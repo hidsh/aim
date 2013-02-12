@@ -4,13 +4,17 @@
 greeting = 'hi!'
 vocabulary = ['hello']
 
-
-# main program
-
-print greeting
+def bye():
+	print 'see you!'
 
 if __name__ == '__main__':
+	print greeting
 	while 1:
-		print raw_input(">")
-		print vocabulary[0]
-		print
+		inp = raw_input('>')
+
+		if inp == 'bye':
+			bye()
+			break
+		else:
+			print vocabulary[0]
+			print
