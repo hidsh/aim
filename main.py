@@ -7,14 +7,18 @@ vocabulary = ['こんにちわ']
 def bye():
     print 'またね!'
 
+def answer(inp):
+    if inp == 'bye':
+        bye()
+        return False
+    else:
+        print vocabulary[0]
+        return True
+
 if __name__ == '__main__':
     print greeting
-    while 1:
-        inp = raw_input('>')
 
-        if inp == 'bye':
-            bye()
-            break
-        else:
-            print vocabulary[0]
-            print
+    ans = True
+    while ans:
+        inp = raw_input('>')
+        ans = answer(inp)
