@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-greeting = 'hi!'
-vocabulary = ['hello']
+greeting = 'やあ!'
+vocabulary = ['こんにちわ']
 
 def bye():
-    print 'see you!'
+    print 'またね!'
 
 if __name__ == '__main__':
     print greeting
