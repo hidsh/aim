@@ -4,12 +4,9 @@
 greeting = 'やあ!'
 vocabulary = ['こんにちわ']
 
-def bye():
-    print 'またね!'
-
 def answer(inp):
     if inp == 'bye':
-        bye()
+        print 'またね!'
         return False
     else:
         print vocabulary[0]
@@ -22,3 +19,4 @@ if __name__ == '__main__':
     while ans:
         inp = raw_input('>')
         ans = answer(inp)
+                
