@@ -1,0 +1,19 @@
+<!-- http://techblog.yahoo.co.jp/programming/bakusoku-jsonp/ -->
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>爆速JSONP</title>
+</head>
+<body>
+ 
+<script src="http://i.yimg.jp/images/yjdn/js/bakusoku-jsonp-v1.js"
+  data-url="http://setsuden.yahooapis.jp/v1/Setsuden/latestPowerUsage"
+  data-p-appid="dj0zaiZpPU94SnZaNlBBSnNLdSZkPVlXazljRVZGUVhsTk5HY21jR285TUEtLSZzPWNvbnN1bWVyc2VjcmV0Jng9M2M-"
+  data-p-output="json"
+  >
+現在の電力消費量は{{ElectricPowerUsage.Usage.$}}kWです。
+</script>
+ 
+</body>
+</html>
