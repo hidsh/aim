@@ -1,0 +1,41 @@
+/* -*- coding: utf-8 -*- */
+/* markdown.css          */
+
+/* グローバル */
+table {
+	border-collapse: collapse;
+	width: 70%;
+}
+
+th {
+	border: #000 1px solid;
+	padding: 3px;
+	font-weight: normal;
+}
+
+td {
+	border: #000 1px solid;
+	padding: 3px;
+}
+
+/* 問題文 */
+
+/* 選択肢 */
+table {
+	border-collapse: collapse;
+	width: 70%;
+}
+
+.opts th {
+    border: none;
+    border-bottom: #000 1px solid;
+	padding: 3px;
+	font-weight: normal;
+}
+
+.opts td {
+    border: none;
+	border-bottom: #000 1px solid;
+    text-align: center;
+	padding: 3px;
+}
