@@ -11,28 +11,6 @@ head_str = '''
 </head>'''
 
 
-
-def format_opts(opts):
-    html = '<table class="opts">'
-    for i,line in enumerate(opts):
-        cols = re.split('[ \t　]{2,}', line.strip())
-        if (i == 0) and (cols == ['']): continue         # empty table head
-
-        html += '<tr>'
-
-        if i < 1:
-            col_tag = 'th'
-            line_num = ''
-        else:
-            col_tag = 'td'
-            line_num = '(%d)' % i
-            
-        for x in [line_num] + cols:
-            html += '<%s>%s</%s>' % (col_tag, x, col_tag)
-        html += '</tr>'
-    html += '</table>'
-    return html
-
 def replace_blanks(html):
     return re.sub(r'\[(.)\]', r'<span class="blank">\1</span>', html)
 
