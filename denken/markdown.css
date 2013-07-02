@@ -18,7 +18,14 @@ td {
 	padding: 3px;
 }
 
-/* 問題文 */
+/* 問題文 (Markdown) */
+
+/* 空欄 */
+span.blank {
+	border: #000 1px solid;
+	padding: 3px 1.5em 0 1.5em;
+    margin: 0 0.3em;
+}
 
 /* 選択肢 */
 table {
@@ -39,3 +46,5 @@ table {
     text-align: center;
 	padding: 3px;
 }
+
+
