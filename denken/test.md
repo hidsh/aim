@@ -10,4 +10,6 @@ Fred   | 29
 Jim    | 47
 Harry  | 32
 
+![Python-Logo](./img/python-logo.gif)
+
 上記の記述中の空白箇所に当てはまる語句又は数値として，正しい組み合わせは次のうちどれか．
