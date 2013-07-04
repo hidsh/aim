@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/">
+  <head>
+    <title>Geddit: News</title>
+  </head>
+  <body class="index">
+    <div id="header">
+      <h1>News</h1>
+    </div>
+
+    <ol py:if="links">
+      <li py:for="link in reversed(links)">
+        <!-- FAILS HERE: unable to read link object but can read links -->
+        <a href="${link.url}">${link.title}</a>
+        posted by ${link.username} at ${link.time.strftime('%x %X')}
+      </li>
+    </ol>
+
+    <p><a class="action" href="/submit/">Submit new link</a></p>
+
+    <div id="footer">
+      <hr />
+      <p class="legalese">© 2007 Edgewall Software</p>
+    </div>
+  </body>
+</html>
+
