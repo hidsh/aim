@@ -3,7 +3,12 @@
 import operator, os, pickle, sys
 
 import cherrypy
+from formencode import Invalid
 from genshi.template import TemplateLoader
+from genshi.filters import HTMLFormFiller
+
+
+from geddit.form import LinkForm, CommentForm
 from geddit.model import Link, Comment
 
 loader = TemplateLoader(
@@ -23,6 +28,26 @@ class Root(object):
         stream = tmpl.generate(links=links)
         return stream.render('html', doctype='html')
 
+    @cherrypy.expose
+    def submit(self, cancel=False, **data):
+        if cherrypy.request.method == 'POST':
+            if cancel:
+                raise cherrypy.HTTPRedirect('/')
+            # validate the input data!
+            form = LinkForm()
+            try:
+                data = form.to_python(data)
+                link = Link(**data)
+                self.data[link.id] = link
+                raise cherrypy.HTTPRedirect('/')
+            except Invalid, e:
+                errors = e.unpack_errors()
+        else:
+            errors = {}
+            
+        tmpl = loader.load('submit.html')
+        stream = tmpl.generate(errors=errors) | HTMLFormFiller(data=data)
+        return stream.render('html', doctype='html')
 
 def main(filename):
     # load data from the pickle file, or initialize it to an empty list
@@ -34,8 +59,6 @@ def main(filename):
             fileobj.close()
     else:
         data = {}
-
-    print data
 
     def _save_data():
         fileobj = open(filename, 'wb')
@@ -69,3 +92,5 @@ def main(filename):
     
 if __name__ == '__main__':
     main(sys.argv[1])
+
+    # $ PYTHONPATH=. python geddit/controller.py geddit.db
