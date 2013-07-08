@@ -41,6 +41,37 @@ class Root(object):
             
         return template.render(errors=errors) | HTMLFormFiller(data=data)
 
+    @cherrypy.expose
+    @template.output('info.html')
+    def info(self, id):
+        link = self.data.get(id)
+        if not link:
+            raise cherrypy.NotFound()
+        return template.render(link=link)
+
+    @cherrypy.expose
+    @template.output('comment.html')
+    def comment(self, id, cancel=False, **data):
+        link = self.data.get(id)
+        if not link:
+            raise cherrypy.NotFound()
+        if cherrypy.request.method == 'POST':
+            if cancel:
+                raise cherrypy.HTTPRedirect('/info/%s' % link.id)
+            form = CommentForm()
+            try:
+                data = form.to_python(data)
+                comment = link.add_comment(**data)
+                raise cherrypy.HTTPRedirect('/info/%s' % link.id)
+            except Invalid, e:
+                errors = e.unpack_errors()
+        else:
+            errors = {}
+
+        return template.render(link=link, comment=None,
+                               errors=errors) | HTMLFormFiller(data=data)
+
+
 def main(filename):
     # load data from the pickle file, or initialize it to an empty list
     if os.path.exists(filename):
