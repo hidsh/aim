@@ -4,31 +4,25 @@ import operator, os, pickle, sys
 
 import cherrypy
 from formencode import Invalid
-from genshi.template import TemplateLoader
 from genshi.filters import HTMLFormFiller
 
 
 from geddit.form import LinkForm, CommentForm
 from geddit.model import Link, Comment
-
-loader = TemplateLoader(
-    os.path.join(os.path.dirname(__file__), 'templates'),
-    auto_reload=True
-)
+from geddit.lib import template
 
 class Root(object):
     def __init__(self, data):
         self.data = data
 
     @cherrypy.expose
+    @template.output('index.html')
     def index(self):
         links = sorted(self.data.values(), key=operator.attrgetter('time'))
-        
-        tmpl = loader.load('index.html')
-        stream = tmpl.generate(links=links)
-        return stream.render('html', doctype='html')
+        return template.render(links=links)
 
     @cherrypy.expose
+    @template.output('submit.html')
     def submit(self, cancel=False, **data):
         if cherrypy.request.method == 'POST':
             if cancel:
@@ -45,9 +39,7 @@ class Root(object):
         else:
             errors = {}
             
-        tmpl = loader.load('submit.html')
-        stream = tmpl.generate(errors=errors) | HTMLFormFiller(data=data)
-        return stream.render('html', doctype='html')
+        return template.render(errors=errors) | HTMLFormFiller(data=data)
 
 def main(filename):
     # load data from the pickle file, or initialize it to an empty list

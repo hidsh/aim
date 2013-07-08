@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
       xmlns:py="http://genshi.edgewall.org/">
+  <xi:include href="layout.html" />
   <head>
-    <title>Geddit: Submit new link</title>
+    <title>Submit new link</title>
   </head>
   <body class="submit">
-    <div id="header">
-      <h1>Submit new link</h1>
-    </div>
+    <h1>Submit new link</h1>
 
     <form action="" method="post">
       <table summary=""><tbody><tr>
@@ -22,7 +22,8 @@
           <input type="text" id="url" name="url" />
           <span py:if="'url' in errors" class="error">${errors.url}</span>
         </td>
-      </tr><tr>
+      </tr>
+      <tr>
         <th><label for="title">Title:</label></th>
         <td>
           <input type="text" name="title" />
@@ -37,9 +38,5 @@
       </tr></tbody></table>
     </form>
 
-    <div id="footer">
-      <hr />
-      <p class="legalese">© 2007 Edgewall Software</p>
-    </div>
   </body>
 </html>
