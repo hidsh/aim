@@ -3,6 +3,12 @@
 import operator, os, pickle, sys
 
 import cherrypy
+from genshi.template import TemplateLoader
+
+loader = TemplateLoader(
+    os.path.join(os.path.dirname(__file__), 'templates'),
+    auto_reload=True
+)
 
 
 class Root(object):
@@ -12,10 +18,10 @@ class Root(object):
 
     @cherrypy.expose
     def index(self):
-        return 'Dr.Drill'
+        tmpl = loader.load('index.html')
+        return tmpl.generate(title='Dr.Driller').render('html', doctype='html')
 
-
-def main(dat_fn):
+def main(db_name):
     data = {} # We'll replace this later
 
     # Some global configuration; note that this could be moved into a
@@ -37,5 +43,5 @@ def main(dat_fn):
 if __name__ == '__main__':
     main('driller.db')
 
-# $ PYTHONPATH=. python controller.py
+# $ PYTHONPATH=. python driller/controller.py
     
