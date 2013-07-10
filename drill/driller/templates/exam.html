@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/">
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <link rel="stylesheet" type="text/css" href="markdown.css" />
+    <!-- mathjax beg -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$']] }, "HTML-CSS": { scale: 140} });
+    </script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+    </script>
+    <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+    <!-- mathjax end -->
+  </head>
+  <body>
+    <div class="qb" py:if="questions">
+      <div class="qbi" py:for="q in questions">
+        <!-- <div class="qbi">%s%s</div>(html_num, html_q, html_opts) -->
+        <h2>問${q.i}<span class="qcap">［${q.ad}年（${q.nengo}${q.jy}年）問${q.qnum}]</span></h2>
+        <p class="qstr">${q.qstr}</p>
+        <form method="post" action=""><table class="opts">
+            <tr py:if="q.opts.head">
+              <th py:for="c in q.opts.head">${c}</th>
+            </tr>
+            <tr py:for="j,line in enumerate(q.opts.ops)">
+              <td><input type="${q.opts.typ}" name="q${q.i}" value="${j}"/></td>
+              <td py:for="col in o">${c}</td>
+            </tr>
+        </table></form>
+      </div>
+    </div>
+  </body>
+</html>
