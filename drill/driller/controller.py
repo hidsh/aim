@@ -6,34 +6,88 @@ import cherrypy
 from genshi.template import TemplateLoader
 
 from driller.model import ExamAnswer, ExamConf
+from driller.question import QuestionList, QuestionPages
+from driller.lib import template
 
 loader = TemplateLoader(
     os.path.join(os.path.dirname(__file__), 'templates'),
     auto_reload=True
 )
 
+class PageInfo(object):
+    def __init__(self, index, qpages):
+        self.page_num = index
+        self.page_max = len(qpages) - 1
 
-
+class Navi(object):
+    def __init__(self, label, dispatcher="exam"):
+        self.label = label
+        self.dispatcher = dispatcher
+        
 class Root(object):
     def __init__(self, data):
         self.data = data
-        self.udat = {}          # <------------------------------------ TODO
 
     @cherrypy.expose
+    @template.output('index.html')
     def index(self):
-        tmpl = loader.load('index.html')
-        return tmpl.generate(title='Dr.Driller').render('html', doctype='html')
+        return template.render(title='電気ドリル')
 
     @cherrypy.expose
+    @template.output('exam.html')
     def exam_start(self):
-        ql = QuestionList()
-        conf = ExamConf(n=7, method=['seq'], n_per_page=2) # test
-        qpages = QuestionPages(ql, conf)
-        for i,p in enumerate(qp):
+        cherrypy.session['conf'] = ExamConf(n=7, method=['seq'], n_per_page=2) # test (set from previous page)
 
+        conf = cherrypy.session['conf']                  # test (get from prev page)
+        ql = QuestionList('houki_a.json')
+        qpages = cherrypy.session['qpages'] = QuestionPages(ql, conf)
 
-        tmpl = loader.load('exam.html')
-        return tmpl.generate(questions=questions).render('html', doctype='html')
+        navi = [None, Navi("次ページ")]
+        pginfo = PageInfo(1, qpages)
+        return template.render(questions=qpages[1], navi=navi, pginfo=pginfo)
+
+    @cherrypy.expose
+    @template.output('exam.html')
+    def exam(self, pg, cmd):
+        page_num = int(pg)
+        cmd = cmd
+        
+        qpages = cherrypy.session['qpages']
+
+        assert 1 <= page_num <= len(qpages) - 1
+
+        if cmd == 'prev':
+            assert 2 <= page_num
+
+            page_num_new = page_num - 1
+
+            if 1 < page_num_new:
+                navi = [Navi("前ページ"), Navi("次ページ")]
+            else:
+                navi = [None, Navi("次ページ")]
+        elif cmd == 'next':
+            assert page_num <= len(qpages) - 2
+            
+            page_num_new = page_num + 1
+            
+            if page_num_new < len(qpages) - 1:
+                navi = [Navi("前ページ"), Navi("次ページ")]
+            else:
+                navi = [Navi("前ページ"), Navi("テスト終了", "exam_finish_confirm")]
+
+        pginfo = PageInfo(page_num_new, qpages)
+        return template.render(questions=qpages[page_num_new], navi=navi, pginfo=pginfo)
+
+    @cherrypy.expose
+    @template.output('exam_finish_confirm.html')
+    def exam_finish_confirm(self):
+        qpages = cherrypy.session['qpages']
+
+        navi = [Navi("前ページ"), None]
+        return template.render(questions=qpages[page_num], navi=navi)
+
+        
+        
     
 def main(db_name):
     # load data from the pickle file, or initialize it to an empty list
@@ -66,6 +120,9 @@ def main(db_name):
         'tools.decode.on': True,
         'tools.trailing_slash.on': True,
         'tools.staticdir.root': os.path.abspath(os.path.dirname(__file__)),
+
+        'tools.sessions.on': True,
+        'tools.sessions.timeout': 60,        
     })
 
     cherrypy.quickstart(Root(data), '/', {

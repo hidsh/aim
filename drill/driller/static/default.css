@@ -1,0 +1,88 @@
+/* -*- coding: utf-8 -*- */
+/* markdown.css          */
+
+/* グローバル */
+body {
+    line-height: 1.8em;
+}
+
+table {
+	border-collapse: collapse;
+	width: 70%;
+}
+
+th {
+	border: #000 1px solid;
+	padding: 3px;
+	font-weight: normal;
+}
+
+td {
+	border: #000 1px solid;
+	padding: 3px;
+}
+
+div.qb {
+    margin: 5px 10px 5em;
+}
+
+div.qbi {
+    margin: 0 40px;
+}
+
+/* ナビゲーション */
+/* div.navi {text-align: center; margin: auto;} */
+div.navi {text-align: center; margin: 10px 10px; height:30px}
+span.navi_l {float: left}
+span.navi_c {float: center}
+span.navi_r {float: right}
+/* a.navi {} */
+a.navi {text-decoration: none; color:#314974}
+a.navi:hover {text-decoration: underline; color:CornflowerBlue}
+
+
+/* 問題番号 */
+h2 {
+    margin-bottom: 0px;
+}
+
+span.q_cap {
+    font-weight: normal;
+    font-size: small;
+    color: #aaa;
+}
+
+/* 問題文 (Markdown) */
+.qbi p {
+    margin-top: 0;
+    text-indent: 1em;
+}
+
+/* 空欄 */
+span.blank {
+	border: #000 1px solid;
+	padding: 3px 1.5em 0 1.5em;
+    margin: 0 0.3em;
+}
+
+/* 選択肢 */
+table {
+	border-collapse: collapse;
+	width: 70%;
+}
+
+.opts th {
+    border: none;
+    border-bottom: #000 1px solid;
+	padding: 3px;
+	font-weight: normal;
+}
+
+.opts td {
+    border: none;
+	border-bottom: #000 1px solid;
+    text-align: center;
+	padding: 3px;
+}
+
+
