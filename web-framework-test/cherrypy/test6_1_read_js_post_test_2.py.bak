@@ -1,0 +1,128 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+import cherrypy
+
+html_index = '''
+<html><head>
+  <script type="text/javascript">
+    function ppost(form, dest){
+      form.action=dest
+      form.submit();
+      return false;
+    }
+  </script>
+</head>
+<body>
+  <form name="opt" method="post">
+    <div><input type="checkbox" name="q_1" value="1" />選択肢1</div>
+    <div><input type="checkbox" name="q_1" value="2" />選択肢2</div>
+    <div><input type="checkbox" name="q_1" value="3" />選択肢3</div>
+    <hr/>
+    <div><input type="radio" name="q_2" value="1" />選択肢1</div>
+    <div><input type="radio" name="q_2" value="2" />選択肢2</div>
+    <div><input type="radio" name="q_2" value="3" />選択肢3</div>
+    <div><input type="radio" name="q_2" value="4" />選択肢4</div>
+    <div><input type="radio" name="q_2" value="5" />選択肢5</div>
+    <hr/>
+    <div><input type="checkbox" name="q_3" value="1" />選択肢1</div>
+    <div><input type="checkbox" name="q_3" value="2" />選択肢2</div>
+    <div><input type="checkbox" name="q_3" value="3" />選択肢3</div>
+    <div><input type="checkbox" name="q_3" value="4" />選択肢4</div>
+  </form>
+  <div>
+    <a href="#" onclick="ppost(document.opt, 'receive')">次のページへ</a>
+  </div>
+</body></html>
+'''
+
+html_receive = '''
+<html>
+<head></head>
+<body>
+  %s
+  <div><a href="/">最初のページへ</a></div>
+</body></html>
+'''
+
+class ObjList(object):
+
+    def __init__(self):
+        self.__list__ = []
+    
+    def __iter__(self):
+        for x in self.__list__:
+            yield x
+
+    def __getitem__(self, index):
+        return self.__list__[index]
+
+    def __setitem__(self, index, value):
+        self.__list__[index] = value
+
+    def __repr__(self):
+        return repr(self.__list__)
+
+    def __len__(self):
+        return len(self.__list__)
+
+    def save(self, path="~/Desktop/hoge.dat"):
+       import pickle
+       try:
+          f = open('path', 'wb')
+          pickle.dump(self.__list__, f)
+       except e:
+          print('cant save pickled data to %s' % path)
+       finally:
+          f.close()
+
+class Ans:
+   def __init__(self, qnum, ans):
+      self.qnum = qnum
+      self.ans = ans
+
+   def __repr__(self):
+      return '%s=%r' % (self.qnum, self.ans)
+   
+class AnswerList(ObjList):
+   def __init__(self, ans_dict):
+      l = []
+      for n,a in ans_dict.items():
+         if type(a) is str:
+            a = [a]
+         assert ('_' in n)
+         n = int(n.split('_')[-1])
+
+         l.append(Ans(n, a))
+
+      from operator import attrgetter
+      self.__list__ = sorted(l, key=attrgetter('qnum'))
+
+
+class Example:
+   @cherrypy.expose
+   def index(self):
+      return html_index
+
+   @cherrypy.expose
+   def receive(self, **ans_dict):
+      print('%r' % ans_dict)
+
+      if ans_dict:
+         answers = AnswerList(ans_dict)
+         answers.save()
+         print('%r' % answers)
+         s = map(lambda x: '  <div>問%d の答え：%s</div>' % (x.qnum, x.ans), answers)
+      else:
+         s = '<div>回答なし<div>'
+      
+      return html_receive % s
+   
+if __name__ == '__main__' :
+
+    cherrypy.config.update({
+        'tools.encode.on': True, 'tools.encode.encoding': 'utf-8',
+        'tools.decode.on': True,
+        'tools.trailing_slash.on': True,
+    })
+
+    cherrypy.quickstart(Example())
