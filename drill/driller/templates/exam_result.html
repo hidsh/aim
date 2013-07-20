@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/">
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <link rel="stylesheet" href="${url('/media/default.css')}" type="text/css" />    
+  </head>
+  <body>
+    <div><img src="${url('/media/logo.gif')}" /></div>
+    <div class="navi">
+      <span py:if="navi[1]" class="navi_r"><a class="navi" href="${navi[1].dispatcher}">${navi[1].label}</a></span>
+    </div>
+    <h1>テスト結果</h1>
+    <div class="summary">
+      <div class="score"><span class="score">${score[0]}/${score[1]} = ${score[2]}点</span></div>
+    </div>
+    <div class="details">
+      <div py:for="r in results" class="dx">
+        <div class="result_head"><span>問${r.i}</span><span class="${r.typ_class}">${r.typ_str}</span></div>
+        <div class="qstr">${r.q.qstr}</div>
+        <table class="opts">
+          <tr py:if="r.q.opt_head">
+            <th></th>
+            <th class="checkbox"></th>
+            <th py:for="c in r.q.opt_head">${c}</th>
+          </tr>
+          <tr py:for="o in r.q.opts">
+            <td class="correct"><span py:if="o.hit">&#9711;</span></td>
+            <td class="${r.typ_class}"><span py:if="o.your_ans">&#10003;</span></td>
+            <td py:for="c in o.cols" class="${r.q.opt_style}">${c}</td>
+          </tr>
+        </table>
+        <div py:if="r.q.desc" class="desc">${r.q.desc}</div>
+      </div>
+    </div>
+    <div class="navi">
+      <span py:if="navi[1]" class="navi_r"><a class="navi" href="${navi[1].dispatcher}">${navi[1].label}</a></span>
+    </div>
+  </body>
+</html>

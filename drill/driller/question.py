@@ -1,23 +1,37 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, re, random, copy
+import os, re, random
 import json
+from markdown import markdown
+from genshi.core import Markup
 
-import util
+from driller.model import ObjList
+
+from driller.lib import util
 
 class Option(object):
     def __init__(self, num, hit, cols=[]):
         self.onum = num
         self.hit  = hit
         self.cols = cols
-        
+        self.your_ans = None
+
+    def __repr__(self):
+        return '%2d:%s:%s' % (self.onum, self.hit, self.your_ans)
+
 class Question(object):
     def __init__(self, year, num, q, opts, a, desc=''):
+        def _normalize_cr(md):
+            return re.sub(r'(\n)+', r'\n\n', md)
+    
+        def _replace_blanks(html):
+            return re.sub(r'\[(.)\]', r'<span class="blank">\1</span>', html)
+        
         self.ad = year
         self.nengo, self.jy = util.jpn_year(year)
         self.qnum = num
-        self.qstr = q
+        self.qstr = Markup(_replace_blanks(markdown(_normalize_cr(q), ['tables'])))
 
         ans = a if type(a) is list else [a]
         self.opt_typ = 'checkbox' if len(ans) > 1 else 'radio'
@@ -26,65 +40,54 @@ class Question(object):
         for i,line in enumerate(opts):
             cols = re.split('[ \t　]{2,}', line.strip())
             if i < 1:
-                self.opt_head = None if cols == [''] else cols
+                if cols == ['']:
+                    self.opt_head = None
+                    self.opt_style = 'no_head'
+                else: 
+                    self.opt_head = cols
+                    self.opt_style = 'with_head'
             else:
-                hit = '*' if i in ans else None
+                hit = '*' if i in ans else None                  # '*' <-- correct answer
                 self.opts.append(Option(i, hit, cols))
-                
+
         self.desc = None if desc == '' else desc
 
-        
-class ObjList(object):
-    def __init__(self):
-        self.__list__ = []
-    
-    def __iter__(self):
-        for x in self.__list__:
-            yield x
+    def correct_answer(self):
+        return [x.onum for x in filter(lambda x: x.hit=='*', self.opts)]
 
-    def __getitem__(self, index):
-        return self.__list__[index]
 
-    def __setitem__(self, index, value):
-        self.__list__[index] = value
-
-    def __repr__(self):
-        return repr(self.__list__)
-
-    def __len__(self):
-        return len(self.__list__)
-
-    
 class QuestionList(ObjList):
     def __init__(self, json_name):
         assert os.path.exists(json_name)
 
         fobj = open(json_name, 'r', encoding='utf-8')
         try:
-            l = json.load(fobj)
+            jl = json.load(fobj)
         finally:
             fobj.close()
 
-        self.__list__ = []
-        for d in l:
+        l = []
+        for d in jl:
             q = Question(d['YEAR'], d['NUM'], d['Q'], d['OPTS'], d['A'], d['DESC'])
-            self.__list__.append(q)
-            
+            l.append(q)
+        self._list = l
 
+        
 class QuestionPages(ObjList):
-    def __init__(self, qul, conf):
-        qul = copy.deepcopy(qul)
+    def __init__(self, ql, conf):
+        qlx = ql[:]
         if 'random' in conf.method:
-            random.shuffle(qul)
+            random.shuffle(qlx)
 
-        selected = qul[:conf.n]
+        selected = qlx[:conf.n]
         
         for i,q in enumerate(selected, 1):
             q.i = i                      # question number
             random.shuffle(q.opts)
 
-        self.__list__ = [None] + util.split_seq(selected, conf.n_per_page)   # __list__[0]: dummy
+        self._list = util.split_seq(selected, conf.n_per_page)
 
+        
 class QuestionPagesForCheck(ObjList):
     def __init__(self, qul):
         qul = copy.deepcopy(qul)
@@ -92,7 +95,7 @@ class QuestionPagesForCheck(ObjList):
         for i,q in enumerate(qul, 1):
             q.i = i                      # question number
 
-        self.__list__ = [None] + util.split_seq(selected, conf.n_per_page)   # __list__[0]: dummy
+        self._list = util.split_seq(selected, conf.n_per_page)
 
             
 ##

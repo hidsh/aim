@@ -12,33 +12,51 @@
     </script>
     <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
     <!-- mathjax end -->
+    <!-- TODO: move to hoge.js -->
+    <script type="text/javascript">
+      function do_post(form, dest, pg, cmd){
+        form.action = dest;
+        form._pg.value  = pg;
+        form._cmd.value = cmd;
+        form.submit();
+        return false;
+      }
+    </script>
   </head>
   <body>
     <div><img src="${url('/media/logo.gif')}" /></div>
     <div class="navi">
-      <span py:if="navi[0]" class="navi_l"><a class="navi" href="${url('/%s/%d/%s/' % (navi[0].dispatcher, pginfo.page_num, 'prev'))}">${navi[0].label}</a></span>
-      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ</span>
-      <span py:if="navi[1]" class="navi_r"><a class="navi" href="${url('/%s/%d/%s/' % (navi[1].dispatcher, pginfo.page_num, 'next'))}">${navi[1].label}</a></span>
+      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.index}, 'prev')">${navi[0].label}</a></span>
+      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qnum_all}）</span>
+      <span py:if="navi[1]" class="navi_r"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.index}, 'next')">${navi[1].label}</a></span>
     </div>
     <div class="qb" py:if="questions">
-      <div class="qbi" py:for="q in questions">
-        <h2>問${q.i}<span class="qcap">［${q.ad}年（${q.nengo}${q.jy}年）問${q.qnum}]</span></h2>
-        <p class="qstr">${q.qstr}</p>
-        <form method="post" action=""><table class="opts">
-            <tr py:if="q.opt_head">
-              <th py:for="c in q.opt_head">${c}</th>
-            </tr>
-            <tr py:for="o in q.opts">
-              <td><input type="${q.opt_typ}" name="q${q.i}_opt" value="${o.onum}"/></td>
-              <td py:for="c in o.cols">${c}</td>
-            </tr>
-        </table></form>
-      </div>
+      <form name="form_opt" method="post">
+        <input type="hidden" name="_pg" value="" />
+        <input type="hidden" name="_cmd" value="" />
+        <div class="qbx" py:for="q in questions">
+          <h2>問${q.i}<span class="qcap">［${q.ad}年（${q.nengo}${q.jy}年）問${q.qnum}]</span></h2>
+          <div class="qbi">
+            ${q.qstr}
+            <table class="opts">
+              <tr py:if="q.opt_head">
+                <th class="checkbox"></th>
+                <th py:for="c in q.opt_head">${c}</th>
+              </tr>
+              <tr py:for="o in q.opts">
+                <td class="checkbox"><input type="${q.opt_typ}" name="q_${q.i}" value="${o.onum}" /></td>
+                <td py:for="c in o.cols" class="${q.opt_style}">${c}</td>
+              </tr>
+                                     <input type="hidden" name="q_${q.i}" value="0" />
+            </table>
+          </div>
+        </div>
+      </form>
     </div>
     <div class="navi">
-      <span py:if="navi[0]" class="navi_l"><a class="navi" href="${url('/%s/%d/%s/' % (navi[0].dispatcher, pginfo.page_num, 'prev'))}">${navi[0].label}</a></span>
-      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ</span>
-      <span py:if="navi[1]" class="navi_r"><a class="navi" href="${url('/%s/%d/%s/' % (navi[1].dispatcher, pginfo.page_num, 'next'))}">${navi[1].label}</a></span>
+      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.index}, 'prev')">${navi[0].label}</a></span>
+      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qnum_all}）</span>
+      <span py:if="navi[1]" class="navi_r"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.index}, 'next')">${navi[1].label}</a></span>
     </div>
   </body>
 </html>

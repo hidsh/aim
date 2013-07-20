@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/">
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <link rel="stylesheet" href="${url('/media/default.css')}" type="text/css" />
+    <script type="text/javascript">
+      function do_post(form, dest){
+        form.action = dest;
+        form.submit();kk
+        return false;
+      }
+    </script>
+  </head>
+  <body>
+    <div><img src="${url('/media/logo.gif')}" /></div>
+    <div class="navi">
+      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_confirm, 'exam')">${navi[0].label}</a></span>
+    </div>
+    <div>
+      <p>テストを終了して採点します。よろしいですか？</p>
+      <form name="form_confirm" method="post"><table>
+          <input type="hidden" name="_pg" value="${pg}"/>
+          <input type="hidden" name="_cmd" value="next"/>
+          <tr>
+            <td><input type="button" name="confirm" value="yes" onclick="do_post(document.form_confirm, 'exam_result')" /></td>
+            <td><input type="button" name="confirm" value="no"  onclick="do_post(document.form_confirm, 'exam')" /></td>
+          </tr>
+      </table></form>
+    </div>
+    <div class="navi">
+      <span py:if="navi[0]" class="navi_l"><a class="navi" href="${url('/%s/%d/%s/' % (navi[0].dispatcher, pg, 'next'))}">${navi[0].label}</a></span>
+    </div>
+  </body>
+</html>

@@ -8,7 +8,7 @@ body {
 
 table {
 	border-collapse: collapse;
-	width: 70%;
+	/* width: 80%; */
 }
 
 th {
@@ -23,7 +23,11 @@ td {
 }
 
 div.qb {
-    margin: 5px 10px 5em;
+    margin: 5px 0 5em;
+}
+
+div.qbx {
+    margin: 5px 0 60px;
 }
 
 div.qbi {
@@ -31,12 +35,17 @@ div.qbi {
 }
 
 /* ナビゲーション */
-/* div.navi {text-align: center; margin: auto;} */
-div.navi {text-align: center; margin: 10px 10px; height:30px}
+div.navi {
+    text-align: center;
+    margin: 10px 0;
+    padding: 4px 10px 0px 10px;
+    height:30px;
+    border: #000 1px solid
+}
 span.navi_l {float: left}
 span.navi_c {float: center}
 span.navi_r {float: right}
-/* a.navi {} */
+
 a.navi {text-decoration: none; color:#314974}
 a.navi:hover {text-decoration: underline; color:CornflowerBlue}
 
@@ -46,7 +55,7 @@ h2 {
     margin-bottom: 0px;
 }
 
-span.q_cap {
+span.qcap {
     font-weight: normal;
     font-size: small;
     color: #aaa;
@@ -68,21 +77,39 @@ span.blank {
 /* 選択肢 */
 table {
 	border-collapse: collapse;
-	width: 70%;
+    margin:10px 10px 10px 30px;
 }
 
 .opts th {
     border: none;
     border-bottom: #000 1px solid;
-	padding: 3px;
+	padding: 3px 3px 3px 2em;
 	font-weight: normal;
 }
 
 .opts td {
     border: none;
 	border-bottom: #000 1px solid;
+	padding: 3px 3px 3px 2em;
+    text-align: center;
+}
+
+.opts td.no_head {
+    border: none;
+	border-bottom: #000 1px solid;
+	padding: 3px 3px 3px 1em;
+    text-align: left;
+    /* text-indent: 1em; */
+}
+
+.opts th.checkbox, td.checkbox {
+    border: none;
+	border-bottom: #000 1px solid;
     text-align: center;
 	padding: 3px;
 }
 
-
+/* 試験結果 */
+td.right {color: blue}
+td.false {color: red}
+span.strike {text-decoration: line-through; color: red}
