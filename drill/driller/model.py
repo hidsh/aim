@@ -52,7 +52,6 @@ class Result(object):
         self.i = i
 
         correct_ans = q.correct_answer()
-        print('%r / %r' % (correct_ans, your_ans))
         if set(correct_ans) == set(your_ans):
             self.typ_str = Markup('&#9711;')        # まる
             self.typ_class = 'correct'
@@ -86,8 +85,9 @@ class ExamResult(ObjList):
         correct_answers = filter(lambda x: x.is_correct(), self._list)
         len_all  = len(self._list)
         len_corr = len(list(correct_answers))
+        score = 0 if len_corr == 0 else round(len_corr / len_all * 100, 1)
         
-        return (len_corr, len_all, round(len_corr / len_all * 100, 1))
+        return (len_corr, len_all, score)
 
 
 ##

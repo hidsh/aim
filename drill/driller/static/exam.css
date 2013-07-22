@@ -1,0 +1,111 @@
+/* -*- coding: utf-8 -*- */
+@import url("default.css");
+
+div.qb {
+    margin:5px 0 5em;
+}
+
+div.qbx {
+    margin:5px 0 60px;
+}
+
+div.qbi {
+    margin:0 40px;
+}
+
+/* ナビゲーション */
+div.navi {
+    text-align:center;
+    margin:10px 0;
+    padding:4px 10px 0px 10px;
+    height:30px;
+    border:#000 1px solid
+}
+span.navi_l {float:left}
+span.navi_c {float:center}
+span.navi_r {float:right}
+
+a.navi {text-decoration:none; color:#314974}
+a.navi:hover {text-decoration:underline; color:CornflowerBlue}
+
+
+/* 問題番号 */
+h2 {
+    margin-bottom:0px;
+}
+
+span.qcap {
+    font-weight:normal;
+    font-size:small;
+    color:#aaa;
+}
+
+/* 問題文 (Markdown) */
+.qbi p {
+    margin-top:0;
+    text-indent:1em;
+}
+
+/* 空欄 */
+span.blank {
+	border:#000 1px solid;
+	padding:3px 1.5em 0 1.5em;
+    margin:0 0.3em;
+}
+
+/* 選択肢 */
+table {
+	border-collapse:collapse;
+    margin:10px 10px 10px 30px;
+}
+
+.opts th {
+    border:none;
+    border-bottom:#000 1px solid;
+	padding:4px 0.7em 1px 0.7em;
+	font-weight:normal;
+}
+
+.opts td {
+    border: none;
+	border-bottom:#000 1px solid;
+	padding:4px 0.7em 1px 0.7em;
+    text-align:center;
+}
+
+.opts td.no_head {
+    border:none;
+	border-bottom:#000 1px solid;
+	padding:4px 0.7em 1px 0.7em;
+    text-align:left;
+    /* text-indent: 1em; */
+}
+
+.opts th.checkbox, td.checkbox {
+    border:none; 
+	border-bottom:#000 1px solid;
+    text-align:center;
+	padding:3px;
+}
+
+/* 試験結果 */
+div.summary {margin:20px 0; text-align:center}
+span.score {font-size:xx-large}
+span.score_frac {font-size: x-large; margin-left:20px}
+div.details {margin:20px 0}
+div.rb {margin:-1px 0 0 0; padding:0; border:none;}
+div.rbx {margin:0; padding:5px 40px 5px 40px; border:none}
+table.accordion_head {margin:0; width:100%}
+.accordion_head th,.accordion_head td {padding:3px 15px 0 15px; font-weight: bold}
+.accordion_head th.qnum {background-color:#333; color:white; width:2.5em}
+.accordion_head td.correct {background-color:#61D9EF; width:2.5em; text-align:center}
+.accordion_head td.wrong   {background-color:#FF6699; width:2.5em; text-align:center}
+.accordion_head td.qinfo   {width:13em; font-weight:normal; text-align:center; padding:3px 8px 0 8px}
+.accordion_head td.history {text-align:right; padding:3px 8px 0 8px}
+.accordion_head td.history span {margin:0 0.2em}
+.accordion_head td.accordion_indicator {width:1.5em; text-align:center; font-size:large}
+ 
+.opts .correct {color:blue; border:none; padding:4px 5px 1px 5px; width:1.2em}
+.opts .wrong   {color:red;  border:none; padding:4px 5px 1px 5px; width:1.2em}
+span.strike {text-decoration:line-through; color:red}
+.accordion_head {cursor:pointer}
