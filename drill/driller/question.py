@@ -76,10 +76,13 @@ class QuestionList(ObjList):
 class QuestionPages(ObjList):
     def __init__(self, ql, conf):
         qlx = ql[:]
-        if 'random' in conf.method:
+        if conf.flavor == 'ng':          # ng | random
+            pass                         # TODO
+            
+        if conf.order == 'random':       # seq | random
             random.shuffle(qlx)
 
-        selected = qlx[:conf.n]
+        selected = qlx[:conf.qn]
         
         for i,q in enumerate(selected, 1):
             q.i = i                      # question number

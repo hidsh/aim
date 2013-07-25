@@ -4,6 +4,7 @@
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <link rel="stylesheet" href="${url('/media/exam.css')}" type="text/css" />    
+    <title>テスト中: ${pginfo.page_num}/${pginfo.page_max}ページ</title>
     <!-- mathjax beg -->
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$']] }, "HTML-CSS": { scale: 140} });
@@ -26,9 +27,9 @@
   <body>
     <div><img src="${url('/media/logo.gif')}" /></div>
     <div class="navi">
-      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.index}, 'prev')">${navi[0].label}</a></span>
-      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qnum_all}）</span>
-      <span py:if="navi[1]" class="navi_r"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.index}, 'next')">${navi[1].label}</a></span>
+      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'prev')">${navi[0].label}</a></span>
+      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qn}）</span>
+      <span py:if="navi[1]" class="navi_r"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'next')">${navi[1].label}</a></span>
     </div>
     <div class="qb" py:if="questions">
       <form name="form_opt" method="post">
@@ -54,9 +55,9 @@
       </form>
     </div>
     <div class="navi">
-      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.index}, 'prev')">${navi[0].label}</a></span>
-      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qnum_all}）</span>
-      <span py:if="navi[1]" class="navi_r"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.index}, 'next')">${navi[1].label}</a></span>
+      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'prev')">${navi[0].label}</a></span>
+      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qn}）</span>
+      <span py:if="navi[1]" class="navi_r"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'next')">${navi[1].label}</a></span>
     </div>
   </body>
 </html>

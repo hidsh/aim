@@ -4,19 +4,21 @@ import operator, os, pickle, sys
 
 import cherrypy
 from genshi.template import TemplateLoader
+from genshi.filters import HTMLFormFiller
 
 from driller.model import ExamConf, ExamResult
 from driller.question import QuestionList, QuestionPages
 from driller.answer import AnswerList
+from driller.user import User
 from driller.lib import template
 
 
 class PageInfo(object):
-    def __init__(self, index, qpages, qn):
-        self.index    = index                  # 0..
-        self.page_num = index + 1              # 1..
+    def __init__(self, idx, qpages, qn):
+        self.idx    = idx                    # 0..
+        self.page_num = idx + 1              # 1..
         self.page_max = len(qpages)
-        self.qnum_all = qn
+        self.qn = qn
 
 class Navi(object):
     def __init__(self, label, dispatcher='exam'):
@@ -30,22 +32,61 @@ class Root(object):
     @cherrypy.expose
     @template.output('index.html')
     def index(self):
-        return template.render(title='電気ドリル')
+        user_account = 'hoge@gmail.com'               # test
+        exam_json    = 'houki_a.json'                 # test
+
+        cherrypy.session['user']      = user_account
+        cherrypy.session['exam_json'] = exam_json
+
+        raise cherrypy.HTTPRedirect('exam_root')
+
+    @cherrypy.expose
+    @template.output('exam_root.html')
+    def exam_root(self):
+        assert cherrypy.session['user']
+        assert cherrypy.session['exam_json']
+        
+        user = User(cherrypy.session['user'])
+        try:
+            user.load()
+        except Exception as e:
+            user.conf = ExamConf()
+            user.save()
+            print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定を保存します。: %r' % (user.mail_addr, e))
+            
+        ql = QuestionList(cherrypy.session['exam_json'])
+        cherrypy.session['ql'] = ql
+        return template.render(n=len(ql)) | HTMLFormFiller(data=user.conf.to_dict())
 
     @cherrypy.expose
     @template.output('exam.html')
-    def exam_start(self):
-        cherrypy.session['conf'] = ExamConf(n=7, method=['seq'], n_per_page=2) # test (set from previous page)
+    def exam_start(self, **post_dict):
+        assert post_dict
+        assert cherrypy.session['user']
+        assert cherrypy.session['ql']
 
-        conf = cherrypy.session['conf']                  # test (get from prev page)
-        ql = QuestionList('houki_a.json')
-        cherrypy.session['qpages'] = qpages = QuestionPages(ql, conf)
+        user = User(cherrypy.session['user'])
+
+        try:
+            user.load()
+        except Exception as e:
+            user = User(cherrypy.session['user'])
+            print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定でテストを開始します。: %r' % (user.mail_addr, e))
+            
+        conf = ExamConf(post_dict)
+        if user.conf != conf:
+            user.conf = conf
+            user.save()
+
+        cherrypy.session['conf'] = user.conf
+        
+        ql = cherrypy.session['ql']
+        cherrypy.session['qpages'] = qpages = QuestionPages(ql, user.conf)
         cherrypy.session['answer_dict'] = {}
 
         navi = [None, Navi('次ページ')]
-        page_num = 0
-        pginfo = PageInfo(page_num, qpages, conf.n)
-        return template.render(questions=qpages[page_num], navi=navi, pginfo=pginfo)
+        pginfo = PageInfo(0, qpages, user.conf.qn)
+        return template.render(questions=qpages[0], navi=navi, pginfo=pginfo)
 
     @cherrypy.expose
     @template.output('exam.html')
@@ -56,14 +97,17 @@ class Root(object):
             cmd = post_dict.pop('_cmd')
             page_num  = int(post_dict.pop('_pg'))
         except ValueError:
-            raise ValueError('ページ番号が変です')
-        except:
-            raise Error('Unknown Errror')
+            print('invalid post request:post_dict=%s' % post_dict)
+            raise cherrypy.HTTPRedirect('request_error')            
+        except Exception as e:
+            print('unknown error: %r' % e)
+            raise cherrypy.HTTPRedirect('unknown_error')            
         
         cherrypy.session['answer_dict'].update(post_dict)
         
         try:
             qpages = cherrypy.session['qpages']
+            conf = cherrypy.session['conf']
         except cherrypy.HTTPError:
             raise cherrypy.HTTPRedirect('session_error')
 
@@ -91,7 +135,7 @@ class Root(object):
             else:
                 navi = [Navi('前ページ'), Navi('次ページ')]
 
-        pginfo = PageInfo(page_num_new, qpages, cherrypy.session['conf'].n)
+        pginfo = PageInfo(page_num_new, qpages, conf.qn)
         return template.render(questions=qpages[page_num_new], navi=navi, pginfo=pginfo)
 
     @cherrypy.expose

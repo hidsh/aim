@@ -13,11 +13,11 @@ class ObjList(object):
         for x in self._list:
             yield x
 
-    def __getitem__(self, index):
-        return self._list[index]
+    def __getitem__(self, idx):
+        return self._list[idx]
 
-    def __setitem__(self, index, value):
-        self._list[index] = value
+    def __setitem__(self, idx, value):
+        self._list[idx] = value
 
     def __repr__(self):
         return repr(self._list)
@@ -37,16 +37,33 @@ class ObjList(object):
 
 
 class ExamConf(object):
-    def __init__(self, n, method, tags=[], n_per_page=5):
-        self.n = n
-        self.method = method
-        self.tags = tags
-        self.n_per_page = n_per_page
+    def __init__(self, post_dict=None):
+        assert type(int(post_dict['qn']))
+        assert type(int(post_dict['n_per_page']))
+
+        if post_dict:
+            self.qn = int(post_dict['qn'])
+            self.order    = post_dict['order']
+            self.flavor   = post_dict['flavor']
+            # self.tags     = post_dict['tags'] TODO
+            self.tags     = [None]
+            self.n_per_page = int(post_dict['n_per_page'])
+        else:
+            self.qn = 3
+            self.order    = 'random'
+            self.flavor   = 'ng'
+            self.tags     = [None]
+            self.n_per_page = 2
+
+    def __eq__(self, obj):
+        return (self.qn == obj.qn) and (self.order == obj.order) and (self.flavor == obj.flavor) and (self.n_per_page == obj.n_per_page)
 
     def __repr__(self):
-        return '<%d, %s, %r>' % (self.n, self.method, self.tags)
+        return '<ExamConf qn:%d, order:%s, flavor:%s, tags:%r, n_per_page:%d>' % (self.qn, self.order, self.flavor, self.tags, self.n_per_page)
 
-
+    def to_dict(self):
+        return {'qn':self.qn, 'order':self.order, 'flavor':self.flavor, 'n_per_page':self.n_per_page}
+    
 class Result(object):
     def __init__(self, i, q, your_ans):
         self.i = i

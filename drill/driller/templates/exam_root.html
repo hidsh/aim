@@ -15,10 +15,6 @@
     </script>
   </head>
   <body class="index">
-    <div id="start">
-      <div>さあ、テストを始めましょう</div>
-      <div><a href="exam_start" onclick="do_post('exam_start')">スタート</a></div>
-    </div>
     <div id="setting">
       <h1>設定</h1>
       <form name="form" method="post">
@@ -28,7 +24,7 @@
           </tr>
           <tr><th>出題数</th>
             <td colspan="2">
-              <select name="qnum_all">
+              <select name="qn">
                 <option value="3"  selected="" >3</option>
                 <option value="5"  selected="" >5</option>
                 <option value="10" selected="">10</option>
@@ -61,8 +57,12 @@
         </table>
       </form>
     </div>
+    <div id="start">
+      <div>さあ、テストを始めましょう</div>
+      <div><a href="#" onclick="do_post('exam_start')">スタート</a></div>
+    </div>
+    
     <div id="personal_data">
-      
     </div>
     <div id="footer">
       <hr />
