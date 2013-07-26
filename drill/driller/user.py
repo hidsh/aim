@@ -21,16 +21,19 @@ class User(object):
     def load(self):
         path = './user/' + self.mail_addr
 
-        assert os.path.exists(path)
-        with open(path, 'rb') as f:
-            box = pickle.load(f)
+        try:
+            with open(path, 'rb') as f:
+                box = pickle.load(f)
+        except FileNotFoundError as e:
+            raise('ファイルがありません %r' % e)
+        else:
+            assert self.mail_addr == box['mail_addr']
 
-        assert self.mail_addr == box['mail_addr']
-
-        self.conf    = box['conf']
-        self.history = box['history']
+            self.conf    = box['conf']
+            self.history = box['history']
         
 
 ##
 if __name__ == '__main__':
     pass
+ 

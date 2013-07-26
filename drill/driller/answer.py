@@ -14,7 +14,7 @@ class Ans(object):
         except ValueError as e:
             print('ユーザの答えに数字以外が含まれています: %r' % e)
         except Exception as e:
-            print('Unknown error: %r' e)
+            print('Unknown error: %r' % e)
 
     def __repr__(self):
         return '%s=%r' % (self.i, self.ans)

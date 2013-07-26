@@ -22,6 +22,10 @@
           <tr><th>全問題数</th>
             <td colspan="2">${n}問</td>
           </tr>
+          
+          <tr>
+            <!-- <td colspan="3"><input type="checkbox" name="again" value="yes" />前回の出題にもう一度チャレンジ</td> -->
+          </tr>
           <tr><th>出題数</th>
             <td colspan="2">
               <select name="qn">
@@ -42,7 +46,7 @@
           </tr>
           <tr><th>出題の傾向</th>
             <td><input type="radio" name="flavor" value="ng" />間違えた問題を優先</td>
-            <td><input type="radio" name="flavor" value="" />関係なし</td>
+            <td><input type="radio" name="flavor" value="dontcare" />関係なし</td>
           </tr>
           <tr><th>1ページあたりの問題数</th>
             <td colspan="2">
@@ -57,13 +61,24 @@
         </table>
       </form>
     </div>
+
     <div id="start">
       <div>さあ、テストを始めましょう</div>
       <div><a href="#" onclick="do_post('exam_start')">スタート</a></div>
     </div>
     
-    <div id="personal_data">
+    <h1>テスト履歴</h1>
+    <div py:if="hists" id="history">
+      <table>
+        <tr><th>日付</th><th>出題数</th><th>得点</th></tr>
+        <tr py:for="h in hists">
+          <td>${h.date.year}/${h.date.month}/${h.date.day} ${h.date.hour}:${h.date.minute}</td>
+          <td>${h.score[1]}問</td>
+          <td>${h.score[2]}点</td>
+        </tr>
+      </table>
     </div>
+    
     <div id="footer">
       <hr />
       <p class="legalese">© 2013 autometa.ro</p>

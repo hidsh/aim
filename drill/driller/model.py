@@ -38,10 +38,10 @@ class ObjList(object):
 
 class ExamConf(object):
     def __init__(self, post_dict=None):
-        assert type(int(post_dict['qn']))
-        assert type(int(post_dict['n_per_page']))
-
         if post_dict:
+            assert type(int(post_dict['qn']))
+            assert type(int(post_dict['n_per_page']))
+
             self.qn = int(post_dict['qn'])
             self.order    = post_dict['order']
             self.flavor   = post_dict['flavor']
@@ -49,10 +49,10 @@ class ExamConf(object):
             self.tags     = [None]
             self.n_per_page = int(post_dict['n_per_page'])
         else:
-            self.qn = 3
-            self.order    = 'random'
-            self.flavor   = 'ng'
-            self.tags     = [None]
+            self.qn     = 3
+            self.order  = 'random'
+            self.flavor = 'ng'
+            self.tags   = [None]
             self.n_per_page = 2
 
     def __eq__(self, obj):
@@ -63,7 +63,7 @@ class ExamConf(object):
 
     def to_dict(self):
         return {'qn':self.qn, 'order':self.order, 'flavor':self.flavor, 'n_per_page':self.n_per_page}
-    
+
 class Result(object):
     def __init__(self, i, q, your_ans):
         self.i = i
@@ -98,14 +98,16 @@ class ExamResult(ObjList):
             l.append(Result(i, q, a.ans))
         self._list = l
 
-    def get_score(self):
+    def get_score(self):        # TODO refactoring: History's same function
         correct_answers = filter(lambda x: x.is_correct(), self._list)
         len_all  = len(self._list)
         len_corr = len(list(correct_answers))
-        score = 0 if len_corr == 0 else round(len_corr / len_all * 100, 1)
+        score = 0 if (len_corr == 0) or (len_all == 0) else round(len_corr / len_all * 100, 1)
         
         return (len_corr, len_all, score)
 
+    def summarize(self):
+        return tuple(map(lambda x: {'typ':x.typ_class, 'ad':x.q.ad, 'qnum':x.q.qnum}, self._list))
 
 ##
 if __name__ == '__main__':

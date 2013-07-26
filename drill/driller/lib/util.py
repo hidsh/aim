@@ -22,6 +22,15 @@ def flatten(l):
     from itertools import chain
     return list(chain.from_iterable(l))
 
+def get_score(func, answers):
+    corrects = filter(lambda x: x.is_correct(), answers)
+    len_all  = len(answers)
+    len_corr = len(list(corrects))
+    score = 0 if len_corr == 0 else round(len_corr / len_all * 100, 1)
+    
+    return (len_corr, len_all, score)
+
+    
 ##
 if __name__ == '__main__':
     print('%r' % split_seq([x for x in range(20)], 3))

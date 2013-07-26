@@ -9,6 +9,7 @@ from genshi.filters import HTMLFormFiller
 from driller.model import ExamConf, ExamResult
 from driller.question import QuestionList, QuestionPages
 from driller.answer import AnswerList
+from driller.history import HistoryList
 from driller.user import User
 from driller.lib import template
 
@@ -51,12 +52,14 @@ class Root(object):
             user.load()
         except Exception as e:
             user.conf = ExamConf()
+            user.history = None
             user.save()
-            print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定を保存します。: %r' % (user.mail_addr, e))
-            
+            print('ユーザ %s のファイルが見つかりませんでした。デフォルトの設定を保存します。: %r' % (user.mail_addr, e))
+
         ql = QuestionList(cherrypy.session['exam_json'])
         cherrypy.session['ql'] = ql
-        return template.render(n=len(ql)) | HTMLFormFiller(data=user.conf.to_dict())
+        return template.render(n=len(ql), hists=reversed(user.history)) | HTMLFormFiller(data=user.conf.to_dict())
+
 
     @cherrypy.expose
     @template.output('exam.html')
@@ -151,24 +154,34 @@ class Root(object):
         return template.render(navi=navi, pg=page_num)
 
     @cherrypy.expose
-    @template.output('session_error.html')
-    def session_error(self):
-        return template.render()
-
-    @cherrypy.expose
     @template.output('exam_result.html')
     def exam_result(self, **post_dict):
         try:
             qpages   = cherrypy.session['qpages']
             ans_dict = cherrypy.session['answer_dict']
+            u        = cherrypy.session['user']
         except cherrypy.HTTPError:
             raise cherrypy.HTTPRedirect('session_error')
 
-        # qpages.save()
+        user = User(u)
+        try:
+            user.load()
+            assert user.history
+        except Exception as e:
+            user.history = HistoryList()
+            print('ユーザ %s のファイルが見つかりませんでした。ヒストリを新規に作ります。: %r' % (user.mail_addr, e))
+            
         result = ExamResult(qpages[:], AnswerList(ans_dict))
+        user.history.append(result.summarize())
+        user.save()
+
         navi = [None, Navi('最初に戻る', '/')]
         return template.render(navi=navi, score=result.get_score(), results=result)
 
+    @cherrypy.expose
+    @template.output('session_error.html')
+    def session_error(self):
+        return template.render()
         
 def main(db_name):
     # load data from the pickle file, or initialize it to an empty list
