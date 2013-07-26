@@ -139,7 +139,7 @@ class Root(object):
                 navi = [Navi('前ページ'), Navi('次ページ')]
 
         pginfo = PageInfo(page_num_new, qpages, conf.qn)
-        return template.render(questions=qpages[page_num_new], navi=navi, pginfo=pginfo)
+        return template.render(questions=qpages[page_num_new], navi=navi, pginfo=pginfo) | HTMLFormFiller(data=cherrypy.session['answer_dict'])
 
     @cherrypy.expose
     @template.output('exam_finish_confirm.html')
