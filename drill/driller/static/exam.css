@@ -88,6 +88,9 @@ table {
 	padding:3px;
 }
 
+/* 全問プリント */
+.opts th.hit, td.hit { border:none; text-align:center; padding:3px; color:blue; font-weight: bold;}
+
 /* 試験結果 */
 div.summary {margin:20px 0; text-align:center}
 span.score {font-size:xx-large}

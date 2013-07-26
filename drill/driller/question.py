@@ -91,14 +91,14 @@ class QuestionPages(ObjList):
         self._list = util.split_seq(selected, conf.n_per_page)
 
         
-class QuestionPagesForCheck(ObjList):
-    def __init__(self, qul):
-        qul = copy.deepcopy(qul)
+class QuestionPagesForPrint(ObjList):
+    def __init__(self, ql):
+        qlx = ql[:]
         
-        for i,q in enumerate(qul, 1):
+        for i,q in enumerate(qlx, 1):
             q.i = i                      # question number
 
-        self._list = util.split_seq(selected, conf.n_per_page)
+        self._list = util.split_seq(qlx, len(qlx))
 
             
 ##

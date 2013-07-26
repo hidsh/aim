@@ -42,27 +42,29 @@ class ExamConf(object):
             assert type(int(post_dict['qn']))
             assert type(int(post_dict['n_per_page']))
 
-            self.qn = int(post_dict['qn'])
-            self.order    = post_dict['order']
-            self.flavor   = post_dict['flavor']
-            # self.tags     = post_dict['tags'] TODO
-            self.tags     = [None]
+            self.mode   = post_dict['mode']
+            self.qn     = int(post_dict['qn'])
+            self.order  = post_dict['order']
+            self.flavor = post_dict['flavor']
+            # self.tags   = post_dict['tags'] TODO
+            self.tags   = [None]
             self.n_per_page = int(post_dict['n_per_page'])
         else:
-            self.qn     = 3
-            self.order  = 'random'
-            self.flavor = 'ng'
+            self.mode   = 'drill'     # TODO 既存のユーザ設定ファイルにメンバがないとき
+            self.qn     = 3           # 'ExamConf' object has no attribute 'mode' とかになるのを
+            self.order  = 'random'    # なんとかする
+            self.flavor = 'ng'        # なかったら、デフォルト値でメンバを差しこむ、としたい
             self.tags   = [None]
             self.n_per_page = 2
 
-    def __eq__(self, obj):
-        return (self.qn == obj.qn) and (self.order == obj.order) and (self.flavor == obj.flavor) and (self.n_per_page == obj.n_per_page)
+    def __eq__(self, obj):      # TODO メンバすべてをチェック→汎化
+        return (self.mode == obj.mode) and (self.qn == obj.qn) and (self.order == obj.order) and (self.flavor == obj.flavor) and (self.n_per_page == obj.n_per_page)
 
-    def __repr__(self):
-        return '<ExamConf qn:%d, order:%s, flavor:%s, tags:%r, n_per_page:%d>' % (self.qn, self.order, self.flavor, self.tags, self.n_per_page)
+    def __repr__(self):         # TODO メンバすべてをプリント→汎化
+        return '<ExamConf mode:%s, qn:%d, order:%s, flavor:%s, tags:%r, n_per_page:%d>' % (self.mode, self.qn, self.order, self.flavor, self.tags, self.n_per_page)
 
-    def to_dict(self):
-        return {'qn':self.qn, 'order':self.order, 'flavor':self.flavor, 'n_per_page':self.n_per_page}
+    def to_dict(self):          # TODO メンバすべてを辞書に→汎化
+        return {'mode':self.mode, 'qn':self.qn, 'order':self.order, 'flavor':self.flavor, 'n_per_page':self.n_per_page}
 
 class Result(object):
     def __init__(self, i, q, your_ans):

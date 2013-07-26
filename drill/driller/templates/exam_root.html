@@ -4,11 +4,15 @@
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <link rel="stylesheet" href="${url('/media/default.css')}" type="text/css" />    
-    <title>テストの開始</title>
+    <title>ドリルの開始</title>
     <!-- TODO: move to hoge.js -->
     <script type="text/javascript">
-      function do_post(dest){
-        document.form.action = dest;
+      function do_post(){
+        if(document.form.elements['mode'].value == 'drill')
+          document.form.action = 'exam_start'
+        else
+          document.form.action = 'exam_print'
+
         document.form.submit();
         return false;
       }
@@ -22,9 +26,9 @@
           <tr><th>全問題数</th>
             <td colspan="2">${n}問</td>
           </tr>
-          
-          <tr>
-            <!-- <td colspan="3"><input type="checkbox" name="again" value="yes" />前回の出題にもう一度チャレンジ</td> -->
+          <tr><th>出題モード</th>
+            <td><input type="radio" name="mode" value="print" />全問プリント</td>
+            <td><input type="radio" name="mode" value="drill" />ドリルをやる</td>
           </tr>
           <tr><th>出題数</th>
             <td colspan="2">
@@ -41,7 +45,7 @@
             </td>
           </tr>
           <tr><th>出題の順番</th>
-            <td><input type="radio" name="order" value="seq" />最初から</td>
+            <td><input type="radio" name="order" value="seq" />連続</td>
             <td><input type="radio" name="order" value="random" />ランダム</td>
           </tr>
           <tr><th>出題の傾向</th>
@@ -63,11 +67,11 @@
     </div>
 
     <div id="start">
-      <div>さあ、テストを始めましょう</div>
-      <div><a href="#" onclick="do_post('exam_start')">スタート</a></div>
+      <div>さあ、ドリルを始めましょう</div>
+      <div><a href="#" onclick="do_post()">スタート</a></div>
     </div>
     
-    <h1>テスト履歴</h1>
+    <h1>ドリル履歴</h1>
     <div py:if="hists" id="history">
       <table>
         <tr><th>日付</th><th>出題数</th><th>得点</th></tr>

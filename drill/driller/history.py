@@ -43,9 +43,11 @@ class HistoryList(ObjList):
         self._max = _max
 
     def append(self, hist):
-        print('>>>&&& ', hist)
         self._list.append(History(hist))
         self._list = self._list[-self._max:]           # FIFO
+
+    def reversed(self):
+        return None if self._list == [] else reversed(self._list)
 
 
 ##

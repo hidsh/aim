@@ -7,7 +7,7 @@ from genshi.template import TemplateLoader
 from genshi.filters import HTMLFormFiller
 
 from driller.model import ExamConf, ExamResult
-from driller.question import QuestionList, QuestionPages
+from driller.question import QuestionList, QuestionPages, QuestionPagesForPrint
 from driller.answer import AnswerList
 from driller.history import HistoryList
 from driller.user import User
@@ -52,15 +52,45 @@ class Root(object):
             user.load()
         except Exception as e:
             user.conf = ExamConf()
-            user.history = None
+            user.history = HistoryList()
             user.save()
             print('ユーザ %s のファイルが見つかりませんでした。デフォルトの設定を保存します。: %r' % (user.mail_addr, e))
 
         ql = QuestionList(cherrypy.session['exam_json'])
         cherrypy.session['ql'] = ql
-        return template.render(n=len(ql), hists=reversed(user.history)) | HTMLFormFiller(data=user.conf.to_dict())
+        user.conf.mode = 'drill'         # reset
+        return template.render(n=len(ql), hists=user.history.reversed()) | HTMLFormFiller(data=user.conf.to_dict())
 
 
+    @cherrypy.expose
+    @template.output('exam_print.html')
+    def exam_print(self, **post_dict):
+        assert post_dict
+        assert cherrypy.session['user']
+        assert cherrypy.session['ql']
+
+        user = User(cherrypy.session['user'])
+
+        try:
+            user.load()
+        except Exception as e:
+            user = User(cherrypy.session['user'])
+            print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定でドリルを開始します。: %r' % (user.mail_addr, e))
+            
+        conf = ExamConf(post_dict)
+        if user.conf != conf:
+            user.conf = conf
+            user.save()
+
+        cherrypy.session['conf'] = user.conf
+        
+        ql = cherrypy.session['ql']
+        qpages = QuestionPagesForPrint(ql)
+        navi = [None, Navi('最初に戻る', '/')]
+        pginfo = PageInfo(0, qpages, len(qpages[0]))
+            
+        return template.render(questions=qpages[0], navi=navi, pginfo=pginfo)
+        
     @cherrypy.expose
     @template.output('exam.html')
     def exam_start(self, **post_dict):
@@ -74,7 +104,7 @@ class Root(object):
             user.load()
         except Exception as e:
             user = User(cherrypy.session['user'])
-            print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定でテストを開始します。: %r' % (user.mail_addr, e))
+            print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定でドリルを開始します。: %r' % (user.mail_addr, e))
             
         conf = ExamConf(post_dict)
         if user.conf != conf:
@@ -86,9 +116,9 @@ class Root(object):
         ql = cherrypy.session['ql']
         cherrypy.session['qpages'] = qpages = QuestionPages(ql, user.conf)
         cherrypy.session['answer_dict'] = {}
-
         navi = [None, Navi('次ページ')]
         pginfo = PageInfo(0, qpages, user.conf.qn)
+
         return template.render(questions=qpages[0], navi=navi, pginfo=pginfo)
 
     @cherrypy.expose
