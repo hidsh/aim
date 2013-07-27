@@ -105,7 +105,7 @@ table.accordion_head {margin:0; width:100%}
 .accordion_head td.wrong   {background-color:#FF6699; width:2.5em; text-align:center}
 .accordion_head td.qinfo   {width:13em; font-weight:normal; text-align:center; padding:3px 8px 0 8px}
 .accordion_head td.history {text-align:right; padding:3px 8px 0 8px}
-.accordion_head td.history span {margin:0 0.2em}
+.accordion_head td.history span {font-family:monospace; margin:0 0.2em;}
 .accordion_head td.accordion_indicator {width:1.5em; text-align:center; font-size:large}
  
 .opts .correct {color:blue; border:none; padding:4px 5px 1px 5px; width:1.2em}

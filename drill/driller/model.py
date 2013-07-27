@@ -58,7 +58,10 @@ class ExamConf(object):
             self.n_per_page = 2
 
     def __eq__(self, obj):      # TODO メンバすべてをチェック→汎化
-        return (self.mode == obj.mode) and (self.qn == obj.qn) and (self.order == obj.order) and (self.flavor == obj.flavor) and (self.n_per_page == obj.n_per_page)
+        if obj == None:
+            return False
+        else:
+            return (self.mode == obj.mode) and (self.qn == obj.qn) and (self.order == obj.order) and (self.flavor == obj.flavor) and (self.n_per_page == obj.n_per_page)
 
     def __repr__(self):         # TODO メンバすべてをプリント→汎化
         return '<ExamConf mode:%s, qn:%d, order:%s, flavor:%s, tags:%r, n_per_page:%d>' % (self.mode, self.qn, self.order, self.flavor, self.tags, self.n_per_page)
@@ -66,16 +69,20 @@ class ExamConf(object):
     def to_dict(self):          # TODO メンバすべてを辞書に→汎化
         return {'mode':self.mode, 'qn':self.qn, 'order':self.order, 'flavor':self.flavor, 'n_per_page':self.n_per_page}
 
+
 class Result(object):
-    def __init__(self, i, q, your_ans):
+    def __init__(self, i, q, your_ans, hist_list):
+        self.MARU  = Markup('&#9711;')
+        self.BATSU = Markup('&#10005;')
+
         self.i = i
 
         correct_ans = q.correct_answer()
         if set(correct_ans) == set(your_ans):
-            self.typ_str = Markup('&#9711;')        # まる
+            self.typ_str = self.MARU
             self.typ_class = 'correct'
         else:
-            self.typ_str = Markup('&#10005;')       # ばつ
+            self.typ_str = self.BATSU
             self.typ_class = 'wrong'
         
         opts = []
@@ -86,18 +93,24 @@ class Result(object):
             
         self.q = q
         self.q.opts = opts
-                
+
+        self.history = tuple(map(self.subst_mark, hist_list))
+
+    def subst_mark(self, x):
+        return self.MARU if x == 'correct' else self.BATSU
+        
     def is_correct(self):
         return self.typ_class == 'correct'
 
 
 
 class ExamResult(ObjList):
-    def __init__(self, qpages, ans_list):
+    def __init__(self, qpages, ans_list, history):
         l = []
         for i,(q,a) in enumerate(zip(util.flatten(qpages), ans_list), 1):
             assert i == q.i == a.i
-            l.append(Result(i, q, a.ans))
+            hist_list = history.get_answer_list(q.ad, q.qnum)
+            l.append(Result(i, q, a.ans, hist_list))
         self._list = l
 
     def get_score(self):        # TODO refactoring: History's same function
@@ -111,6 +124,7 @@ class ExamResult(ObjList):
     def summarize(self):
         return tuple(map(lambda x: {'typ':x.typ_class, 'ad':x.q.ad, 'qnum':x.q.qnum}, self._list))
 
+    
 ##
 if __name__ == '__main__':
 

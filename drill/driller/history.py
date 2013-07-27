@@ -19,8 +19,9 @@ class HistoryResultElement(object):
 
     
 class History(object):
-    def __init__(self, summary_list):
-        self.date = datetime.now()
+    def __init__(self, summary_list, start_time):
+        self.start_time = start_time
+        self.end_time   = datetime.now()
         self._list = []
         self.score = (0, 0, 0)
         
@@ -36,19 +37,31 @@ class History(object):
 
         return (len_corr, len_all, score)
 
+    def find_answer(self, ad, qnum):
+        for x in self._list:
+            if (x.ad == ad) and (x.qnum == qnum):
+                return x.typ
+        else:
+            return None
+
 
 class HistoryList(ObjList):
     def __init__(self, _max=500):
         self._list = []
         self._max = _max
 
-    def append(self, hist):
-        self._list.append(History(hist))
-        self._list = self._list[-self._max:]           # FIFO
+    def append(self, hist, start_time):
+        if not tuple(filter(lambda x: x.start_time == start_time, self._list)):
+            self._list.append(History(hist, start_time))
+            self._list = self._list[-self._max:]           # FIFO
 
     def reversed(self):
         return None if self._list == [] else reversed(self._list)
 
+    def get_answer_list(self, ad, qnum, reverse=True):
+        l = tuple(filter(lambda x: x, [x.find_answer(ad, qnum) for x in self._list]))
+        return tuple(reversed(l)) if reverse else l
+        
 
 ##
 if __name__ == '__main__':

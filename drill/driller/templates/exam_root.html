@@ -71,12 +71,12 @@
       <div><a href="#" onclick="do_post()">スタート</a></div>
     </div>
     
-    <h1>ドリル履歴</h1>
     <div py:if="hists" id="history">
+    <h1>ドリル履歴</h1>
       <table>
         <tr><th>日付</th><th>出題数</th><th>得点</th></tr>
         <tr py:for="h in hists">
-          <td>${h.date.year}/${h.date.month}/${h.date.day} ${h.date.hour}:${h.date.minute}</td>
+          <td>${h.start_time.year}/${h.start_time.month}/${h.start_time.day} ${h.start_time.hour}:${h.start_time.minute}</td>
           <td>${h.score[1]}問</td>
           <td>${h.score[2]}点</td>
         </tr>

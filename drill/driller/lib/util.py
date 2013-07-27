@@ -22,7 +22,7 @@ def flatten(l):
     from itertools import chain
     return list(chain.from_iterable(l))
 
-def get_score(func, answers):
+def get_score(func, answers):   # TODO
     corrects = filter(lambda x: x.is_correct(), answers)
     len_all  = len(answers)
     len_corr = len(list(corrects))

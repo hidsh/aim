@@ -32,7 +32,7 @@
               }
 
               $(this).find('.accordion_indicator').children('span').text(arrow);
-              $('div.rbx').css({
+              $(this).next().css({
                  'border-left':   bline,
                  'border-right':  bline,
                  'border-bottom': bline,
@@ -59,7 +59,7 @@
           <tr>
             <th class="qnum">問 ${r.i}</th>
             <td class="${r.typ_class}">${r.typ_str}</td>
-            <td class="history"><span>&#9711;</span><span>&#9711;</span><span>&#9711;</span><span>&#9711;</span><span>&#9711;</span></td>
+            <td class="history"><span py:for="h in r.history">${h}</span></td>
             <td class="qinfo">${r.q.ad}年（${r.q.nengo} ${r.q.jy}年）問${r.q.qnum}</td>
             <td class="accordion_indicator"><span></span></td>
           </tr>

@@ -3,6 +3,7 @@
 
 import os.path
 import pickle
+import copy
 
 class User(object):
     def __init__(self, mail_addr):
@@ -25,13 +26,21 @@ class User(object):
             with open(path, 'rb') as f:
                 box = pickle.load(f)
         except FileNotFoundError as e:
-            raise('ファイルがありません %r' % e)
+            raise('ファイルがありません: %r' % e)
         else:
             assert self.mail_addr == box['mail_addr']
 
             self.conf    = box['conf']
             self.history = box['history']
+
+    def update_conf(self, new_conf):
+        if self.conf != new_conf:
+            self.conf = new_conf
         
+    def get_history_old(self, start_time):
+        clone = copy.copy(self.history)
+        clone._list = list(filter(lambda x: x.start_time < start_time, clone._list))
+        return clone
 
 ##
 if __name__ == '__main__':

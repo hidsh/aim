@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import operator, os, pickle, sys
+from datetime import datetime
 
 import cherrypy
 from genshi.template import TemplateLoader
@@ -35,6 +36,8 @@ class Root(object):
     def index(self):
         user_account = 'hoge@gmail.com'               # test
         exam_json    = 'houki_a.json'                 # test
+
+        # cherrypy.lib.sessions.expire()
 
         cherrypy.session['user']      = user_account
         cherrypy.session['exam_json'] = exam_json
@@ -103,15 +106,15 @@ class Root(object):
         try:
             user.load()
         except Exception as e:
-            user = User(cherrypy.session['user'])
             print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定でドリルを開始します。: %r' % (user.mail_addr, e))
             
         conf = ExamConf(post_dict)
-        if user.conf != conf:
-            user.conf = conf
-            user.save()
+        user.update_conf(conf)
+        user.save()
 
         cherrypy.session['conf'] = user.conf
+        
+        cherrypy.session['start_time'] = datetime.now()
         
         ql = cherrypy.session['ql']
         cherrypy.session['qpages'] = qpages = QuestionPages(ql, user.conf)
@@ -187,6 +190,7 @@ class Root(object):
     @template.output('exam_result.html')
     def exam_result(self, **post_dict):
         try:
+            start_time = cherrypy.session['start_time']
             qpages   = cherrypy.session['qpages']
             ans_dict = cherrypy.session['answer_dict']
             u        = cherrypy.session['user']
@@ -196,14 +200,16 @@ class Root(object):
         user = User(u)
         try:
             user.load()
-            assert user.history
         except Exception as e:
             user.history = HistoryList()
             print('ユーザ %s のファイルが見つかりませんでした。ヒストリを新規に作ります。: %r' % (user.mail_addr, e))
-            
-        result = ExamResult(qpages[:], AnswerList(ans_dict))
-        user.history.append(result.summarize())
+
+        result = ExamResult(qpages[:], AnswerList(ans_dict), user.history)
+
+        user.history.append(result.summarize(), start_time)
         user.save()
+
+        result = ExamResult(qpages[:], AnswerList(ans_dict), user.get_history_old(start_time)) # for output to html
 
         navi = [None, Navi('最初に戻る', '/')]
         return template.render(navi=navi, score=result.get_score(), results=result)
