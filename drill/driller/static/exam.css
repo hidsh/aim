@@ -13,11 +13,30 @@ div.qbi {
     margin:0 40px;
 }
 
+div#footer {margin:40px 30px 5px 30px; text-align:center; border-top:#000 1px solid; line-height:normal; font-size:small}
+div#footer p {margin-top:5px}
+
 /* ルートページ */
+#exam_root h1 {margin:40px 30px 5px 30px}
+
+#setting table {width:510px}
+#setting tr {border: #000 1px solid;}
+#setting th {width:180px}
+#setting td {border:none}
+
 th.lv_gr {font-size: x-large; color:green;}
 th.lv_ye {font-size: x-large; color:yellow;}
 th.lv_re {font-size: x-large; color:red;}
-th.lv_wh {font-size: x-large; color:black;}
+th.lv_wh {font-size: x-large; color:LightGray;}
+
+div#get_start {border: #000 1px dashed; margin:40px 30px 40px 30px; width:510px}
+
+#stat table {width:510px; text-align:center}
+#stat th {width: 180px}
+
+#history table {width:510px; text-align:center}
+#history td.num {width:40px;}
+#history td.date {width:140px;}
 
 /* ナビゲーション */
 div.navi {

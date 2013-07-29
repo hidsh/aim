@@ -72,23 +72,7 @@ class Root(object):
     @template.output('exam_print.html')
     def exam_print(self, **post_dict):
         assert post_dict
-        assert cherrypy.session['user']
         assert cherrypy.session['ql']
-
-        user = User(cherrypy.session['user'])
-
-        try:
-            user.load()
-        except Exception as e:
-            user = User(cherrypy.session['user'])
-            print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定でドリルを開始します。: %r' % (user.mail_addr, e))
-            
-        conf = ExamConf(post_dict)
-        if user.conf != conf:
-            user.conf = conf
-            user.save()
-
-        cherrypy.session['conf'] = user.conf
         
         ql = cherrypy.session['ql']
         qpages = QuestionPagesForPrint(ql)

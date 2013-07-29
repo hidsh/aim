@@ -25,7 +25,7 @@
     </script>
   </head>
   <body>
-    <div><img src="${url('/media/logo.gif')}" /></div>
+    <!-- <div><img src="${url('/media/logo.gif')}" /></div> -->
     <div class="navi">
       <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'prev')">${navi[0].label}</a></span>
       <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qn}問）</span>

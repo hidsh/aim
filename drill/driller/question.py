@@ -108,7 +108,7 @@ class QuestionList(ObjList):
             
         l.sort(key=lambda x:x.level)
         for x in l:
-            x.delattr('level')
+            delattr(x, 'level')
         return l
         
     def get_color_distribution(self):
@@ -122,14 +122,15 @@ class QuestionList(ObjList):
         
         return ((n, 100), (n_gr, util.percent(n_gr, n)), (n_ye, util.percent(n_ye, n)), (n_re, util.percent(n_re, n)), (n_wh, util.percent(n_wh, n)))
 
-        
+
 class QuestionPages(ObjList):
     def __init__(self, ql, conf):
         qlx = ql[:]
-        if conf.flavor == 'ng':          # ng | random
-            pass                         # TODO
+        if conf.order == 'poor':         # poor | cont | random
+            random.shuffle(qlx)
+            qlx = ql.sort_by_poor_questions()
             
-        if conf.order == 'random':       # seq | random
+        elif conf.order == 'rand':
             random.shuffle(qlx)
 
         selected = qlx[:conf.qn]
@@ -140,7 +141,7 @@ class QuestionPages(ObjList):
 
         self._list = util.split_seq(selected, conf.n_per_page)
 
-        
+
 class QuestionPagesForPrint(ObjList):
     def __init__(self, ql):
         qlx = ql[:]
@@ -148,7 +149,7 @@ class QuestionPagesForPrint(ObjList):
         for i,q in enumerate(qlx, 1):
             q.i = i                      # question number
 
-        self._list = util.split_seq(qlx, len(qlx))
+        self._list = [qlx]
 
          
 ##

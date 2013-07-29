@@ -4,6 +4,7 @@
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <link rel="stylesheet" href="${url('/media/exam.css')}" type="text/css" />
+    <title>結果</title>
     <!-- mathjax beg -->
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$']] }, "HTML-CSS": { scale: 140} });
@@ -46,7 +47,6 @@
     </script>
   </head>
   <body>
-    <div><img src="${url('/media/logo.gif')}" /></div>
     <div class="navi">
       <span py:if="navi[1]" class="navi_r"><a class="navi" href="${navi[1].dispatcher}">${navi[1].label}</a></span>
     </div>
