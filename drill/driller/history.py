@@ -1,9 +1,10 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, date
 
 from driller.model import ObjList
+from driller.lib import util
 
 class HistoryResultElement(object):
     def __init__(self, summarized_result):
@@ -14,15 +15,16 @@ class HistoryResultElement(object):
 
     def __repr__(self):
         print('<HistoryResultElement %d: Q%d: %s>' % (self.ad, self.qnum, self.typ))
+
     def is_correct(self):
         return self.typ == 'correct'
 
     
 class History(object):
     def __init__(self, summary_list, start_time):
+        self._list = []
         self.start_time = start_time
         self.end_time   = datetime.now()
-        self._list = []
         self.score = (0, 0, 0)
         
         for x in summary_list:
@@ -33,14 +35,14 @@ class History(object):
         correct_answers = filter(lambda x: x.is_correct(), self._list)
         len_all  = len(self._list)
         len_corr = len(list(correct_answers))
-        score = 0 if (len_corr == 0) or (len_all == 0) else round(len_corr / len_all * 100, 1)
+        pct = util.percent(len_corr, len_all)
 
-        return (len_corr, len_all, score)
+        return (len_corr, len_all, pct)
 
     def find_answer(self, ad, qnum):
         for x in self._list:
             if (x.ad == ad) and (x.qnum == qnum):
-                return x.typ
+                return (x.typ, self.start_time)
         else:
             return None
 
@@ -51,18 +53,23 @@ class HistoryList(ObjList):
         self._max = _max
 
     def append(self, hist, start_time):
-        if not tuple(filter(lambda x: x.start_time == start_time, self._list)):
-            self._list.append(History(hist, start_time))
-            self._list = self._list[-self._max:]           # FIFO
+        l = list(filter(lambda x: x.start_time != start_time, self._list)) # prevent overlapping
+        l.append(History(hist, start_time))
+        self._list = l[-self._max:]           # FIFO
 
-    def reversed(self):
-        return None if self._list == [] else reversed(self._list)
+    def out(self, reverse=True):
+        l = self._list[:]
+        for i,x in enumerate(l, 1):
+            x.i = i
+            x.date_str = x.start_time.strftime('%Y/%m/%d %H:%M')
+            
+        return [] if l == [] else reversed(l)
 
     def get_answer_list(self, ad, qnum, reverse=True):
         l = tuple(filter(lambda x: x, [x.find_answer(ad, qnum) for x in self._list]))
         return tuple(reversed(l)) if reverse else l
-        
 
+        
 ##
 if __name__ == '__main__':
     pass

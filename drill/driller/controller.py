@@ -59,10 +59,13 @@ class Root(object):
             user.save()
             print('ユーザ %s のファイルが見つかりませんでした。デフォルトの設定を保存します。: %r' % (user.mail_addr, e))
 
-        ql = QuestionList(cherrypy.session['exam_json'])
+        ql = QuestionList(cherrypy.session['exam_json'], user.history)
+        
         cherrypy.session['ql'] = ql
-        user.conf.mode = 'drill'         # reset
-        return template.render(n=len(ql), hists=user.history.reversed()) | HTMLFormFiller(data=user.conf.to_dict())
+        user.conf.mode = 'drill'                      # reset mode
+        hists=user.history.out()
+        stat = ql.get_color_distribution()
+        return template.render(n=len(ql), hists=hists, stat=stat) | HTMLFormFiller(data=user.conf.to_dict())
 
 
     @cherrypy.expose

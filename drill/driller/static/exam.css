@@ -13,6 +13,12 @@ div.qbi {
     margin:0 40px;
 }
 
+/* ルートページ */
+th.lv_gr {font-size: x-large; color:green;}
+th.lv_ye {font-size: x-large; color:yellow;}
+th.lv_re {font-size: x-large; color:red;}
+th.lv_wh {font-size: x-large; color:black;}
+
 /* ナビゲーション */
 div.navi {
     text-align:center;
@@ -112,3 +118,4 @@ table.accordion_head {margin:0; width:100%}
 .opts .wrong   {color:red;  border:none; padding:4px 5px 1px 5px; width:1.2em}
 span.strike {text-decoration:line-through; color:red}
 .accordion_head {cursor:pointer}
+

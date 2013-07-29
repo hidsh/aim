@@ -22,13 +22,26 @@ def flatten(l):
     from itertools import chain
     return list(chain.from_iterable(l))
 
+def percent(part, total):
+    if part  < 1: return 0
+    if total < 1: return 0      # prevent 'div by 0'
+    
+    _pct = part / (total * 1.0) * 100
+
+    _pct = round(_pct, 1)       # x.x
+    _int = int(_pct)
+    
+    return _int if (_pct * 10 - _int * 10) == 0 else _pct
+    
 def get_score(func, answers):   # TODO
     corrects = filter(lambda x: x.is_correct(), answers)
     len_all  = len(answers)
     len_corr = len(list(corrects))
-    score = 0 if len_corr == 0 else round(len_corr / len_all * 100, 1)
+    score = 0 if len_corr == 0 else percent(len_corr / len_all * 100, 1)
     
     return (len_corr, len_all, score)
+
+
 
     
 ##

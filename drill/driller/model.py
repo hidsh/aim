@@ -110,16 +110,16 @@ class ExamResult(ObjList):
         for i,(q,a) in enumerate(zip(util.flatten(qpages), ans_list), 1):
             assert i == q.i == a.i
             hist_list = history.get_answer_list(q.ad, q.qnum)
-            l.append(Result(i, q, a.ans, hist_list))
+            l.append(Result(i, q, a.ans, map(lambda x: x[0], hist_list)))
         self._list = l
 
     def get_score(self):        # TODO refactoring: History's same function
         correct_answers = filter(lambda x: x.is_correct(), self._list)
         len_all  = len(self._list)
         len_corr = len(list(correct_answers))
-        score = 0 if (len_corr == 0) or (len_all == 0) else round(len_corr / len_all * 100, 1)
+        pct = util.percent(len_corr, len_all)
         
-        return (len_corr, len_all, score)
+        return (len_corr, len_all, pct)
 
     def summarize(self):
         return tuple(map(lambda x: {'typ':x.typ_class, 'ad':x.q.ad, 'qnum':x.q.qnum}, self._list))

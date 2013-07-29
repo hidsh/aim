@@ -3,7 +3,7 @@
       xmlns:py="http://genshi.edgewall.org/">
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-    <link rel="stylesheet" href="${url('/media/default.css')}" type="text/css" />    
+    <link rel="stylesheet" href="${url('/media/exam.css')}" type="text/css" />    
     <title>ドリルの開始</title>
     <!-- TODO: move to hoge.js -->
     <script type="text/javascript">
@@ -33,14 +33,14 @@
           <tr><th>出題数</th>
             <td colspan="2">
               <select name="qn">
-                <option value="3"  selected="" >3</option>
-                <option value="5"  selected="" >5</option>
-                <option value="10" selected="">10</option>
-                <option value="15" selected="">15</option>
-                <option value="20" selected="">20</option>
-                <option value="30" selected="">30</option>
-                <option value="50" selected="">50</option>
-                <option value="all" selected="">全部</option>
+                <option value="3"  >3</option>
+                <option value="5"  >5</option>
+                <option value="10" >10</option>
+                <option value="15" >15</option>
+                <option value="20" >20</option>
+                <option value="30" >30</option>
+                <option value="50" >50</option>
+                <option value="all">全部</option>
               </select>
             </td>
           </tr>
@@ -49,16 +49,16 @@
             <td><input type="radio" name="order" value="random" />ランダム</td>
           </tr>
           <tr><th>出題の傾向</th>
-            <td><input type="radio" name="flavor" value="ng" />間違えた問題を優先</td>
-            <td><input type="radio" name="flavor" value="dontcare" />関係なし</td>
+            <td><input type="radio" name="flavor" value="ng" />弱点だくだく</td>
+            <td><input type="radio" name="flavor" value="dontcare" />ふつうで</td>
           </tr>
           <tr><th>1ページあたりの問題数</th>
             <td colspan="2">
               <select name="n_per_page">
-                <option value="1"  selected="" >1</option>
-                <option value="2"  selected="" >2</option>
-                <option value="3"  selected="" >3</option>
-                <option value="5"  selected="" >5</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="5">5</option>
               </select>
             </td>
           </tr>
@@ -67,16 +67,28 @@
     </div>
 
     <div id="start">
-      <div>さあ、ドリルを始めましょう</div>
+      <div>さあ、ドリルを始めよう</div>
       <div><a href="#" onclick="do_post()">スタート</a></div>
+    </div>
+    
+    <div id="stat">
+      <h1>現在の状況</h1>
+      <table>
+        <tr><th>全体</th><th colspan="2">${stat[0][0]}問</th></tr>
+        <tr><th class="lv_gr">&#10026;</th><td>${stat[1][0]}問</td><td>${stat[1][1]}%</td></tr>
+        <tr><th class="lv_ye">&#10026;</th><td>${stat[2][0]}問</td><td>${stat[2][1]}%</td></tr>
+        <tr><th class="lv_re">&#10026;</th><td>${stat[3][0]}問</td><td>${stat[3][1]}%</td></tr>
+        <tr><th class="lv_wh">&#10026;</th><td>${stat[4][0]}問</td><td>${stat[4][1]}%</td></tr>
+      </table>
     </div>
     
     <div py:if="hists" id="history">
     <h1>ドリル履歴</h1>
       <table>
-        <tr><th>日付</th><th>出題数</th><th>得点</th></tr>
+        <tr><th></th><th>日付</th><th>出題数</th><th>得点</th></tr>
         <tr py:for="h in hists">
-          <td>${h.start_time.year}/${h.start_time.month}/${h.start_time.day} ${h.start_time.hour}:${h.start_time.minute}</td>
+          <td>${h.i}</td>
+          <td>${h.date_str}</td>
           <td>${h.score[1]}問</td>
           <td>${h.score[2]}点</td>
         </tr>
