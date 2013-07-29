@@ -59,7 +59,7 @@ class Question(object):
         self.history = history
 
     def get_color(self, by):             # by: 'color'|'level'
-        if   self.history == []:
+        if   self.history == [] or self.history[0] == 'reset':
             color = self.WHITE
             level = 0
         elif self.history[0:2] == ['correct', 'correct']:

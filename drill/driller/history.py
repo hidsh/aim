@@ -8,7 +8,7 @@ from driller.lib import util
 
 class HistoryResultElement(object):
     def __init__(self, summarized_result):
-        # summarized_result: {'typ':typ_class, 'ad':q.ad, 'qnum':q.qnum}
+        # summarized_result: dict {'typ':typ_class, 'ad':q.ad, 'qnum':q.qnum}
         self.typ  = summarized_result['typ']
         self.ad   = summarized_result['ad']
         self.qnum = summarized_result['qnum']
@@ -48,7 +48,7 @@ class History(object):
 
 
 class HistoryList(ObjList):
-    def __init__(self, _max=500):
+    def __init__(self, _max=1000):
         self._list = []
         self._max = _max
 
@@ -57,8 +57,15 @@ class HistoryList(ObjList):
         l.append(History(hist, start_time))
         self._list = l[-self._max:]           # FIFO
 
+    def level_reset(self, ql):
+        l = list(filter(lambda x: x.start_time, self._list))               # delete previous reset record
+        summary_list = [{'typ':'reset', 'ad':x.ad, 'qnum':x.qnum} for x in ql]
+        l.append(History(summary_list, None))                              # reset: start_time = None
+        self._list = l
+            
+        
     def out(self, reverse=True):
-        l = self._list[:]
+        l = list(filter(lambda x: x.start_time, self._list))
         for i,x in enumerate(l, 1):
             x.i = i
             x.date_str = x.start_time.strftime('%Y/%m/%d %H:%M')

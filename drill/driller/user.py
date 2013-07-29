@@ -39,7 +39,7 @@ class User(object):
         
     def get_history_old(self, start_time):
         clone = copy.copy(self.history)
-        clone._list = list(filter(lambda x: x.start_time < start_time, clone._list))
+        clone._list = list(filter(lambda x: x.start_time and (x.start_time < start_time), clone._list))
         return clone
 
 ##

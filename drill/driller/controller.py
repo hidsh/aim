@@ -46,7 +46,7 @@ class Root(object):
 
     @cherrypy.expose
     @template.output('exam_root.html')
-    def exam_root(self):
+    def exam_root(self, **post_dict):
         assert cherrypy.session['user']
         assert cherrypy.session['exam_json']
         
@@ -61,8 +61,14 @@ class Root(object):
 
         ql = QuestionList(cherrypy.session['exam_json'], user.history)
         
+        if post_dict:
+            if post_dict['level_reset'] == 'yes':
+                user.history.level_reset(ql)
+                user.save()
+                raise cherrypy.HTTPRedirect('exam_root')              # reload
+        
         cherrypy.session['ql'] = ql
-        user.conf.mode = 'drill'                      # reset mode
+        user.conf.mode = 'drill'                                      # default mode
         hists=user.history.out()
         stat = ql.get_color_distribution()
         return template.render(n=len(ql), hists=hists, stat=stat) | HTMLFormFiller(data=user.conf.to_dict())
@@ -100,7 +106,6 @@ class Root(object):
         user.save()
 
         cherrypy.session['conf'] = user.conf
-        
         cherrypy.session['start_time'] = datetime.now()
         
         ql = cherrypy.session['ql']

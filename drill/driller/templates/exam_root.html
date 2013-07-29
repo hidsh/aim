@@ -9,11 +9,17 @@
     <script type="text/javascript">
       function do_post(){
         if(document.form.elements['mode'].value == 'drill')
-          document.form.action = 'exam_start'
+          document.form.action = 'exam_start';
         else
-          document.form.action = 'exam_print'
+          document.form.action = 'exam_print';
 
         document.form.submit();
+        return false;
+      }
+      function level_reset(){
+        //window.dialog('レベルをリセットします。よろしいですか？'); // TODO
+        document.f_reset.action = 'exam_root';
+        document.f_reset.submit();
         return false;
       }
     </script>
@@ -75,7 +81,10 @@
     </div>
     
     <div id="stat">
-      <h1>現在の状況</h1>
+      <h1>現在の状況<a href="#" id="level_reset" onclick="level_reset()">レベルリセット</a></h1>
+      <form name="f_reset" method="post">
+        <input type="hidden" name="level_reset" value="yes" />
+      </form>
       <table>
         <tr><th>全体</th><th colspan="2">${stat[0][0]}問</th></tr>
         <tr><th class="lv_gr">&#10026;</th><td>${stat[1][0]}問</td><td>${stat[1][1]}%</td></tr>
