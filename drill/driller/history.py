@@ -48,14 +48,17 @@ class History(object):
 
 
 class HistoryList(ObjList):
-    def __init__(self, _max=1000):
+    _MAX = 1000
+    
+    def __init__(self):
         self._list = []
-        self._max = _max
+        self.count = 0
 
     def append(self, hist, start_time):
         l = list(filter(lambda x: x.start_time != start_time, self._list)) # prevent overlapping
         l.append(History(hist, start_time))
-        self._list = l[-self._max:]           # FIFO
+        self._list = l[-self._MAX:]           # FIFO
+        self.count += 1
 
     def level_reset(self, ql):
         l = list(filter(lambda x: x.start_time, self._list))               # delete previous reset record
@@ -66,11 +69,16 @@ class HistoryList(ObjList):
         
     def out(self, reverse=True):
         l = list(filter(lambda x: x.start_time, self._list))
-        for i,x in enumerate(l, 1):
+        oldest = 1 if self.count < self._MAX else self.count - (self._MAX - 1)
+        
+        for i,x in enumerate(l, oldest):
             x.i = i
             x.date_str = x.start_time.strftime('%Y/%m/%d %H:%M')
             
-        return [] if l == [] else reversed(l)
+        if reverse:
+            l.reverse()
+            
+        return [] if l == [] else l
 
     def get_answer_list(self, ad, qnum, reverse=True):
         l = tuple(filter(lambda x: x, [x.find_answer(ad, qnum) for x in self._list]))
