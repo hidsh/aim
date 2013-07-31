@@ -254,7 +254,9 @@ def main(db_name):
         'tools.staticdir.root': os.path.abspath(os.path.dirname(__file__)),
 
         'tools.sessions.on': True,
-        'tools.sessions.timeout': 60        # 60 min
+        'tools.sessions.timeout': 60,        # 60 min
+        'tools.sessions.storage_type': 'file',
+        'tools.sessions.storage_path': './sessions'
     })
 
     cherrypy.quickstart(Root(data), '/', {
