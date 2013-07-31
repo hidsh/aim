@@ -32,7 +32,29 @@ def percent(part, total):
     _int = int(_pct)
     
     return _int if (_pct * 10 - _int * 10) == 0 else _pct
+
+def timedelta_fmt(timedelta):
+    hh,mm,ss = str(timedelta).split(':')
+    h = int(hh)
+    m = int(mm)
+    s = round(float(ss))
     
+    if s > 30:
+        m += 1
+        if m > 60:
+            h += 1
+            m -= 60
+            
+
+    if h > 1:
+        return '%d時間%d分' % (h, m)
+    elif m > 10:
+        return '%d分' % m
+    elif m >= 1:
+        return '%d分%d秒' % (m, s)
+    else:
+        return '%d秒' % s
+
 def get_score(func, answers):   # TODO
     corrects = filter(lambda x: x.is_correct(), answers)
     len_all  = len(answers)

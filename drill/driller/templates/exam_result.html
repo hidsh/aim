@@ -52,7 +52,8 @@
       <span py:if="navi[1]" class="navi_r"><a class="navi" href="${navi[1].dispatcher}">${navi[1].label}</a></span>
     </div>
     <div class="summary">
-      <div class="score"><span class="score">${score[2]}点</span><span class="score_frac">$(=\frac{${score[0]}}{${score[1]}})$</span></div>
+      <div id="score"><span id="total">${score[2]}点</span><span id="frac">$(=\frac{${score[0]}}{${score[1]}})$</span></div>
+      <div id="time"><span id="total">タイム：${time[0]}</span><span id="avg">(1問あたり約 ${time[1]})</span></div>
     </div>
     <div class="details">
       <div py:for="r in results" class="rb">

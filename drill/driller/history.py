@@ -55,9 +55,10 @@ class HistoryList(ObjList):
         self.count = 0
 
     def append(self, hist, start_time):
-        l = list(filter(lambda x: x.start_time != start_time, self._list)) # prevent overlapping
-        l.append(History(hist, start_time))
-        self._list = l[-self._MAX:]           # FIFO
+        if list(filter(lambda x: x.start_time == start_time, self._list)): return   # prevent overlapping
+
+        self._list.append(History(hist, start_time))
+        self._list = self._list[-self._MAX:]                               # FIFO
         self.count += 1
 
     def level_reset(self, ql):
@@ -66,6 +67,12 @@ class HistoryList(ObjList):
         l.append(History(summary_list, None))                              # reset: start_time = None
         self._list = l
             
+    def get_last_time(self):
+        last = self._list[-1]
+        total = (last.end_time - last.start_time)
+        avg = total / len(last._list)
+        return (util.timedelta_fmt(total), util.timedelta_fmt(avg))
+        
         
     def out(self, reverse=True):
         l = list(filter(lambda x: x.start_time, self._list))

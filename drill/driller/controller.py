@@ -203,11 +203,12 @@ class Root(object):
 
         user.history.append(result.summarize(), start_time)
         user.save()
+        time = user.history.get_last_time()
 
         result = ExamResult(qpages[:], AnswerList(ans_dict), user.get_history_old(start_time)) # for output to html
 
         navi = [None, Navi('最初に戻る', '/')]
-        return template.render(navi=navi, score=result.get_score(), results=result, u=user)
+        return template.render(navi=navi, score=result.get_score(), results=result, time=time, u=user)
 
     @cherrypy.expose
     @template.output('session_error.html')
