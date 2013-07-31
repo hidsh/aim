@@ -4,6 +4,7 @@
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <link rel="stylesheet" href="${url('/media/exam.css')}" type="text/css" />
+    <title>ドリル終了確認</title>
     <script type="text/javascript">
       function do_post(form, dest){
         form.action = dest;
@@ -13,7 +14,6 @@
     </script>
   </head>
   <body>
-    <div><img src="${url('/media/logo.gif')}" /></div>
     <div class="navi">
       <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_confirm, 'exam')">${navi[0].label}</a></span>
     </div>

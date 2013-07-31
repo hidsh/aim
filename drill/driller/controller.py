@@ -49,7 +49,7 @@ class Root(object):
     def exam_root(self, **post_dict):
         assert cherrypy.session['user']
         assert cherrypy.session['exam_json']
-        
+
         user = User(cherrypy.session['user'])
         try:
             user.load()
@@ -69,8 +69,8 @@ class Root(object):
         
         cherrypy.session['ql'] = ql
         user.conf.mode = 'drill'                                      # default mode
-        hists=user.history.out()
-        stat = ql.get_color_distribution()
+        hists = user.history.out()
+        stat  = ql.get_color_distribution()
         return template.render(n=len(ql), hists=hists, stat=stat) | HTMLFormFiller(data=user.conf.to_dict())
 
 
