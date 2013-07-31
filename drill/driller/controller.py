@@ -128,7 +128,7 @@ class Root(object):
             page_num  = int(post_dict.pop('_pg'))
         except ValueError:
             print('invalid post request:post_dict=%s' % post_dict)
-            raise cherrypy.HTTPRedirect('request_error')            
+            raise cherrypy.HTTPRedirect('request_error')
         except Exception as e:
             print('unknown error: %r' % e)
             raise cherrypy.HTTPRedirect('unknown_error')            
@@ -142,7 +142,7 @@ class Root(object):
         except cherrypy.HTTPError:
             raise cherrypy.HTTPRedirect('session_error')
 
-        assert 0 <= page_num <= len(qpages) - 1
+        assert 0 <= page_num <= len(qpages), 'page_num:%d' % page_num
 
         if cmd == 'prev':
             assert 1 <= page_num
@@ -178,7 +178,7 @@ class Root(object):
         except cherrypy.HTTPError:
             raise cherrypy.HTTPRedirect('session_error')
         
-        page_num = len(qpages) - 2                     # last question page
+        page_num = len(qpages)                     # (last question page) + 1
         navi = [Navi('前ページ'), None]
         return template.render(navi=navi, pg=page_num, u=user)
 

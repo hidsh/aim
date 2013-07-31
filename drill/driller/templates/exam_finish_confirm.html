@@ -8,7 +8,7 @@
     <script type="text/javascript">
       function do_post(form, dest){
         form.action = dest;
-        form.submit();kk
+        form.submit();
         return false;
       }
     </script>
@@ -20,14 +20,16 @@
     </div>
     <div>
       <p>テストを終了します。よろしいですか？</p>
-      <form name="form_confirm" method="post"><table>
+      <form name="form_confirm" method="post">
+        <table id="confirm">
           <input type="hidden" name="_pg" value="${pg}"/>
-          <input type="hidden" name="_cmd" value="next"/>
+          <input type="hidden" name="_cmd" value="prev"/>
           <tr>
-            <td><input type="button" name="confirm" value="yes" onclick="do_post(document.form_confirm, 'exam_result')" /></td>
-            <td><input type="button" name="confirm" value="no"  onclick="do_post(document.form_confirm, 'exam')" /></td>
+            <td><input type="button" name="confirm" value="はい" onclick="do_post(document.form_confirm, 'exam_result')" /></td>
+            <td><input type="button" name="confirm" value="いいえ"  onclick="do_post(document.form_confirm, 'exam')" /></td>
           </tr>
-      </table></form>
+        </table>
+      </form>
     </div>
     <div class="navi">
       <span py:if="navi[0]" class="navi_l"><a class="navi" href="${url('/%s/%d/%s/' % (navi[0].dispatcher, pg, 'next'))}">${navi[0].label}</a></span>

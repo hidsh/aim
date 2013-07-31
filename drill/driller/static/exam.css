@@ -122,18 +122,19 @@ table {
 .opts th.hit, td.hit {border:none; text-align:center; padding:3px; color:blue; font-weight:bold}
 
 /* exam_finish_confirm */
+table#confirm td {border:none}
 
 /* exam_result */
 div.summary {margin:20px 0; text-align:center}
 div#score {margin 50px}
 div#score span#total {font-size:xx-large}
-div#score span#frac {font-size:x-large; margin-left:20px}
+div#score span#frac  {font-size:x-large; margin-left:20px}
 
 div#time {margin:50px}
 div#time span#total {}
 div#time span#avg   {margin-left:20px}
 div.details {margin:20px 0}
-div.rb {margin:-1px 0 0 0; padding:0; border:none;}
+div.rb {margin:-1px 0 0 0; padding:0; border:none}
 div.rbx {margin:0; padding:5px 40px 5px 40px; border:none}
 table.accordion_head {margin:0; width:100%}
 .accordion_head th,.accordion_head td {padding:3px 15px 0 15px; font-weight: bold}
