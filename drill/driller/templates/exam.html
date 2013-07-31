@@ -25,6 +25,7 @@
     </script>
   </head>
   <body>
+    <div id="user_id"><p><span>${u.mail_addr}</span> としてログイン中</p></div>
     <!-- <div><img src="${url('/media/logo.gif')}" /></div> -->
     <div class="navi">
       <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'prev')">${navi[0].label}</a></span>
