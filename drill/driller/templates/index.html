@@ -4,7 +4,7 @@
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <link rel="stylesheet" href="${url('/media/default.css')}" type="text/css" />    
-    <title>テストの開始</title>
+    <title>電気ドリル</title>
     <!-- TODO: move to hoge.js -->
     <script type="text/javascript">
       function do_post(dest){
@@ -15,57 +15,17 @@
     </script>
   </head>
   <body class="index">
-    <div id="start">
-      <div>さあ、テストを始めましょう</div>
-      <div><a href="exam_start" onclick="do_post('exam_start')">スタート</a></div>
+    <div id="register">
+      <div>登録</div>
+      <div><a href="#" onclick="do_post('regi')">登録</a></div>
     </div>
-    <div id="setting">
-      <h1>設定</h1>
-      <form name="form" method="post">
-        <table>
-          <tr><th>全問題数</th>
-            <td colspan="2">${n}問</td>
-          </tr>
-          <tr><th>出題数</th>
-            <td colspan="2">
-              <select name="qnum_all">
-                <option value="3"  selected="" >3</option>
-                <option value="5"  selected="" >5</option>
-                <option value="10" selected="">10</option>
-                <option value="15" selected="">15</option>
-                <option value="20" selected="">20</option>
-                <option value="30" selected="">30</option>
-                <option value="50" selected="">50</option>
-                <option value="all" selected="">全部</option>
-              </select>
-            </td>
-          </tr>
-          <tr><th>出題の順番</th>
-            <td><input type="radio" name="order" value="seq" />最初から</td>
-            <td><input type="radio" name="order" value="random" />ランダム</td>
-          </tr>
-          <tr><th>出題の傾向</th>
-            <td><input type="radio" name="flavor" value="ng" />間違えた問題を優先</td>
-            <td><input type="radio" name="flavor" value="" />関係なし</td>
-          </tr>
-          <tr><th>1ページあたりの問題数</th>
-            <td colspan="2">
-              <select name="n_per_page">
-                <option value="1"  selected="" >1</option>
-                <option value="2"  selected="" >2</option>
-                <option value="3"  selected="" >3</option>
-                <option value="5"  selected="" >5</option>
-              </select>
-            </td>
-          </tr>
-        </table>
-      </form>
+    <div id="login">
+      <div>ログイン</div>
+      <div><a href="#" onclick="do_post('login')">ログイン</a></div>
     </div>
-    <div id="personal_data">
-      
+    <div id="ドリル一覧">
     </div>
     <div id="footer">
-      <hr />
       <p class="legalese">© 2013 autometa.ro</p>
     </div>
   </body>

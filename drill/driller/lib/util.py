@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+
 def split_seq(seq, size):
     return [seq[i:i+size] for i in range(0, len(seq), size)]
 
@@ -63,7 +65,11 @@ def get_score(func, answers):   # TODO
     
     return (len_corr, len_all, score)
 
+def filename_body(path):
+    return os.path.splitext(path)[0]
 
+def filename_ext(path):
+    return os.path.splitext(path)[1]
 
     
 ##

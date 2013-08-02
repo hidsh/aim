@@ -13,6 +13,7 @@ from driller.answer import AnswerList
 from driller.history import HistoryList
 from driller.user import User
 from driller.lib import template
+from driller.lib import util
 
 
 class PageInfo(object):
@@ -36,11 +37,25 @@ class Root(object):
     def index(self):
         user_account = 'hoge@gmail.com'               # test
         exam_json    = 'houki_a.json'                 # test
+        readme_json  = 'readme.json'                  # test
 
-        # cherrypy.lib.sessions.expire()
-
+        # image directory for each questions
+        # TODO: store to session
+        # cherrypy.tree.mount(Root(self.data), "/", config={
+        cherrypy.request.app.merge( config={
+                '/img': {
+                    'tools.staticdir.on': True,
+                    'tools.staticdir.dir': '../questions/%s/img' % util.filename_body(exam_json)
+                }
+        })
+        
+        qdir = os.path.join(cherrypy.config['tools.staticdir.root'],
+                            os.path.dirname(cherrypy.request.app.config['/img']['tools.staticdir.dir']))
+        
+        cherrypy.session['exam_json']   = os.path.join(qdir, exam_json)
+        print(cherrypy.session['exam_json'])
+        cherrypy.session['readme_json'] = os.path.join(qdir,readme_json)
         cherrypy.session['user_mail'] = user_account
-        cherrypy.session['exam_json'] = exam_json
 
         raise cherrypy.HTTPRedirect('exam_root')
 
