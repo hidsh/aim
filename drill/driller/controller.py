@@ -36,8 +36,8 @@ class Root(object):
     @template.output('index.html')
     def index(self):
         user_account = 'hoge@gmail.com'               # test
-        exam_json    = 'houki_a.json'                 # test
-        readme_json  = 'readme.json'                  # test
+        q_path    = 'houki_a.txt'                 # test
+        readme_path  = 'readme.txt'                  # test
 
         # image directory for each questions
         # TODO: store to session
@@ -45,16 +45,16 @@ class Root(object):
         cherrypy.request.app.merge( config={
                 '/img': {
                     'tools.staticdir.on': True,
-                    'tools.staticdir.dir': '../questions/%s/img' % util.filename_body(exam_json)
+                    'tools.staticdir.dir': '../questions/%s/img' % util.filename_body(q_path)
                 }
         })
         
         qdir = os.path.join(cherrypy.config['tools.staticdir.root'],
                             os.path.dirname(cherrypy.request.app.config['/img']['tools.staticdir.dir']))
         
-        cherrypy.session['exam_json']   = os.path.join(qdir, exam_json)
-        print(cherrypy.session['exam_json'])
-        cherrypy.session['readme_json'] = os.path.join(qdir,readme_json)
+        cherrypy.session['q_path']   = os.path.join(qdir, q_path)
+        print(cherrypy.session['q_path'])
+        cherrypy.session['readme_path'] = os.path.join(qdir,readme_path)
         cherrypy.session['user_mail'] = user_account
 
         raise cherrypy.HTTPRedirect('exam_root')
@@ -63,7 +63,7 @@ class Root(object):
     @template.output('exam_root.html')
     def exam_root(self, **post_dict):
         assert cherrypy.session['user_mail']
-        assert cherrypy.session['exam_json']
+        assert cherrypy.session['q_path']
 
         user = User(cherrypy.session['user_mail'])
         try:
@@ -74,7 +74,7 @@ class Root(object):
             user.save()
             print('ユーザ %s のファイルが見つかりませんでした。デフォルトの設定を保存します。: %r' % (user.mail_addr, e))
 
-        ql = QuestionList(cherrypy.session['exam_json'], user.history)
+        ql = QuestionList(cherrypy.session['q_path'], user.history)
         
         if post_dict:
             if post_dict['level_reset'] == 'yes':

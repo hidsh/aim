@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, re, random
-import json
+import configparser
 from markdown import markdown
 from genshi.core import Markup
 
@@ -25,35 +25,39 @@ class Question(object):
     YELLOW = 'yello'                     #       2
     RED    = 'red'                       #       1
     WHITE  = 'white'                     #       0
-    
-    def __init__(self, year, num, q, opts, a, desc, history):
-        def _normalize_cr(md):
-            return re.sub(r'(\n)+', r'\n\n', md)
-    
+    re_blank = re.compile(r'\[{2}(.)\]{2}')            # e.g. [[ア]] --> ア
+    re_opt   = re.compile(r'[ \t　]{2,}')
+
+    def __init__(self, ad, qnum, q, opts, a, desc, history):
         def _replace_blanks(html):
-            return re.sub(r'\[(.)\]', r'<span class="blank">\1</span>', html)
+            return self.re_blank.sub(r'<span class="blank">\1</span>', html)
+
+        def _to_num(x):
+            s = x.strip()
+            return int(s) if s and s.isdigit() else None
         
-        self.ad = year
-        self.nengo, self.jy = util.jpn_year(year)
-        self.qnum = num
-        self.qstr = Markup(_replace_blanks(markdown(_normalize_cr(q), ['tables'])))
+        self.ad = ad
+        self.nengo, self.jy = util.jpn_year(ad)
+        self.qnum = qnum
+        self.qstr = Markup(_replace_blanks(markdown(q, ['tables'])))
 
-        ans = a if type(a) is list else [a]
-        self.opt_typ = 'checkbox' if len(ans) > 1 else 'radio'
+        ans = list(map(_to_num, a))
+        self.opt_typ  = 'checkbox' if len(ans) > 1 else 'radio'
 
+        opts = list(opts)
+        opt_top = opts.pop(0).strip()
+        if opt_top.startswith('-'):
+            self.opt_style = 'no_head'
+            self.opt_head  = None
+        else:
+            self.opt_style = 'with_head'
+            self.opt_head  = self.re_opt.split(opt_top)
+        
         self.opts = []
-        for i,line in enumerate(opts):
-            cols = re.split('[ \t　]{2,}', line.strip())
-            if i < 1:
-                if cols == ['']:
-                    self.opt_head = None
-                    self.opt_style = 'no_head'
-                else: 
-                    self.opt_head = cols
-                    self.opt_style = 'with_head'
-            else:
-                hit = '*' if i in ans else None                  # '*' <-- correct answer
-                self.opts.append(Option(i, hit, cols))
+        for i,line in enumerate(opts, 1):
+            cols = self.re_opt.split(line.strip())
+            hit = '*' if i in ans else None                  # '*' <-- correct answer
+            self.opts.append(Option(i, hit, cols))
 
         self.desc = None if desc == '' else desc
         self.history = history
@@ -82,23 +86,31 @@ class Question(object):
 
 
 class QuestionList(ObjList):
-    def __init__(self, json_name, history_list):
-        assert os.path.exists(json_name)
+    def __init__(self, path, history_list):
+        def _to_num(x):
+            s = x.strip()
+            return int(s) if s and s.isdigit() else None
+        def _get_value(_dict,_key):
+            return _dict[_key] if _key in _dict else ''
+            
 
-        fobj = open(json_name, 'r', encoding='utf-8')
-        try:
-            jl = json.load(fobj)
-        finally:
-            fobj.close()
+        if not os.path.exists(path):
+            raise FileNotFoundError('%sがありません' % path)
+
+        ini = configparser.RawConfigParser()
+        ini.read(path, encoding='utf-8')
 
         l = []
-        for d in jl:
-            ad   = d['YEAR']
-            qnum = d['NUM']
+        for sect in ini.sections():
+            ad,qnum = map(lambda x: _to_num(x), sect.split(','))
+            q = _get_value(ini[sect], 'Q')
+            opts = filter(lambda x: x != '', _get_value(ini[sect], 'OPTS').split('\n'))
+            a = map(lambda x: x.strip(), _get_value(ini[sect], 'A').split(','))
+            desc = _get_value(ini[sect], 'DESC')
             his = list(map(lambda x: x[0], history_list.get_answer_list(ad, qnum)))
-            q = Question(ad, qnum, d['Q'], d['OPTS'], d['A'], d['DESC'], his)
+            q = Question(ad, qnum, q, opts, a, desc, his)
             l.append(q)
-            
+
         self._list = l
 
     def sort_by_poor_questions(self):
@@ -155,7 +167,7 @@ class QuestionPagesForPrint(ObjList):
 ##
 if __name__ == '__main__':
     
-    ql = QuestionList('../houki_a.json')
+    ql = QuestionList('../questions/houki_a/houki_a.txt')
     
     for o in ql[:3]:
         print("%d - %2d: %s.." % (o.ad, o.qnum, o.qstr[:20]))
