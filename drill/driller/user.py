@@ -37,7 +37,7 @@ class User(object):
         if self.conf != new_conf:
             self.conf = new_conf
         
-    def get_history_old(self, start_time):
+    def get_history_old(self, start_time): # TODO refactoring: --> hisotry.py
         clone = copy.copy(self.history)
         clone._list = list(filter(lambda x: x.start_time and (x.start_time < start_time), clone._list))
         return clone
