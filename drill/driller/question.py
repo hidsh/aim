@@ -66,7 +66,7 @@ class Question(object):
             hit = '*' if i in ans else None                  # '*' <-- correct answer
             self.opts.append(Option(i, hit, cols))
 
-        self.desc = None if desc == '' else desc
+        self.desc = None if desc == '' else Markup(_replace_blanks(markdown(desc, ['tables'])))
         self.history = history
 
     def get_color(self, by):             # by: 'color'|'level'
