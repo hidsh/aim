@@ -25,17 +25,22 @@
     </script>
   </head>
   <body id="exam_root">
-    <div id="user_id"><p><span>${u.mail_addr}</span> としてログイン中</p></div>
+    <div id="user_id"><p><span>${u.id}</span> としてログイン中</p></div>
+    <div id="about">
+      <h1>このドリルについて</h1>
+      <table>
+        <tr py:if="author"><th>ファイル名</th><td><span class="file">${about.filename}</span></td></tr>
+        <tr><th rowspan="2">問題集</th><td>${about.name}</td></tr>
+        <tr><td><span py:if="about.desc">${about.desc}</span></td></tr>
+        <tr py:if="author"><th>作成者</th><td><span py:for="a in about.authors">${a}</span></td></tr>
+        <tr><th>問題数</th><td>${about.n}問</td></tr>
+      </table>
+    </div>
     <div id="setting">
       <h1>設定</h1>
       <form name="form" method="post">
         <table>
-          <tr><th>全問題数</th>
-            <td></td>
-            <td colspan="2">${n}問</td>
-            <td></td>
-          </tr>
-          <tr><th>出題モード</th>
+          <tr py:if="author"><th>出題モード</th>
             <td colspan="2"><input type="radio" name="mode" value="print" />全問プリント</td>
             <td colspan="2"><input type="radio" name="mode" value="drill" />ドリルをやる</td>
           </tr>

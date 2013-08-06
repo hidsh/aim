@@ -99,7 +99,6 @@ class QuestionList(ObjList):
             return int(s) if s and s.isdigit() else None
         def _get_value(_dict,_key):
             return _dict[_key] if _key in _dict else ''
-            
 
         if not os.path.exists(path):
             raise FileNotFoundError('%sがありません' % path)
@@ -107,16 +106,22 @@ class QuestionList(ObjList):
         ini = configparser.RawConfigParser()
         ini.read(path, encoding='utf-8')
 
+        self.filename = os.path.basename(path)
         l = []
         for sect in ini.sections():
-            ad,qnum = map(lambda x: _to_num(x), sect.split(','))
-            q = _get_value(ini[sect], 'Q')
-            opts = filter(lambda x: x != '', _get_value(ini[sect], 'OPTS').split('\n'))
-            a = map(lambda x: x.strip(), _get_value(ini[sect], 'A').split(','))
-            desc = _get_value(ini[sect], 'DESC')
-            his = list(map(lambda x: x[0], history_list.get_answer_list(ad, qnum)))
-            q = Question(ad, qnum, q, opts, a, desc, his)
-            l.append(q)
+            if sect == 'HEAD':
+                self.name    = _get_value(ini[sect], 'NAME')
+                self.desc    = _get_value(ini[sect], 'DESC')
+                self.authors = [x.strip() for x in _get_value(ini[sect], 'AUTHORS').split(',')]
+            else:
+                ad,qnum = [_to_num(x) for x in sect.split(',')]
+                q = _get_value(ini[sect], 'Q')
+                opts = filter(lambda x: x != '', _get_value(ini[sect], 'OPTS').split('\n'))
+                a = [x.strip() for x in _get_value(ini[sect], 'A').split(',')]
+                desc = _get_value(ini[sect], 'DESC')
+                his = [x[0] for x in history_list.get_answer_list(ad, qnum)]
+                q = Question(ad, qnum, q, opts, a, desc, his)
+                l.append(q)
 
         self._list = l
 

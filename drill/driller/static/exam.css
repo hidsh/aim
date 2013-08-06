@@ -14,18 +14,19 @@ div.qbi {
 }
 
 div#user_id {text-align:right; font-size:small}
-div#user_id span {font-family:Courier}
+div#user_id span{font-family:Courier}
 div#footer {margin:40px 30px 5px 30px; text-align:center; border-top:#000 1px solid; line-height:normal; font-size:small}
 div#footer p {margin-top:5px}
 
 /* exam_root */
 #exam_root h1 {margin:40px 30px 5px 30px}
+#about table {width:510px}
+span#file {color:red}           /* why doesn't work?? */
 
 #setting table {width:510px}
 #setting tr {border: #000 1px solid;}
 #setting th {width:180px}
 #setting td {border:none}
-
 a#level_reset {margin-left:30px; font-weight:normal; font-size:small; }
 th.lv_gr {font-size: x-large; color:green;}
 th.lv_ye {font-size: x-large; color:yellow;}

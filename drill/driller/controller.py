@@ -35,9 +35,8 @@ class Root(object):
     @cherrypy.expose
     @template.output('index.html')
     def index(self):
-        user_account = 'hoge@gmail.com'               # test
-        q_path    = 'houki_a.txt'                 # test
-        readme_path  = 'readme.txt'                  # test
+        user_id = '__g'                              # test
+        q_path  = 'houki_a.txt'                      # test
 
         # image directory for each questions
         # TODO: store to session
@@ -52,20 +51,18 @@ class Root(object):
         qdir = os.path.join(cherrypy.config['tools.staticdir.root'],
                             os.path.dirname(cherrypy.request.app.config['/img']['tools.staticdir.dir']))
         
-        cherrypy.session['q_path']   = os.path.join(qdir, q_path)
-        print(cherrypy.session['q_path'])
-        cherrypy.session['readme_path'] = os.path.join(qdir,readme_path)
-        cherrypy.session['user_mail'] = user_account
+        cherrypy.session['q_path']  = os.path.join(qdir, q_path)
+        cherrypy.session['user_id'] = user_id
 
         raise cherrypy.HTTPRedirect('exam_root')
 
     @cherrypy.expose
     @template.output('exam_root.html')
     def exam_root(self, **post_dict):
-        assert cherrypy.session['user_mail']
+        assert cherrypy.session['user_id']
         assert cherrypy.session['q_path']
 
-        user = User(cherrypy.session['user_mail'])
+        user = User(cherrypy.session['user_id'])
         try:
             user.load()
         except Exception as e:
@@ -83,10 +80,12 @@ class Root(object):
                 raise cherrypy.HTTPRedirect('exam_root')              # reload
         
         cherrypy.session['ql'] = ql
+        a = user.id in ql.authors
+        about = {'filename':ql.filename, 'name':ql.name, 'desc':ql.desc, 'authors':ql.authors, 'n':len(ql)}
         user.conf.mode = 'drill'                                      # default mode
         hists = user.history.out()
         stat  = ql.get_color_distribution()
-        return template.render(n=len(ql), hists=hists, stat=stat, u=user) | HTMLFormFiller(data=user.conf.to_dict())
+        return template.render(about=about, hists=hists, stat=stat, u=user, author=a) | HTMLFormFiller(data=user.conf.to_dict())
 
 
     @cherrypy.expose
@@ -94,13 +93,13 @@ class Root(object):
     def exam_print(self, **post_dict):
         assert post_dict
         assert cherrypy.session['ql']
-        assert cherrypy.session['user_mail']
+        assert cherrypy.session['user_id']
 
         ql = cherrypy.session['ql']
         qpages = QuestionPagesForPrint(ql)
         navi = [None, Navi('最初に戻る', '/')]
         pginfo = PageInfo(0, qpages, len(qpages[0]))
-        user = User(cherrypy.session['user_mail'])
+        user = User(cherrypy.session['user_id'])
             
         return template.render(questions=qpages[0], navi=navi, pginfo=pginfo, u=user)
         
@@ -109,9 +108,9 @@ class Root(object):
     def exam_start(self, **post_dict):
         assert post_dict
         assert cherrypy.session['ql']
-        assert cherrypy.session['user_mail']
+        assert cherrypy.session['user_id']
 
-        user = User(cherrypy.session['user_mail'])
+        user = User(cherrypy.session['user_id'])
 
         try:
             user.load()
@@ -153,7 +152,7 @@ class Root(object):
         try:
             qpages = cherrypy.session['qpages']
             conf = cherrypy.session['conf']
-            user = User(cherrypy.session['user_mail'])
+            user = User(cherrypy.session['user_id'])
         except cherrypy.HTTPError:
             raise cherrypy.HTTPRedirect('session_error')
 
@@ -189,7 +188,7 @@ class Root(object):
     def exam_finish_confirm(self):
         try:
             qpages = cherrypy.session['qpages']
-            user = User(cherrypy.session['user_mail'])
+            user = User(cherrypy.session['user_id'])
         except cherrypy.HTTPError:
             raise cherrypy.HTTPRedirect('session_error')
         
@@ -204,7 +203,7 @@ class Root(object):
             start_time = cherrypy.session['start_time']
             qpages   = cherrypy.session['qpages']
             ans_dict = cherrypy.session['answer_dict']
-            user     = User(cherrypy.session['user_mail'])
+            user     = User(cherrypy.session['user_id'])
         except cherrypy.HTTPError:
             raise cherrypy.HTTPRedirect('session_error')
 
@@ -229,7 +228,7 @@ class Root(object):
     @template.output('session_error.html')
     def session_error(self):
         try:
-            user = User(cherrypy.session['user_mail'])
+            user = User(cherrypy.session['user_id'])
         except Exception as e:
             print('ユーザーのメールアドレスが不正です:%r' % e)
 
