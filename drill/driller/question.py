@@ -27,6 +27,8 @@ class Question(object):
     WHITE  = 'white'                     #       0
     re_blank = re.compile(r'\[{2}(.)\]{2}')            # e.g. [[ア]] --> ア
     re_opt   = re.compile(r'[ \t　]{2,}')
+    re_opt_head = re.compile(r'[ \t　]+')
+    re_p     = re.compile(r'</?p>')
 
     def __init__(self, ad, qnum, q, opts, a, desc, history):
         def _replace_blanks(html):
@@ -35,6 +37,11 @@ class Question(object):
         def _to_num(x):
             s = x.strip()
             return int(s) if s and s.isdigit() else None
+
+        def _opt_md(x):
+            m = Markup(markdown(x.replace('\\n', '\n\n'), ['tables']))
+            
+            return Markup(self.re_p.sub('', m))
         
         self.ad = ad
         self.nengo, self.jy = util.jpn_year(ad)
@@ -51,11 +58,11 @@ class Question(object):
             self.opt_head  = None
         else:
             self.opt_style = 'with_head'
-            self.opt_head  = self.re_opt.split(opt_top)
+            self.opt_head  = self.re_opt_head.split(opt_top)
         
         self.opts = []
         for i,line in enumerate(opts, 1):
-            cols = self.re_opt.split(line.strip())
+            cols = [_opt_md(x) for x in self.re_opt.split(line.strip())]
             hit = '*' if i in ans else None                  # '*' <-- correct answer
             self.opts.append(Option(i, hit, cols))
 
