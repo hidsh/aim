@@ -3145,9 +3145,9 @@ OPTS:-
  62.5
 
 A:3
-DESC:$Q = P\tan(\theta) = P\times\frac{\sin\theta}{\cos\theta} = 50 \times \frac{0.6}{0.8} = 37.5[kvar]$
+DESC:$Q = P\tan(\theta) = P\frac{\sin\theta}{\cos\theta} = 50 \times \frac{0.6}{0.8} = 37.5[kvar]$
 
- 力率を1.0にするには、この無効電力を完全に打ち消す必要があるので、これと同じ値のコンデンサ容量[kvar]が必要となる。
+ 力率を1.0にするということは、この無効電力$Q$と同じ容量[kvar]のコンデンサで完全に打ち消すということなので、この値が答えとなる。
  
 
 [2002, 10]
