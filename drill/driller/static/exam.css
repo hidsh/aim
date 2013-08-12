@@ -136,8 +136,8 @@ div#time span#total {}
 div#time span#avg   {margin-left:20px}
 div.details {margin:20px 0}
 div.rb {margin:-1px 0 0 0; padding:0; border:none}
-div.rbx {margin:0; padding:5px 40px 5px 40px; border:none}
-table.accordion_head {margin:0; width:100%}
+div.rbx {margin:0; padding:5px 40px 5px 40px; border:#000 1px solid; border-top:none; margin-bottom:20px}
+table.accordion_head {margin:0; width:100%; cursor:pointer}
 .accordion_head th,.accordion_head td {padding:3px 15px 0 15px; font-weight: bold}
 .accordion_head th.qnum {background-color:#333; color:white; width:2.5em}
 .accordion_head td.correct {background-color:#61D9EF; width:2.5em; text-align:center}
@@ -145,10 +145,12 @@ table.accordion_head {margin:0; width:100%}
 .accordion_head td.qinfo   {width:13em; font-weight:normal; text-align:center; padding:3px 8px 0 8px}
 .accordion_head td.history {text-align:right; padding:3px 8px 0 8px}
 .accordion_head td.history span {font-family:monospace; margin:0 0.2em;}
-.accordion_head td.accordion_indicator {width:1.5em; text-align:center; font-size:large}
+.accordion_head td.accordion_indicator {width:1.5em}
+.accordion_head td.accordion_indicator span {display:block; width:20px; height:17px; background:url(accordion_indicator.png) no-repeat left bottom}
+.accordion_head td.accordion_indicator span.active {background:url(accordion_indicator.png) no-repeat left top}
  
 .opts .correct {color:blue; border:none; padding:4px 5px 1px 5px; width:1.2em}
 .opts .wrong   {color:red;  border:none; padding:4px 5px 1px 5px; width:1.2em}
 span.strike {text-decoration:line-through; color:red}
-.accordion_head {cursor:pointer}
+
 

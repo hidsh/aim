@@ -16,34 +16,11 @@
     <script type="text/javascript" src="${url('/media/jquery.js')}"></script>
     <script type="text/javascript">
       $(function(){
-          //$('.score').css('color', 'red');  // test
-
-          var arrow = '&#8743;'
-          $('.accordion_indicator').children('span').text(arrow);
-
           $('.accordion_head').click(function() {
-              if(arrow == '&#8743;') {
-                  arrow = '&#8744;';
-                  bline = $(this).find('th').css('border');
-                  bmargin = '20px';
-              } else {
-                  arrow = '&#8743;';
-                  bline = 'none';
-                  bmargin = '0';
-              }
-
-              $(this).find('.accordion_indicator').children('span').text(arrow);
-              $(this).next().css({
-                 'border-left':   bline,
-                 'border-right':  bline,
-                 'border-bottom': bline,
-                 'margin-bottom': bmargin
-              });
               $(this).next().slideToggle();
+              $(this).find('td.accordion_indicator').find('span').toggleClass('active');
           }).next().hide();
-      
       });
-      
     </script>
   </head>
   <body>
