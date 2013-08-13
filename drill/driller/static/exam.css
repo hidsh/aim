@@ -134,6 +134,9 @@ div#score span#frac  {font-size:x-large; margin-left:20px}
 div#time {margin:50px}
 div#time span#total {}
 div#time span#avg   {margin-left:20px}
+
+div#ac_ctrl {text-align:right}
+
 div.details {margin:20px 0}
 div.rb {margin:-1px 0 0 0; padding:0; border:none}
 div.rbx {margin:0; padding:5px 40px 5px 40px; border:#000 1px solid; border-top:none; margin-bottom:20px}

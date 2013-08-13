@@ -15,12 +15,44 @@
     <!-- mathjax end -->
     <script type="text/javascript" src="${url('/media/jquery.js')}"></script>
     <script type="text/javascript">
+    //<![CDATA[ 
       $(function(){
-          $('.accordion_head').click(function() {
+          var _ac = $('table.accordion_head');
+
+          // クリックでアコーディオンを開く/閉じる
+          _ac.click(function() {
               $(this).next().slideToggle();
-              $(this).find('td.accordion_indicator').find('span').toggleClass('active');
+              $(this).find('td.accordion_indicator > span').toggleClass('active');
           }).next().hide();
+
+          // アコーディオンをすべて開く
+          $('button#ac_open_all').click(function () {
+              for(var i=0; i<_ac.length; i++) {
+                if(_ac.eq(i).find('td.accordion_indicator > span').hasClass('active') == false)
+                  _ac.eq(i).click();
+              }
+          });
+
+          // アコーディオンをすべて閉じる
+          $('button#ac_close_all').click(function () {
+              for(var i=0; i<_ac.length; i++) {
+                if(_ac.eq(i).find('td.accordion_indicator > span').hasClass('active') == true)
+                  _ac.eq(i).click();
+              }
+          });
+
+          // 間違えた問題のアコーディオンをすべて開く
+          $('button#ac_undo').click(function () {
+            for(var i=0; i<_ac.length; i++) {
+              if(_ac.eq(i).find('td:first').attr('class') == 'wrong')
+                  _ac.eq(i).click();
+            }
+          });
+
+          // 間違えた問題は、あらかじめアコーディオンを開いておく
+          $('button#ac_undo').click();
       });
+    // ]]>
     </script>
   </head>
   <body>
@@ -31,6 +63,11 @@
     <div class="summary">
       <div id="score"><span id="total">${score[2]}点</span><span id="frac">$(=\frac{${score[0]}}{${score[1]}})$</span></div>
       <div id="time"><span id="total">タイム：${time[0]}</span><span id="avg">(1問あたり約 ${time[1]})</span></div>
+    </div>
+    <div id="ac_ctrl">
+      <button id="ac_open_all">すべて開く</button>
+      <button id="ac_close_all">すべて閉じる</button>
+      <button id="ac_undo">元の状態に戻す</button>
     </div>
     <div class="details">
       <div py:for="r in results" class="rb">
