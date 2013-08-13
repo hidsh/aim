@@ -7,7 +7,7 @@
     <title>結果</title>
     <!-- mathjax beg -->
     <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$']] }, "HTML-CSS": { scale: 140} });
+      MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$']] }, "HTML-CSS": { scale: 100} });
     </script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
     </script>
@@ -94,7 +94,7 @@
             <td py:for="c in o.cols" class="${r.q.opt_style}">${c}</td>
           </tr>
         </table>
-        <div py:if="r.q.desc" class="desc"><div class="desc_head">解説</div>${r.q.desc}</div>
+        <div py:if="r.q.desc" class="desc"><div class="desc_head0">解説</div>${r.q.desc}</div>
         </div>
       </div>
     </div>
