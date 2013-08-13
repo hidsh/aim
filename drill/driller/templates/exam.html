@@ -46,8 +46,8 @@
                 <th py:for="c in q.opt_head">${c}</th>
               </tr>
               <tr py:for="o in q.opts">
-                <td class="checkbox"><input type="${q.opt_typ}" name="q_${q.i}" value="${o.onum}" /></td>
-                <td py:for="c in o.cols" class="${q.opt_style}">${c}</td>
+                <td class="checkbox"><input type="${q.opt_typ}" name="q_${q.i}" value="${o.onum}" id="q_${q.i}_${o.onum}"/></td>
+                <td py:for="c in o.cols" class="${q.opt_style}"><label for="q_${q.i}_${o.onum}">${c}</label></td>
               </tr>
                                      <input type="hidden" name="q_${q.i}" value="0" />
             </table>
