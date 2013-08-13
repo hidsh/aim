@@ -121,6 +121,7 @@ table {
 
 /* 全問プリント */
 .opts th.hit, td.hit {border:none; text-align:center; padding:3px; color:blue; font-weight:bold}
+div.desc_head {margin: 30px 0 0 0; padding-left: 10px; font-weight:bold; background-color:#DDD; color:black}
 
 /* exam_finish_confirm */
 table#confirm td {border:none}
@@ -131,7 +132,7 @@ div#score {margin 50px}
 div#score span#total {font-size:xx-large}
 div#score span#frac  {font-size:x-large; margin-left:20px}
 
-div#time {margin:50px}
+div#time {margin:20px}
 div#time span#total {}
 div#time span#avg   {margin-left:20px}
 
