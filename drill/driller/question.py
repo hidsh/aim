@@ -119,7 +119,7 @@ class QuestionList(ObjList):
                 opts = filter(lambda x: x != '', _get_value(ini[sect], 'OPTS').split('\n'))
                 a = [x.strip() for x in _get_value(ini[sect], 'A').split(',')]
                 desc = _get_value(ini[sect], 'DESC')
-                his = [x[0] for x in history_list.get_answer_list(ad, qnum)]
+                his = [x[0] for x in history_list.get_ox_list(ad, qnum)]
                 q = Question(ad, qnum, q, opts, a, desc, his)
                 l.append(q)
 

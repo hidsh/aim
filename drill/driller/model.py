@@ -69,9 +69,20 @@ class ExamConf(object):
 
 
 class Result(object):
+    MARU  = Markup('&#9711;')
+    BATSU = Markup('&#10005;')
+
     def __init__(self, i, q, your_ans, hist_list):
-        self.MARU  = Markup('&#9711;')
-        self.BATSU = Markup('&#10005;')
+        def _subst_mark(x):
+            return self.MARU if x == 'correct' else self.BATSU
+        
+        def _get_color_class(now, prev):                    # TODO refactoring: Question get_color()
+            if [now, prev] == ['correct', 'correct']:
+                return 'lv_gr'
+            elif now == 'correct':
+                return 'lv_ye'
+            else:
+                return 'lv_re'
 
         self.i = i
 
@@ -92,32 +103,29 @@ class Result(object):
         self.q = q
         self.q.opts = opts
 
-        self.history = tuple(map(self.subst_mark, hist_list))
-
-    def subst_mark(self, x):
-        return self.MARU if x == 'correct' else self.BATSU
+        self.history = [_subst_mark(x) for x in hist_list]
+        self.lv_xx = _get_color_class(self.typ_class, hist_list[0])
         
     def is_correct(self):
         return self.typ_class == 'correct'
 
 
-
 class ExamResult(ObjList):
-    def __init__(self, qpages, ans_list, history):
+    def __init__(self, qpages, ans_list, history, start_time):
         l = []
         for i,(q,a) in enumerate(zip(util.flatten(qpages), ans_list), 1):
             assert i == q.i == a.i
-            hist_list = history.get_answer_list(q.ad, q.qnum)
-            l.append(Result(i, q, a.ans, map(lambda x: x[0], hist_list)))
+            hist_list = [x[0] for x in history.get_previous(start_time).get_ox_list(q.ad, q.qnum)] # prevent new history when reload
+            l.append(Result(i, q, a.ans, hist_list))
         self._list = l
 
     def get_score(self):        # TODO refactoring: History's same function
         correct_answers = filter(lambda x: x.is_correct(), self._list)
         len_all  = len(self._list)
         len_corr = len(list(correct_answers))
-        pct = util.percent(len_corr, len_all)
+        percent = util.percent(len_corr, len_all)
         
-        return (len_corr, len_all, pct)
+        return (len_corr, len_all, percent)
 
     def summarize(self):
         return tuple(map(lambda x: {'typ':x.typ_class, 'ad':x.q.ad, 'qnum':x.q.qnum}, self._list))

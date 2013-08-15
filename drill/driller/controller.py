@@ -213,13 +213,11 @@ class Root(object):
             user.history = HistoryList()
             print('ユーザ %s のファイルが見つかりませんでした。ヒストリを新規に作ります。: %r' % (user.mail_addr, e))
 
-        result = ExamResult(qpages[:], AnswerList(ans_dict), user.history)
+        result = ExamResult(qpages, AnswerList(ans_dict), user.history, start_time)
 
         user.history.append(result.summarize(), start_time)
         user.save()
         time = user.history.get_last_time()
-
-        result = ExamResult(qpages[:], AnswerList(ans_dict), user.get_history_old(start_time)) # for output to html
 
         navi = [None, Navi('最初に戻る', '/')]
         return template.render(navi=navi, score=result.get_score(), results=result, time=time, u=user)

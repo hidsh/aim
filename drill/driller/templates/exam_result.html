@@ -76,7 +76,7 @@
             <th class="qnum">問 ${r.i}</th>
             <td class="${r.typ_class}">${r.typ_str}</td>
             <td class="history"><span py:for="h in r.history">${h}</span></td>
-            <td class="qinfo">${r.q.ad}年（${r.q.nengo} ${r.q.jy}年）問${r.q.qnum}</td>
+            <td class="qinfo"><span class="${r.lv_xx}">&#10026;</span>${r.q.ad}年（${r.q.nengo} ${r.q.jy}年）問${r.q.qnum}</td>
             <td class="accordion_indicator"><span></span></td>
           </tr>
         </table>
@@ -94,7 +94,7 @@
             <td py:for="c in o.cols" class="${r.q.opt_style}">${c}</td>
           </tr>
         </table>
-        <div py:if="r.q.desc" class="desc"><div class="desc_head0">解説</div>${r.q.desc}</div>
+        <div py:if="r.q.desc" class="desc"><div class="desc_head">解説</div>${r.q.desc}</div>
         </div>
       </div>
     </div>

@@ -28,10 +28,10 @@ span#file {color:red}           /* why doesn't work?? */
 #setting th {width:180px}
 #setting td {border:none}
 a#level_reset {margin-left:30px; font-weight:normal; font-size:small; }
-th.lv_gr {font-size: x-large; color:green;}
-th.lv_ye {font-size: x-large; color:yellow;}
-th.lv_re {font-size: x-large; color:red;}
-th.lv_wh {font-size: x-large; color:LightGray;}
+.lv_gr {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:green;}
+.lv_ye {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:yellow;}
+.lv_re {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:red;}
+.lv_wh {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:LightGray;}
 
 div#get_start {border: #000 1px dashed; margin:40px 30px 40px 30px; width:510px}
 

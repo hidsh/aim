@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, date
+import copy
 
 from driller.model import ObjList
 from driller.lib import util
@@ -35,9 +36,9 @@ class History(object):
         correct_answers = filter(lambda x: x.is_correct(), self._list)
         len_all  = len(self._list)
         len_corr = len(list(correct_answers))
-        pct = util.percent(len_corr, len_all)
+        percent = util.percent(len_corr, len_all)
 
-        return (len_corr, len_all, pct)
+        return (len_corr, len_all, percent)
 
     def find_answer(self, ad, qnum):
         for x in self._list:
@@ -73,7 +74,6 @@ class HistoryList(ObjList):
         avg = total / len(last._list)
         return (util.timedelta_fmt(total), util.timedelta_fmt(avg))
         
-        
     def out(self, reverse=True):
         l = list(filter(lambda x: x.start_time, self._list))
         oldest = 1 if self.count < self._MAX else self.count - (self._MAX - 1)
@@ -87,11 +87,15 @@ class HistoryList(ObjList):
             
         return [] if l == [] else l
 
-    def get_answer_list(self, ad, qnum, reverse=True):
+    def get_ox_list(self, ad, qnum, reverse=True):
         l = tuple(filter(lambda x: x, [x.find_answer(ad, qnum) for x in self._list]))
         return tuple(reversed(l)) if reverse else l
 
-        
+    def get_previous(self, start_time):
+        clone = copy.copy(self)
+        clone._list = [x for x in self._list if x.start_time and (x.start_time < start_time)]
+        return clone
+    
 ##
 if __name__ == '__main__':
     pass

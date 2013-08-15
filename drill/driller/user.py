@@ -3,7 +3,6 @@
 
 import os.path
 import pickle
-import copy
 
 class User(object):
     def __init__(self, id_or_mail):
@@ -43,10 +42,6 @@ class User(object):
         if self.conf != new_conf:
             self.conf = new_conf
         
-    def get_history_old(self, start_time): # TODO refactoring: --> hisotry.py
-        clone = copy.copy(self.history)
-        clone._list = list(filter(lambda x: x.start_time and (x.start_time < start_time), clone._list))
-        return clone
 
 ##
 if __name__ == '__main__':
