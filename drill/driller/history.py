@@ -3,6 +3,7 @@
 
 from datetime import datetime, date
 import copy
+from itertools import dropwhile
 
 from driller.model import ObjList
 from driller.lib import util
@@ -15,7 +16,7 @@ class HistoryResultElement(object):
         self.qnum = summarized_result['qnum']
 
     def __repr__(self):
-        print('<HistoryResultElement %d: Q%d: %s>' % (self.ad, self.qnum, self.typ))
+        return '<HistoryResultElement %d: Q%d: %s>' % (self.ad, self.qnum, self.typ)
 
     def is_correct(self):
         return self.typ == 'correct'
@@ -93,7 +94,12 @@ class HistoryList(ObjList):
 
     def get_previous(self, start_time):
         clone = copy.copy(self)
-        clone._list = [x for x in self._list if x.start_time and (x.start_time < start_time)]
+            
+        l = list(dropwhile(lambda x: x.start_time != None, clone._list))
+        l = l[1:] if l else clone._list
+        l = [x for x in l if x.start_time < start_time]    # except newest
+        clone._list = l
+
         return clone
     
 ##

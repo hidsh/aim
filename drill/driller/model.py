@@ -104,7 +104,8 @@ class Result(object):
         self.q.opts = opts
 
         self.history = [_subst_mark(x) for x in hist_list]
-        self.lv_xx = _get_color_class(self.typ_class, hist_list[0])
+        h = hist_list[0] if len(hist_list) > 0 else 'reset'
+        self.lv_xx = _get_color_class(self.typ_class, h)
         
     def is_correct(self):
         return self.typ_class == 'correct'
@@ -112,10 +113,12 @@ class Result(object):
 
 class ExamResult(ObjList):
     def __init__(self, qpages, ans_list, history, start_time):
+        h = history.get_previous(start_time)             # prevent new history when reload
+        hist_limit = 10
         l = []
         for i,(q,a) in enumerate(zip(util.flatten(qpages), ans_list), 1):
-            assert i == q.i == a.i
-            hist_list = [x[0] for x in history.get_previous(start_time).get_ox_list(q.ad, q.qnum)] # prevent new history when reload
+            # assert i == q.i == a.i
+            hist_list = [x[0] for x in h.get_ox_list(q.ad, q.qnum)][:hist_limit]
             l.append(Result(i, q, a.ans, hist_list))
         self._list = l
 
