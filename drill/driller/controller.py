@@ -27,7 +27,7 @@ class Navi(object):
     def __init__(self, label, dispatcher='exam'):
         self.label = label
         self.dispatcher = dispatcher
-        
+
 class Root(object):
     def __init__(self, data):
         self.data = data
@@ -39,8 +39,6 @@ class Root(object):
         q_path  = 'houki_a.txt'                      # test
 
         # image directory for each questions
-        # TODO: store to session
-        # cherrypy.tree.mount(Root(self.data), "/", config={
         cherrypy.request.app.merge( config={
                 '/img': {
                     'tools.staticdir.on': True,
@@ -59,10 +57,13 @@ class Root(object):
     @cherrypy.expose
     @template.output('exam_root.html')
     def exam_root(self, **post_dict):
-        assert cherrypy.session['user_id']
-        assert cherrypy.session['q_path']
-
-        user = User(cherrypy.session['user_id'])
+        try:
+            user_id = cherrypy.session['user_id']
+            q_path  = cherrypy.session['q_path']
+        except KeyError:
+            raise cherrypy.HTTPRedirect('session_error')
+            
+        user = User(user_id)
         try:
             user.load()
         except Exception as e:
@@ -71,7 +72,7 @@ class Root(object):
             user.save()
             print('ユーザ %s のファイルが見つかりませんでした。デフォルトの設定を保存します。: %r' % (user.mail_addr, e))
 
-        ql = QuestionList(cherrypy.session['q_path'], user.history)
+        ql = QuestionList(q_path, user.history)
         
         if post_dict:
             if post_dict['level_reset'] == 'yes':
@@ -92,14 +93,16 @@ class Root(object):
     @template.output('exam_print.html')
     def exam_print(self, **post_dict):
         assert post_dict
-        assert cherrypy.session['ql']
-        assert cherrypy.session['user_id']
+        try:
+            ql       = cherrypy.session['ql']
+            user_id  = cherrypy.session['user_id']
+        except KeyError:
+            raise cherrypy.HTTPRedirect('session_error')
 
-        ql = cherrypy.session['ql']
         qpages = QuestionPagesForPrint(ql)
         navi = [None, Navi('最初に戻る', '/')]
         pginfo = PageInfo(0, qpages, len(qpages[0]))
-        user = User(cherrypy.session['user_id'])
+        user = User(user_id)
             
         return template.render(questions=qpages[0], navi=navi, pginfo=pginfo, u=user)
         
@@ -107,10 +110,13 @@ class Root(object):
     @template.output('exam.html')
     def exam_start(self, **post_dict):
         assert post_dict
-        assert cherrypy.session['ql']
-        assert cherrypy.session['user_id']
+        try:
+            ql       = cherrypy.session['ql']
+            user_id  = cherrypy.session['user_id']
+        except KeyError:
+            raise cherrypy.HTTPRedirect('session_error')
 
-        user = User(cherrypy.session['user_id'])
+        user = User(user_id)
 
         try:
             user.load()
@@ -124,7 +130,6 @@ class Root(object):
         cherrypy.session['conf'] = user.conf
         cherrypy.session['start_time'] = datetime.now()
         
-        ql = cherrypy.session['ql']
         cherrypy.session['qpages'] = qpages = QuestionPages(ql, user.conf)
         cherrypy.session['answer_dict'] = {}
         navi = [None, Navi('次ページ')]
@@ -147,19 +152,20 @@ class Root(object):
             print('unknown error: %r' % e)
             raise cherrypy.HTTPRedirect('unknown_error')            
         
-        cherrypy.session['answer_dict'].update(post_dict)
-        
         try:
-            qpages = cherrypy.session['qpages']
-            conf = cherrypy.session['conf']
-            user = User(cherrypy.session['user_id'])
-        except cherrypy.HTTPError:
+            _ = cherrypy.session['answer_dict']
+            qpages  = cherrypy.session['qpages']
+            conf    = cherrypy.session['conf']
+            user_id = cherrypy.session['user_id']
+        except KeyError:
             raise cherrypy.HTTPRedirect('session_error')
 
-        assert 0 <= page_num <= len(qpages), 'page_num:%d' % page_num
+        cherrypy.session['answer_dict'].update(post_dict)
+        
+        # assert 0 <= page_num <= len(qpages), 'page_num:%d' % page_num
 
         if cmd == 'prev':
-            assert 1 <= page_num
+            # assert 1 <= page_num
 
             page_num_new = page_num - 1
 
@@ -168,7 +174,7 @@ class Root(object):
             else:
                 navi = [Navi('前ページ'), Navi('次ページ')]
         elif cmd == 'next':
-            assert page_num <= len(qpages) - 1
+            # assert page_num <= len(qpages) - 1
             
             page_num_new = page_num + 1
             
@@ -181,20 +187,20 @@ class Root(object):
                 navi = [Navi('前ページ'), Navi('次ページ')]
 
         pginfo = PageInfo(page_num_new, qpages, conf.qn)
-        return template.render(questions=qpages[page_num_new], navi=navi, pginfo=pginfo, u=user) | HTMLFormFiller(data=cherrypy.session['answer_dict'])
+        return template.render(questions=qpages[page_num_new], navi=navi, pginfo=pginfo, u=User(user_id)) | HTMLFormFiller(data=cherrypy.session['answer_dict'])
 
     @cherrypy.expose
     @template.output('exam_finish_confirm.html')
     def exam_finish_confirm(self):
         try:
-            qpages = cherrypy.session['qpages']
-            user = User(cherrypy.session['user_id'])
-        except cherrypy.HTTPError:
+            qpages  = cherrypy.session['qpages']
+            user_id = cherrypy.session['user_id']
+        except KeyError:
             raise cherrypy.HTTPRedirect('session_error')
         
         page_num = len(qpages)                     # (last question page) + 1
         navi = [Navi('前ページ'), None]
-        return template.render(navi=navi, pg=page_num, u=user)
+        return template.render(navi=navi, pg=page_num, u=User(user_id))
 
     @cherrypy.expose
     @template.output('exam_result.html')
@@ -204,7 +210,7 @@ class Root(object):
             qpages   = cherrypy.session['qpages']
             ans_dict = cherrypy.session['answer_dict']
             user     = User(cherrypy.session['user_id'])
-        except cherrypy.HTTPError:
+        except KeyError:
             raise cherrypy.HTTPRedirect('session_error')
 
         try:
@@ -223,15 +229,24 @@ class Root(object):
         return template.render(navi=navi, score=result.get_score(), results=result, time=time, u=user)
 
     @cherrypy.expose
-    @template.output('session_error.html')
+    @template.output('error.html')
     def session_error(self):
-        try:
-            user = User(cherrypy.session['user_id'])
-        except Exception as e:
-            print('ユーザーのメールアドレスが不正です:%r' % e)
+        msg = 'セッションエラーが発生しました。'
+        return template.render(msg=msg)
 
-        return template.render(u=user)
-        
+    @cherrypy.expose
+    @template.output('error.html')
+    def request_error(self):
+        msg = 'リクエストエラーが発生しました。'
+        return template.render(msg=msg)
+
+    @cherrypy.expose
+    @template.output('error.html')
+    def unknown_error(self):
+        msg = '予期せぬエラーが発生しました。'
+        return template.render(u=user, msg=msg)
+
+    
 def main(db_name):
     # load data from the pickle file, or initialize it to an empty list
     if os.path.exists(db_name):
@@ -266,10 +281,10 @@ def main(db_name):
         'tools.staticdir.root': os.path.abspath(os.path.dirname(__file__)),
 
         'tools.sessions.on': True,
-        'tools.sessions.timeout': 60,        # 60 min
+        'tools.sessions.timeout': 60,        # 60: 60 min
         'tools.sessions.storage_type': 'file',
         'tools.sessions.storage_path': './sessions'
-    })
+        })
 
     cherrypy.quickstart(Root(data), '/', {
         '/media': {

@@ -2,11 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta http-equiv="refresh" content="5;URL=/" />    
     <link rel="stylesheet" href="${url('/media/default.css')}" type="text/css" />    
   </head>
   <body>
-    <p>セッション情報がありません。</p>
-    <p>最初からやり直してください。</p>
-    <p><a href="/">戻る</a></p>
+    <div>${msg}</div>
+    <p>5秒後にトップページにジャンプします。</p>
+    <p>自動的にジャンプしない場合は、<a href="/">こちら</a>をクリック</p>
   </body>
 </html>
