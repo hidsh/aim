@@ -14,23 +14,19 @@ class User(object):
             self.id = id_or_mail
         self.conf    = None
         self.history = None
+        self._path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../user/' + self.id)
 
     def save(self):
-        path = './user/' + self.id
-
         _dict = {'id':self.id, 'mail_addr':self.mail_addr, 'conf':self.conf, 'history':self.history}
-        
-        with open(path, 'wb') as f:
+        with open(self._path, 'wb') as f:
             pickle.dump(_dict, f)
 
     def load(self):
-        path = './user/' + self.id
-
         try:
-            with open(path, 'rb') as f:
+            with open(self._path, 'rb') as f:
                 _dict = pickle.load(f)
         except FileNotFoundError as e:
-            raise('ファイルがありません: %r' % e)
+            print('ファイルがありません: %r' % e)
         else:
             assert self.id == _dict['id']
 

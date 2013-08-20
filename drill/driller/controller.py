@@ -29,7 +29,9 @@ class Navi(object):
         self.dispatcher = dispatcher
 
 class Root(object):
-    def __init__(self, data):
+    app_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../')
+    
+    def __init__(self, data=None):
         self.data = data
  
     @cherrypy.expose
@@ -45,7 +47,6 @@ class Root(object):
                     'tools.staticdir.dir': '../questions/%s/img' % util.filename_body(q_path)
                 }
         })
-        
         qdir = os.path.join(cherrypy.config['tools.staticdir.root'],
                             os.path.dirname(cherrypy.request.app.config['/img']['tools.staticdir.dir']))
         
