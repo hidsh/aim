@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import operator, os, pickle, sys
 from datetime import datetime
 
@@ -31,8 +32,8 @@ class Navi(object):
 class Root(object):
     app_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../')
     
-    def __init__(self, data=None):
-        self.data = data
+    def __init__(self):
+        pass
  
     @cherrypy.expose
     @template.output('index.html')
