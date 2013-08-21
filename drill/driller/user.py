@@ -18,18 +18,20 @@ class User(object):
 
     def save(self):
         _dict = {'id':self.id, 'mail_addr':self.mail_addr, 'conf':self.conf, 'history':self.history}
-        with open(self._path, 'wb') as f:
-            pickle.dump(_dict, f)
-
+        try:
+            with open(self._path, 'wb') as f:
+                pickle.dump(_dict, f)
+        except IOError:
+            print('オブジェクトを保存できませんでした: %s' % self._path)
+            
     def load(self):
         try:
             with open(self._path, 'rb') as f:
                 _dict = pickle.load(f)
-        except FileNotFoundError as e:
-            print('ファイルがありません: %r' % e)
+        except IOError:
+            print('オブジェクトをロードできませんでした: %s' % self._path)
         else:
-            assert self.id == _dict['id']
-
+            # assert self.id == _dict['id']
             self.mail_addr = _dict['mail_addr']
             self.conf      = _dict['conf']
             self.history   = _dict['history']

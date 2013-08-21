@@ -25,15 +25,20 @@ class ObjList(object):
     def __len__(self):
         return len(self._list)
 
-    def save(self, path='./hoge.dat'):
+    def save(self, _path):
         import pickle
         try:
-            f = open(path, 'wb')
-            pickle.dump(self._list, f, 2)
-        except:
-            print('can\'t save pickled data to %s' % path)
-        finally:
-            f.close()
+            with open(_path, 'wb') as f:
+                pickle.dump(self._list, f)
+        except IOError:
+            print('オブジェクトを保存できませんでした: %s' % _path)
+            
+    def load(self, _path):
+        try:
+            with open(_path, 'rb') as f:
+                self._list = pickle.load(f)
+        except IOError:
+            print('オブジェクトをロードできませんでした: %s' % _path)
 
 
 class ExamConf(object):
