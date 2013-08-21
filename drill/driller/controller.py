@@ -249,30 +249,6 @@ class Root(object):
 
     
 def main(db_name):
-    data = {}
-
-    """
-    # load data from the pickle file, or initialize it to an empty list
-    try:
-        with open(db_name, 'rb') as f:
-            data = pickle.load(f)
-    except IOError:
-        print('オブジェクトをロードできませんでした: %s' % db_name)
-
-    def _save_data():
-        # save data back to the pickle file
-        try:
-            with open(db_name, 'wb') as f:
-                pickle.dump(data, fileobj)
-    except IOError:
-        print('オブジェクトを保存できませんでした: %s' % db_name)
-
-    if hasattr(cherrypy.engine, 'subscribe'): # CherryPy >= 3.1
-        cherrypy.engine.subscribe('stop', _save_data)
-    else:
-        cherrypy.engine.on_stop_engine_list.append(_save_data)
-    """
-
     # Some global configuration; note that this could be moved into a
     # configuration file
     cherrypy.config.update({
@@ -287,7 +263,7 @@ def main(db_name):
         'tools.sessions.storage_path': './sessions'
         })
 
-    cherrypy.quickstart(Root(data), '/', {
+    cherrypy.quickstart(Root(), '/', {
         '/media': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir': 'static'
