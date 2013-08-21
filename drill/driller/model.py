@@ -128,15 +128,15 @@ class ExamResult(ObjList):
         self._list = l
 
     def get_score(self):        # TODO refactoring: History's same function
-        correct_answers = filter(lambda x: x.is_correct(), self._list)
+        correct_answers = [x for x in self._list if x.is_correct()]
         len_all  = len(self._list)
-        len_corr = len(list(correct_answers))
+        len_corr = len(correct_answers)
         percent = util.percent(len_corr, len_all)
         
         return (len_corr, len_all, percent)
 
     def summarize(self):
-        return tuple(map(lambda x: {'typ':x.typ_class, 'ad':x.q.ad, 'qnum':x.q.qnum}, self._list))
+        return [{'typ':x.typ_class, 'ad':x.q.ad, 'qnum':x.q.qnum} for x in self._list]
 
     
 ##

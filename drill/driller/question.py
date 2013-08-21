@@ -49,7 +49,7 @@ class Question(object):
         self.qnum = qnum
         self.qstr = Markup(_replace_blanks(markdown(q, ['tables'])))
 
-        ans = list(map(_to_num, a))
+        ans = [_to_num(x) for x in a]
         self.opt_typ  = 'checkbox' if len(ans) > 1 else 'radio'
 
         opts = list(opts)
@@ -128,7 +128,7 @@ class QuestionList(ObjList):
                 else:
                     ad,qnum = [_to_num(x) for x in sect.split(',')]
                     q = _get_value(ini[sect], 'Q')
-                    opts = filter(lambda x: x != '', _get_value(ini[sect], 'OPTS').split('\n'))
+                    opts = [x for x in _get_value(ini[sect], 'OPTS').split('\n') if x != '']
                     a = [x.strip() for x in _get_value(ini[sect], 'A').split(',')]
                     desc = _get_value(ini[sect], 'DESC')
                     his = [x[0] for x in history_list.get_ox_list(ad, qnum)]
@@ -152,10 +152,10 @@ class QuestionList(ObjList):
     def get_color_distribution(self):
         colors = [x.get_color('color') for x in self._list]
         n     = len(colors)
-        n_gr  = len(list(filter(lambda c: c == Question.GREEN,  colors)))
-        n_ye  = len(list(filter(lambda c: c == Question.YELLOW, colors)))
-        n_re  = len(list(filter(lambda c: c == Question.RED,    colors)))
-        n_wh  = len(list(filter(lambda c: c == Question.WHITE,  colors)))
+        n_gr  = len([c for c in colors if c == Question.GREEN])
+        n_ye  = len([c for c in colors if c == Question.YELLOW])
+        n_re  = len([c for c in colors if c == Question.RED])
+        n_wh  = len([c for c in colors if c == Question.WHITE])
         # TODO: adjust max value ratio
         
         return ((n, 100), (n_gr, util.percent(n_gr, n)), (n_ye, util.percent(n_ye, n)), (n_re, util.percent(n_re, n)), (n_wh, util.percent(n_wh, n)))

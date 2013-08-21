@@ -34,9 +34,9 @@ class History(object):
         self.score = self._get_score()
 
     def _get_score(self):                  # TODO refactoring: ExamResult's same function
-        correct_answers = filter(lambda x: x.is_correct(), self._list)
+        correct_answers = [x for x in self._list if x.is_correct()]
         len_all  = len(self._list)
-        len_corr = len(list(correct_answers))
+        len_corr = len(correct_answers)
         percent = util.percent(len_corr, len_all)
 
         return (len_corr, len_all, percent)
@@ -57,14 +57,14 @@ class HistoryList(ObjList):
         self.count = 0
 
     def append(self, hist, start_time):
-        if list(filter(lambda x: x.start_time == start_time, self._list)): return   # prevent overlapping
+        if [x for x in self._list if x.start_time == start_time]: return   # prevent overlapping
 
         self._list.append(History(hist, start_time))
         self._list = self._list[-self._MAX:]                               # FIFO
         self.count += 1
 
     def level_reset(self, ql):
-        l = list(filter(lambda x: x.start_time, self._list))               # delete previous reset record
+        l = [x for x in self._list if x.start_time]                        # delete previous reset record
         summary_list = [{'typ':'reset', 'ad':x.ad, 'qnum':x.qnum} for x in ql]
         l.append(History(summary_list, None))                              # reset: start_time = None
         self._list = l
@@ -76,7 +76,7 @@ class HistoryList(ObjList):
         return (util.timedelta_fmt(total), util.timedelta_fmt(avg))
         
     def out(self, reverse=True):
-        l = list(filter(lambda x: x.start_time, self._list))
+        l = [x for x in self._list if x.start_time]
         oldest = 1 if self.count < self._MAX else self.count - (self._MAX - 1)
         
         for i,x in enumerate(l, oldest):

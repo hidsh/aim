@@ -58,9 +58,9 @@ def timedelta_fmt(timedelta):
         return '%d秒' % s
 
 def get_score(func, answers):   # TODO
-    corrects = filter(lambda x: x.is_correct(), answers)
+    corrects = [ x for x in answers if x.is_correct()]
     len_all  = len(answers)
-    len_corr = len(list(corrects))
+    len_corr = len(corrects)
     score = 0 if len_corr == 0 else percent(len_corr / len_all * 100, 1)
     
     return (len_corr, len_all, score)
