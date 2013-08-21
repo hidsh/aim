@@ -59,9 +59,6 @@ class Root(object):
     @cherrypy.expose
     @template.output('exam_root.html')
     def exam_root(self, **post_dict):
-        import time
-        start_time = time.time()
-        
         try:
             user_id = cherrypy.session['user_id']
             q_path  = cherrypy.session['q_path']
@@ -90,9 +87,6 @@ class Root(object):
         user.conf.mode = 'drill'                                      # default mode
         hists = user.history.out()
         stat  = ql.get_color_distribution()
-        
-        print('>>>%02.6f sec' % (time.time() - start_time))
-        
         return template.render(about=about, hists=hists, stat=stat, u=user, author=a) | HTMLFormFiller(data=user.conf.to_dict())
 
 
