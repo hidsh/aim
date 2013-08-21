@@ -9,6 +9,7 @@ from genshi.core import Markup
 from driller.model import ObjList
 
 from driller.lib import util
+from driller.lib import deco
 
 class Option(object):
     def __init__(self, num, hit, cols=[]):
@@ -93,38 +94,51 @@ class Question(object):
 
 
 class QuestionList(ObjList):
-    def __init__(self, path, history_list):
+    def __init__(self, path_txt, history_list):
         def _to_num(x):
             s = x.strip()
             return int(s) if s and s.isdigit() else None
         def _get_value(_dict,_key):
             return _dict[_key] if _key in _dict else ''
-
-        if not os.path.exists(path):
-            raise FileNotFoundError('%sがありません' % path)
-
-        ini = configparser.RawConfigParser()
-        ini.read(path, encoding='utf-8')
-
-        self.filename = os.path.basename(path)
-        l = []
-        for sect in ini.sections():
-            if sect == 'HEAD':
-                self.name    = _get_value(ini[sect], 'NAME')
-                self.desc    = _get_value(ini[sect], 'DESC')
-                self.authors = [x.strip() for x in _get_value(ini[sect], 'AUTHORS').split(',')]
+        def _is_cache_old(path_cache, path_txt):
+            mod_cache = os.stat(path_cache).st_mtime
+            mod_txt   = os.stat(path_txt).st_mtime
+            if mod_cache < mod_txt:
+                return True
             else:
-                ad,qnum = [_to_num(x) for x in sect.split(',')]
-                q = _get_value(ini[sect], 'Q')
-                opts = filter(lambda x: x != '', _get_value(ini[sect], 'OPTS').split('\n'))
-                a = [x.strip() for x in _get_value(ini[sect], 'A').split(',')]
-                desc = _get_value(ini[sect], 'DESC')
-                his = [x[0] for x in history_list.get_ox_list(ad, qnum)]
-                q = Question(ad, qnum, q, opts, a, desc, his)
-                l.append(q)
+                return False
+            
+        if not os.path.exists(path_txt):
+            raise FileNotFoundError('%sがありません' % path_txt)
 
-        self._list = l
+        path_cache = util.filename_body(path_txt) + '.cache'
+        if os.path.exists(path_cache) and not _is_cache_old(path_cache, path_txt):
+            self.load(path_cache)
+        else:
+            ini = configparser.RawConfigParser()
+            ini.read(path_txt, encoding='utf-8')
 
+            self.filename = os.path.basename(path_txt)
+            l = []
+            for sect in ini.sections():
+                if sect == 'HEAD':
+                    self.name    = _get_value(ini[sect], 'NAME')
+                    self.desc    = _get_value(ini[sect], 'DESC')
+                    self.authors = [x.strip() for x in _get_value(ini[sect], 'AUTHORS').split(',')]
+                else:
+                    ad,qnum = [_to_num(x) for x in sect.split(',')]
+                    q = _get_value(ini[sect], 'Q')
+                    opts = filter(lambda x: x != '', _get_value(ini[sect], 'OPTS').split('\n'))
+                    a = [x.strip() for x in _get_value(ini[sect], 'A').split(',')]
+                    desc = _get_value(ini[sect], 'DESC')
+                    his = [x[0] for x in history_list.get_ox_list(ad, qnum)]
+                    q = Question(ad, qnum, q, opts, a, desc, his)
+                    l.append(q)
+
+            self._list = l
+            self.save(path_cache)
+
+        
     def sort_by_poor_questions(self):
         l = self._list[:]
         for x in l:

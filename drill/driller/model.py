@@ -29,14 +29,14 @@ class ObjList(object):
     def save(self, _path):
         try:
             with open(_path, 'wb') as f:
-                pickle.dump(self._list, f)
+                pickle.dump(self.__dict__, f)
         except IOError:
             print('オブジェクトを保存できませんでした: %s' % _path)
             
     def load(self, _path):
         try:
             with open(_path, 'rb') as f:
-                self._list = pickle.load(f)
+                self.__dict__ = pickle.load(f)
         except IOError:
             print('オブジェクトをロードできませんでした: %s' % _path)
 

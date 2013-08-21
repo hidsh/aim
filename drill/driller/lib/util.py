@@ -71,7 +71,6 @@ def filename_body(path):
 def filename_ext(path):
     return os.path.splitext(path)[1]
 
-    
 ##
 if __name__ == '__main__':
     print('%r' % split_seq([x for x in range(20)], 3))
@@ -80,4 +79,4 @@ if __name__ == '__main__':
         nengo, jy = jpn_year(ad)
         print ('%04d = %s %2d' % (ad, nengo, jy))
 
-    print('%r' % split_seq(3, range(20)))
+    # print('%r' % split_seq(3, range(20)))

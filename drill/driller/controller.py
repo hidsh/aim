@@ -15,7 +15,7 @@ from driller.history import HistoryList
 from driller.user import User
 from driller.lib import template
 from driller.lib import util
-
+from driller.lib import deco
 
 class PageInfo(object):
     def __init__(self, idx, qpages, qn):
@@ -59,6 +59,9 @@ class Root(object):
     @cherrypy.expose
     @template.output('exam_root.html')
     def exam_root(self, **post_dict):
+        import time
+        start_time = time.time()
+        
         try:
             user_id = cherrypy.session['user_id']
             q_path  = cherrypy.session['q_path']
@@ -76,11 +79,10 @@ class Root(object):
 
         ql = QuestionList(q_path, user.history)
         
-        if post_dict:
-            if post_dict['level_reset'] == 'yes':
-                user.history.level_reset(ql)
-                user.save()
-                raise cherrypy.HTTPRedirect('exam_root')              # reload
+        if post_dict and post_dict['level_reset'] == 'yes':
+            user.history.level_reset(ql)
+            user.save()
+            raise cherrypy.HTTPRedirect('exam_root')              # reload
         
         cherrypy.session['ql'] = ql
         a = user.id in ql.authors
@@ -88,6 +90,9 @@ class Root(object):
         user.conf.mode = 'drill'                                      # default mode
         hists = user.history.out()
         stat  = ql.get_color_distribution()
+        
+        print('>>>%02.6f sec' % (time.time() - start_time))
+        
         return template.render(about=about, hists=hists, stat=stat, u=user, author=a) | HTMLFormFiller(data=user.conf.to_dict())
 
 
