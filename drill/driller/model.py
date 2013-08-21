@@ -3,6 +3,7 @@
 
 from genshi.core import Markup
 from driller.lib import util
+import pickle
 
 
 class ObjList(object):
@@ -26,7 +27,6 @@ class ObjList(object):
         return len(self._list)
 
     def save(self, _path):
-        import pickle
         try:
             with open(_path, 'wb') as f:
                 pickle.dump(self._list, f)
