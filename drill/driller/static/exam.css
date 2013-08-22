@@ -137,6 +137,7 @@ div#time span#total {}
 div#time span#avg   {margin-left:20px}
 
 div#ac_ctrl {text-align:right}
+button#ac_open_all,button#ac_close_all {width:8em}
 
 div.details {margin:20px 0}
 div.rb {margin:-1px 0 0 0; padding:0; border:none}

@@ -15,37 +15,54 @@
     <!-- mathjax end -->
     <script type="text/javascript" src="${url('/media/jquery.js')}"></script>
     <script type="text/javascript">
-    //<![CDATA[ 
+    //<![CDATA[
       $(function(){
           var _ac = $('table.accordion_head');
+
+          function accordion_open(ac) {
+            ac.next().slideDown();
+            ac.addClass('active');
+          }
+                
+        
+          function accordion_close(ac) {
+            ac.next().slideUp();
+            ac.removeClass('active');
+          }
 
           // クリックでアコーディオンを開く/閉じる
           _ac.click(function() {
               $(this).next().slideToggle();
-              $(this).find('td.accordion_indicator > span').toggleClass('active');
+              $(this).toggleClass('active');
           }).next().hide();
 
           // アコーディオンをすべて開く
-          $('button#ac_open_all').click(function () {
+          $(document).on('click', '#ac_open_all', function (event) {
               for(var i=0; i<_ac.length; i++) {
-                if(_ac.eq(i).find('td.accordion_indicator > span').hasClass('active') == false)
-                  _ac.eq(i).click();
+                if(_ac.eq(i).hasClass('active') == false)
+                  accordion_open(_ac.eq(i));
               }
+              $(this).text('すべて閉じる')
+              $(this).attr('id', 'ac_close_all')
           });
 
           // アコーディオンをすべて閉じる
-          $('button#ac_close_all').click(function () {
+          $(document).on('click', '#ac_close_all', function () {
               for(var i=0; i<_ac.length; i++) {
-                if(_ac.eq(i).find('td.accordion_indicator > span').hasClass('active') == true)
-                  _ac.eq(i).click();
+                if(_ac.eq(i).hasClass('active') == true)
+                  accordion_close(_ac.eq(i));
               }
+              $(this).text('すべて開く')
+              $(this).attr('id', 'ac_open_all')
           });
-
           // 間違えた問題のアコーディオンをすべて開く
           $('button#ac_undo').click(function () {
             for(var i=0; i<_ac.length; i++) {
-              if(_ac.eq(i).find('td:first').attr('class') == 'wrong')
-                  _ac.eq(i).click();
+              if(_ac.eq(i).find('td:first').attr('class') == 'wrong') {
+                accordion_open(_ac.eq(i));
+              } else {
+                accordion_close(_ac.eq(i));
+              }
             }
           });
 
@@ -66,7 +83,6 @@
     </div>
     <div id="ac_ctrl">
       <button id="ac_open_all">すべて開く</button>
-      <button id="ac_close_all">すべて閉じる</button>
       <button id="ac_undo">元の状態に戻す</button>
     </div>
     <div class="details">
