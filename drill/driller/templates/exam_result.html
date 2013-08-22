@@ -21,25 +21,25 @@
 
           function accordion_open(ac) {
             ac.next().slideDown();
-            ac.addClass('active');
+            ac.find('span.accordion_indicator > img').addClass('active');
           }
                 
         
           function accordion_close(ac) {
             ac.next().slideUp();
-            ac.removeClass('active');
+            ac.find('span.accordion_indicator > img').removeClass('active');
           }
 
           // クリックでアコーディオンを開く/閉じる
           _ac.click(function() {
               $(this).next().slideToggle();
-              $(this).toggleClass('active');
+              $(this).find('span.accordion_indicator > img').toggleClass('active');
           }).next().hide();
 
           // アコーディオンをすべて開く
           $(document).on('click', '#ac_open_all', function (event) {
               for(var i=0; i<_ac.length; i++) {
-                if(_ac.eq(i).hasClass('active') == false)
+                if(_ac.eq(i).find('span.accordion_indicator > img').hasClass('active') == false)
                   accordion_open(_ac.eq(i));
               }
               $(this).text('すべて閉じる')
@@ -49,14 +49,15 @@
           // アコーディオンをすべて閉じる
           $(document).on('click', '#ac_close_all', function () {
               for(var i=0; i<_ac.length; i++) {
-                if(_ac.eq(i).hasClass('active') == true)
+                if(_ac.eq(i).find('span.accordion_indicator > img').hasClass('active') == true)
                   accordion_close(_ac.eq(i));
               }
               $(this).text('すべて開く')
               $(this).attr('id', 'ac_open_all')
           });
+          
           // 間違えた問題のアコーディオンをすべて開く
-          $('button#ac_undo').click(function () {
+          $('button#ac_init').click(function () {
             for(var i=0; i<_ac.length; i++) {
               if(_ac.eq(i).find('td:first').attr('class') == 'wrong') {
                 accordion_open(_ac.eq(i));
@@ -67,7 +68,7 @@
           });
 
           // 間違えた問題は、あらかじめアコーディオンを開いておく
-          $('button#ac_undo').click();
+          $('button#ac_init').click();
       });
     // ]]>
     </script>
@@ -83,17 +84,17 @@
     </div>
     <div id="ac_ctrl">
       <button id="ac_open_all">すべて開く</button>
-      <button id="ac_undo">元の状態に戻す</button>
+      <button id="ac_init">元の状態に戻す</button>
     </div>
     <div class="details">
       <div py:for="r in results" class="rb">
         <table class="accordion_head">
           <tr>
+            <!-- <th class="accordion_indicator"><span></span></th> -->
             <th class="qnum">問 ${r.i}</th>
-            <td class="${r.typ_class}">${r.typ_str}</td>
+            <td class="${r.typ_class}"><span class="accordion_indicator"><img src="${url('/media/accordion_front.png')}" /></span>${r.typ_str}</td>
             <td class="history"><span py:for="h in r.history">${h}</span></td>
             <td class="qinfo"><span class="${r.lv_xx}">&#10026;</span>${r.q.ad}年（${r.q.nengo} ${r.q.jy}年）問${r.q.qnum}</td>
-            <td class="accordion_indicator"><span></span></td>
           </tr>
         </table>
         <div class="rbx">

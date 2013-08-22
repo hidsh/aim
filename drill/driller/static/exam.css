@@ -140,7 +140,7 @@ div#ac_ctrl {text-align:right}
 button#ac_open_all,button#ac_close_all {width:8em}
 
 div.details {margin:20px 0}
-div.rb {margin:-1px 0 0 0; padding:0; border:none}
+div.rb {margin:-1px 0 0 23px; padding:0; border:none}
 div.rbx {margin:0; padding:5px 40px 5px 40px; border:#000 1px solid; border-top:none; margin-bottom:20px}
 table.accordion_head {margin:0; width:100%; cursor:pointer}
 .accordion_head th,.accordion_head td {padding:3px 15px 0 15px; font-weight: bold}
@@ -150,9 +150,8 @@ table.accordion_head {margin:0; width:100%; cursor:pointer}
 .accordion_head td.qinfo   {width:14em; font-weight:normal; text-align:center; padding:3px 8px 0 8px}
 .accordion_head td.history {padding:3px 8px 0 8px}
 .accordion_head td.history span {font-family:monospace; margin:0 0.2em;}
-.accordion_head td.accordion_indicator {width:1.5em}
-.accordion_head td.accordion_indicator span {display:block; width:20px; height:17px; background:url(accordion_indicator.png) no-repeat left bottom}
-.accordion_head td.accordion_indicator span.active {background:url(accordion_indicator.png) no-repeat left top}
+.accordion_head span.accordion_indicator img {position:absolute; left:8px; margin-top:3px; background:url(accordion_indicator.png) no-repeat left top}
+.accordion_head span.accordion_indicator img.active {background:url(accordion_indicator.png) no-repeat left bottom}
  
 .opts .correct {color:blue; border:none; padding:4px 5px 1px 5px; width:1.2em}
 .opts .wrong   {color:red;  border:none; padding:4px 5px 1px 5px; width:1.2em}
