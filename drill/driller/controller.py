@@ -15,7 +15,6 @@ from driller.history import HistoryList
 from driller.user import User
 from driller.lib import template
 from driller.lib import util
-from driller.lib import deco
 
 class PageInfo(object):
     def __init__(self, idx, qpages, qn):

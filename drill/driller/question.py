@@ -9,7 +9,6 @@ from genshi.core import Markup
 from driller.model import ObjList
 
 from driller.lib import util
-from driller.lib import deco
 
 class Option(object):
     def __init__(self, num, hit, cols=[]):
