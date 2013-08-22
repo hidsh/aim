@@ -74,3 +74,4 @@ tramp
 #main.py#
 drill/sessions/*
 drill/user/*
+*.cache
