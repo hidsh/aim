@@ -1,17 +1,11 @@
 /* -*- coding: utf-8 -*- */
 @import url("default.css");
 
-div.qb {
-    margin:5px 0 5em;
-}
+div.qb {margin:5px 0 5em}
 
-div.qbx {
-    margin:5px 0 60px;
-}
+div.qbx {margin:5px 0 60px}
 
-div.qbi {
-    margin:0 40px;
-}
+div.qbi {margin:0 40px}
 
 div#user_id {text-align:right; font-size:small}
 div#user_id span{font-family:Courier}
@@ -19,7 +13,8 @@ div#footer {margin:40px 30px 5px 30px; text-align:center; border-top:#000 1px so
 div#footer p {margin-top:5px}
 
 /* exam_root */
-#exam_root h1 {margin:40px 30px 5px 30px}
+#exam_root #page {margin:0px 20px 0 40px}
+#exam_root h1 {margin:40px 0 10px 0}
 #about table {width:510px}
 span#file {color:red}           /* why doesn't work?? */
 
@@ -28,21 +23,22 @@ span#file {color:red}           /* why doesn't work?? */
 #setting th {width:180px}
 #setting td {border:none}
 a#level_reset {margin-left:30px; font-weight:normal; font-size:small; }
-.lv_gr {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:green;}
-.lv_ye {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:yellow;}
-.lv_re {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:red;}
-.lv_wh {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:LightGray;}
+.lv_gr {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#1e90ff;}
+.lv_ye {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#ffd700;}
+.lv_re {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#ff3030;}
+.lv_wh {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#e6e6e6;}
 
-div#get_start {border: #000 1px dashed; margin:40px 30px 40px 30px; width:510px}
+div#get_start {border: #000 1px dashed; margin:40px 0 40px 0; width:510px}
 
-#stat table {width:510px; text-align:center}
+span#chart_doughnut {margin:0 30px 0 0; float:left}
+#stat table {width:300px; text-align:center}
 #stat th {width: 180px}
 
 #history table {width:510px; text-align:center}
 #history td.num {width:40px;}
 #history td.date {width:140px;}
 
-
+div#chart_line {margin:5px 0 10px 0; width:100%; overflow:auto; cursor:pointer}
 
 /* ナビゲーション */
 div.navi {
@@ -85,7 +81,7 @@ span.blank {
 }
 
 /* 選択肢 */
-table {
+table.opts {
 	border-collapse:collapse;
     margin:10px 10px 10px 30px;
 }

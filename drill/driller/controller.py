@@ -64,16 +64,15 @@ class Root(object):
         except KeyError:
             raise cherrypy.HTTPRedirect('session_error')
             
+        ql = QuestionList(q_path)
         user = User(user_id)
         try:
             user.load()
         except Exception as e:
+            print('ユーザ %s のファイルが見つかりませんでした。デフォルトの設定を保存します。:%r' % (user.mail_addr, e))
             user.conf = ExamConf()
-            user.history = HistoryList()
+            user.history = HistoryList(ql)
             user.save()
-            print('ユーザ %s のファイルが見つかりませんでした。デフォルトの設定を保存します。: %r' % (user.mail_addr, e))
-
-        ql = QuestionList(q_path, user.history)
         
         if post_dict and post_dict['level_reset'] == 'yes':
             user.history.level_reset(ql)
@@ -85,8 +84,9 @@ class Root(object):
         about = {'filename':ql.filename, 'name':ql.name, 'desc':ql.desc, 'authors':ql.authors, 'n':len(ql)}
         user.conf.mode = 'drill'                                      # default mode
         hists = user.history.out()
-        stat  = ql.get_color_distribution()
-        return template.render(about=about, hists=hists, stat=stat, u=user, author=a) | HTMLFormFiller(data=user.conf.to_dict())
+        stat  = user.history.get_color_distribution()
+        hist_chart = user.history.get_history_chart()
+        return template.render(about=about, hists=hists, stat=stat, h_chart = hist_chart, u=user, author=a) | HTMLFormFiller(data=user.conf.to_dict())
 
 
     @cherrypy.expose
@@ -219,14 +219,14 @@ class Root(object):
             user.history = HistoryList()
             print('ユーザ %s のファイルが見つかりませんでした。ヒストリを新規に作ります。: %r' % (user.mail_addr, e))
 
-        result = ExamResult(qpages, AnswerList(ans_dict), user.history, start_time)
+        results = ExamResult(qpages, AnswerList(ans_dict), user.history, start_time)
 
-        user.history.append(result.summarize(), start_time)
+        user.history.append(results, start_time)
         user.save()
         time = user.history.get_last_time()
 
         navi = [None, Navi('最初に戻る', '/')]
-        return template.render(navi=navi, score=result.get_score(), results=result, time=time, u=user)
+        return template.render(navi=navi, score=results.get_score(), results=results, time=time, u=user)
 
     @cherrypy.expose
     @template.output('error.html')

@@ -30,7 +30,7 @@ class Question(object):
     re_opt_head = re.compile(r'[ \t　]+')
     re_p     = re.compile(r'</?p>')
 
-    def __init__(self, ad, qnum, q, opts, a, desc, history):
+    def __init__(self, ad, qnum, q, opts, a, desc):
         def _replace_blanks(html):
             return self.re_blank.sub(r'<span class="blank">\1</span>', html)
 
@@ -67,9 +67,9 @@ class Question(object):
             self.opts.append(Option(i, hit, cols))
 
         self.desc = None if desc == '' else Markup(_replace_blanks(markdown(desc, ['tables'])))
-        self.history = history
 
-    def get_color(self, by):             # by: 'color'|'level'
+        """
+        def get_color(self, by):             # by: 'color'|'level'
         if   self.history == [] or self.history[0] == 'reset':
             color = self.WHITE
             level = 0
@@ -87,25 +87,24 @@ class Question(object):
             return color
         else:
             return level
-
+    """
     def correct_answer(self):
         return [x.onum for x in filter(lambda x: x.hit=='*', self.opts)]
 
 
 class QuestionList(ObjList):
-    def __init__(self, path_txt, history_list):
+    def __init__(self, path_txt):
         def _to_num(x):
             s = x.strip()
             return int(s) if s and s.isdigit() else None
+        
         def _get_value(_dict,_key):
             return _dict[_key] if _key in _dict else ''
+
         def _is_cache_old(path_cache, path_txt):
             mod_cache = os.stat(path_cache).st_mtime
             mod_txt   = os.stat(path_txt).st_mtime
-            if mod_cache < mod_txt:
-                return True
-            else:
-                return False
+            return mod_cache < mod_txt
             
         if not os.path.exists(path_txt):
             raise FileNotFoundError('%sがありません' % path_txt)
@@ -130,15 +129,14 @@ class QuestionList(ObjList):
                     opts = [x for x in _get_value(ini[sect], 'OPTS').split('\n') if x != '']
                     a = [x.strip() for x in _get_value(ini[sect], 'A').split(',')]
                     desc = _get_value(ini[sect], 'DESC')
-                    his = [x[0] for x in history_list.get_ox_list(ad, qnum)]
-                    q = Question(ad, qnum, q, opts, a, desc, his)
+                    q = Question(ad, qnum, q, opts, a, desc)
                     l.append(q)
 
             self._list = l
             self.save(path_cache)
 
-        
-    def sort_by_poor_questions(self):
+    """
+    def sort_by_poor_questions(self, hist_list):
         l = self._list[:]
         for x in l:
             x.level = x.get_color('level')
@@ -148,7 +146,7 @@ class QuestionList(ObjList):
             delattr(x, 'level')
         return l
         
-    def get_color_distribution(self):
+    def get_color_distribution(self, hist_list):
         colors = [x.get_color('color') for x in self._list]
         n     = len(colors)
         n_gr  = len([c for c in colors if c == Question.GREEN])
@@ -158,7 +156,7 @@ class QuestionList(ObjList):
         # TODO: adjust max value ratio
         
         return ((n, 100), (n_gr, util.percent(n_gr, n)), (n_ye, util.percent(n_ye, n)), (n_re, util.percent(n_re, n)), (n_wh, util.percent(n_wh, n)))
-
+    """
 
 class QuestionPages(ObjList):
     def __init__(self, ql, conf):

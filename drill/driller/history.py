@@ -9,38 +9,43 @@ from driller.model import ObjList
 from driller.lib import util
 
 class HistoryResultElement(object):
-    def __init__(self, summarized_result):
-        # summarized_result: dict {'typ':typ_class, 'ad':q.ad, 'qnum':q.qnum}
-        self.typ  = summarized_result['typ']
-        self.ad   = summarized_result['ad']
-        self.qnum = summarized_result['qnum']
+    def __init__(self, result):
+        self.typ   = result.typ_class
+        self.ad    = result.q.ad
+        self.qnum  = result.q.qnum
+        self.lv_xx = result.lv_xx
 
     def __repr__(self):
-        return '<HistoryResultElement %d: Q%d: %s>' % (self.ad, self.qnum, self.typ)
-
-    def is_correct(self):
-        return self.typ == 'correct'
+        return '<HistoryResultElement %d: Q%d: %s, %s>' % (self.ad, self.qnum, self.typ, self.lv_xx)
 
     
 class History(object):
-    def __init__(self, summary_list, start_time):
+    def __init__(self, result_list, start_time, colors_old):
         self._list = []
         self.start_time = start_time
         self.end_time   = datetime.now()
-        self.score = (0, 0, 0)
         
-        for x in summary_list:
+        for x in result_list:
             self._list.append(HistoryResultElement(x))
-        self.score = self._get_score()
-
+        self.score  = self._get_score()
+        self.colors = self._get_color_distributions(colors_old)            # colors_old is updated
+        
     def _get_score(self):                  # TODO refactoring: ExamResult's same function
-        correct_answers = [x for x in self._list if x.is_correct()]
+        correct_answers = [x for x in self._list if x.typ == 'correct']
         len_all  = len(self._list)
         len_corr = len(correct_answers)
         percent = util.percent(len_corr, len_all)
 
         return (len_corr, len_all, percent)
 
+    def _get_color_distributions(self, colors):
+        for h in self._list:
+            for q in colors:
+                if (q['ad'] == h.ad) and (q['qnum'] == h.qnum):
+                    q['lv_xx'] = h.lv_xx                                   # colors is updated
+                    break
+        return colors[:]
+            
     def find_answer(self, ad, qnum):
         for x in self._list:
             if (x.ad == ad) and (x.qnum == qnum):
@@ -52,21 +57,23 @@ class History(object):
 class HistoryList(ObjList):
     _MAX = 1000
     
-    def __init__(self):
+    def __init__(self, qlist):
         self._list = []
         self.count = 0
+        self.color_dists = [{'ad':q.ad, 'qnum':q.qnum, 'lv_xx':'lv_wh'} for q in qlist]     # latest value (also used as initial value)
 
     def append(self, hist, start_time):
         if [x for x in self._list if x.start_time == start_time]: return   # prevent overlapping
 
-        self._list.append(History(hist, start_time))
+        self._list.append(History(hist, start_time, self.color_dists))     # color_dists is updated
         self._list = self._list[-self._MAX:]                               # FIFO
         self.count += 1
 
     def level_reset(self, ql):
+        if self._list[-1].start_time == None: return                       # ignore resetting twice in a row
+
         l = [x for x in self._list if x.start_time]                        # delete previous reset record
-        summary_list = [{'typ':'reset', 'ad':x.ad, 'qnum':x.qnum} for x in ql]
-        l.append(History(summary_list, None))                              # reset: start_time = None
+        l.append(History(ql, None))                                        # reset: start_time = None
         self._list = l
             
     def get_last_time(self):
@@ -87,7 +94,48 @@ class HistoryList(ObjList):
             l.reverse()
             
         return [] if l == [] else l
+    """
+    def sort_by_poor_questions(self, hist_list):
+        l = self._list[:]
+        for x in l:
+            x.level = x.get_color('level')
+            
+        l.sort(key=lambda x:x.level)
+        for x in l:
+            delattr(x, 'level')
+        return l
+    """ 
+    def get_color_distribution(self, colors=None):
+        if colors == None:
+            colors = self.color_dists
 
+        n     = len(colors)
+        n_gr  = len([q for q in colors if q['lv_xx'] == 'lv_gr'])
+        n_ye  = len([q for q in colors if q['lv_xx'] == 'lv_ye'])
+        n_re  = len([q for q in colors if q['lv_xx'] == 'lv_re'])
+        n_wh  = len([q for q in colors if q['lv_xx'] == 'lv_wh'])
+        # TODO: adjust max value ratio
+        return ((n, 100), (n_gr, util.percent(n_gr, n)), (n_ye, util.percent(n_ye, n)), (n_re, util.percent(n_re, n)), (n_wh, util.percent(n_wh, n)))
+
+    def get_history_chart(self):
+        l_gr = []
+        l_ye = []
+        l_re = []
+        l_wh = []
+        l_score = []
+        
+        for h in self._list:
+            _, gr, ye, re, wh = self.get_color_distribution(h.colors)
+            l_gr.append(gr[0])
+            l_ye.append(ye[0])
+            l_re.append(re[0])
+            l_wh.append(wh[0])
+            l_score.append(h.score[2])
+
+        l_label = list(reversed(range(self.count, 0, -1)[:self._MAX]))
+
+        return ('%r' % l_label, '%r' % l_score, '%r' % l_gr, '%r' % l_ye, '%r' % l_re, '%r' % l_wh)
+        
     def get_ox_list(self, ad, qnum, reverse=True):
         l = tuple(filter(lambda x: x, [x.find_answer(ad, qnum) for x in self._list]))
         return tuple(reversed(l)) if reverse else l
@@ -101,6 +149,7 @@ class HistoryList(ObjList):
         clone._list = l
 
         return clone
+
     
 ##
 if __name__ == '__main__':

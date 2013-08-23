@@ -135,9 +135,6 @@ class ExamResult(ObjList):
         
         return (len_corr, len_all, percent)
 
-    def summarize(self):
-        return [{'typ':x.typ_class, 'ad':x.q.ad, 'qnum':x.q.qnum} for x in self._list]
-
     
 ##
 if __name__ == '__main__':

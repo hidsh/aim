@@ -17,24 +17,15 @@ class User(object):
         self._path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../user/' + self.id)
 
     def save(self):
-        _dict = {'id':self.id, 'mail_addr':self.mail_addr, 'conf':self.conf, 'history':self.history}
         try:
             with open(self._path, 'wb') as f:
-                pickle.dump(_dict, f)
-        except IOError:
-            print('オブジェクトを保存できませんでした: %s' % self._path)
+                pickle.dump(self.__dict__, f)
+        except IOError as e:
+            print('オブジェクトを保存できませんでした: %s: %r' % (self._path, e))
             
     def load(self):
-        try:
-            with open(self._path, 'rb') as f:
-                _dict = pickle.load(f)
-        except IOError:
-            print('オブジェクトをロードできませんでした: %s' % self._path)
-        else:
-            # assert self.id == _dict['id']
-            self.mail_addr = _dict['mail_addr']
-            self.conf      = _dict['conf']
-            self.history   = _dict['history']
+        with open(self._path, 'rb') as f:
+            self.__dict__ = pickle.load(f)
 
     def update_conf(self, new_conf):
         if self.conf != new_conf:

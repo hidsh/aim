@@ -22,10 +22,21 @@
         document.f_reset.submit();
         return false;
       }
+      
     </script>
+    <script type="text/javascript" src="${url('/media/jquery.js')}"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+      $(function() {
+        $('div#chart_line').flickable();
+      });
+    // ]]>
+    </script>
+    <script src="${url('/media/Chart.js')}"></script>
   </head>
   <body id="exam_root">
     <div id="user_id"><p><span>${u.id}</span> としてログイン中</p></div>
+    <div id="page">
     <div id="about">
       <h1>このドリルについて</h1>
       <table>
@@ -91,17 +102,25 @@
       <form name="f_reset" method="post">
         <input type="hidden" name="level_reset" value="yes" />
       </form>
+      <span id="chart_doughnut">
+        <canvas id="doughnut" height="165" width="165"></canvas>
+      </span>
+      <span>
       <table>
-        <tr><th>全体</th><th colspan="2">${stat[0][0]}問</th></tr>
         <tr><th class="lv_gr">&#10026;</th><td>${stat[1][0]}問</td><td>${stat[1][1]}%</td></tr>
         <tr><th class="lv_ye">&#10026;</th><td>${stat[2][0]}問</td><td>${stat[2][1]}%</td></tr>
         <tr><th class="lv_re">&#10026;</th><td>${stat[3][0]}問</td><td>${stat[3][1]}%</td></tr>
         <tr><th class="lv_wh">&#10026;</th><td>${stat[4][0]}問</td><td>${stat[4][1]}%</td></tr>
+        <tr><th>全体</th><th>${stat[0][0]}問</th><th>-</th></tr>
       </table>
+      </span>
     </div>
     
     <div py:if="hists" id="history">
-    <h1>ドリル履歴</h1>
+      <h1>ドリル履歴</h1>
+      <div id="chart_line">
+        <canvas id="line" height="350" width="800"></canvas>
+      </div>
       <table>
         <tr><th></th><th>日付</th><th>出題数</th><th>得点</th></tr>
         <tr py:for="h in hists">
@@ -112,9 +131,70 @@
         </tr>
       </table>
     </div>
-    
+    </div>    
     <div id="footer">
       <p class="legalese">© 2013 autometa.ro</p>
     </div>
+    <script>
+        var d_data = [
+          {value: ${stat[1][0]},  color: "#1e90ff"},  // blue
+          {value: ${stat[2][0]},  color: "#ffd700"},  // yellow
+          {value: ${stat[3][0]},  color: "#ff3030"},  // red
+          {value: ${stat[4][0]},  color: "#e6e6e6"}   // white
+        ];
+
+        new Chart(document.getElementById("doughnut").getContext("2d")).Doughnut(d_data);
+
+        var l_data = {
+	      labels : ${h_chart[0]},
+	      datasets : [
+		    {
+              // black
+			  fillColor: "rgba(50,50,50,0.5)",
+			  strokeColor: "rgba(50,50,50,1.0)",
+			  pointColor: "#333333",
+			  pointStrokeColor: "#fff",
+			  data: ${h_chart[1]}
+		    }, {
+              // blue
+			  fillColor: "rgba(10,10,10,0)",
+			  strokeColor: "#1e90ff",
+			  pointColor: "#1e90ff",
+			  pointStrokeColor: "#fff",
+			  data: ${h_chart[2]}
+		    }, {
+              // yellow
+			  fillColor: "rgba(10,10,10,0)",
+			  strokeColor: "#ffd700",
+			  pointColor: "#ffd700",
+			  pointStrokeColor: "#fff",
+			  data: ${h_chart[3]}
+		    }, {
+              // red
+			  fillColor: "rgba(10,10,10,0)",
+			  strokeColor: "#ff3030",
+			  pointColor: "#ff3030",
+			  pointStrokeColor: "#fff",
+			  data: ${h_chart[4]}
+		    }, {
+              // white
+			  fillColor: "rgba(10,10,10,0)",
+			  strokeColor: "e6e6e6",
+			  pointColor: "e6e6e6",
+			  pointStrokeColor: "#fff",
+			  data: ${h_chart[5]}
+		    }
+	      ]
+        };
+        
+        var l_opt = {
+                     scaleOverride: true,
+                     scaleSteps: 10,
+                     scaleStepWidth: 10,
+                     scaleStartValue: 0
+        };
+        
+        new Chart(document.getElementById("line").getContext("2d")).Line(l_data, l_opt);
+    </script>
   </body>
 </html>
