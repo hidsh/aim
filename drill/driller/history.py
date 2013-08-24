@@ -44,7 +44,7 @@ class History(object):
                 if (q['ad'] == h.ad) and (q['qnum'] == h.qnum):
                     q['lv_xx'] = h.lv_xx                                   # colors is updated
                     break
-        return colors[:]
+        return copy.deepcopy(colors)
             
     def find_answer(self, ad, qnum):
         for x in self._list:
@@ -118,21 +118,22 @@ class HistoryList(ObjList):
         return ((n, 100), (n_gr, util.percent(n_gr, n)), (n_ye, util.percent(n_ye, n)), (n_re, util.percent(n_re, n)), (n_wh, util.percent(n_wh, n)))
 
     def get_history_chart(self):
-        l_gr = []
-        l_ye = []
-        l_re = []
-        l_wh = []
-        l_score = []
+        l_gr = [0]
+        l_ye = [0]
+        l_re = [0]
+        l_wh = [100]
+        l_score = [0]
         
         for h in self._list:
             _, gr, ye, re, wh = self.get_color_distribution(h.colors)
-            l_gr.append(gr[0])
-            l_ye.append(ye[0])
-            l_re.append(re[0])
-            l_wh.append(wh[0])
+            print('>>gr:%2.1f, ye:%2.1f, re:%2.1f, wh:%2.1f' % (gr[1], ye[1], re[1], wh[1]))
+            l_gr.append(gr[1])              # percent
+            l_ye.append(ye[1])
+            l_re.append(re[1])
+            l_wh.append(wh[1])
             l_score.append(h.score[2])
 
-        l_label = list(reversed(range(self.count, 0, -1)[:self._MAX]))
+        l_label = [''] + list(reversed(range(self.count, 0, -1)[:self._MAX]))
 
         return ('%r' % l_label, '%r' % l_score, '%r' % l_gr, '%r' % l_ye, '%r' % l_re, '%r' % l_wh)
         

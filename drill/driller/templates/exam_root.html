@@ -27,12 +27,13 @@
     <script type="text/javascript" src="${url('/media/jquery.js')}"></script>
     <script type="text/javascript">
     //<![CDATA[
-      $(function() {
+      (function() {
         $('div#chart_line').flickable();
       });
     // ]]>
     </script>
     <script src="${url('/media/Chart.js')}"></script>
+    <!--[if IE]><script type="text/javascript" src="excanvas.js" charset="utf-8"></script><![endif]-->
   </head>
   <body id="exam_root">
     <div id="user_id"><p><span>${u.id}</span> としてログイン中</p></div>
@@ -119,7 +120,7 @@
     <div py:if="hists" id="history">
       <h1>ドリル履歴</h1>
       <div id="chart_line">
-        <canvas id="line" height="350" width="800"></canvas>
+        <canvas id="line" height="350"></canvas>
       </div>
       <table>
         <tr><th></th><th>日付</th><th>出題数</th><th>得点</th></tr>
@@ -143,14 +144,14 @@
           {value: ${stat[4][0]},  color: "#e6e6e6"}   // white
         ];
 
-        new Chart(document.getElementById("doughnut").getContext("2d")).Doughnut(d_data);
+        new Chart($("canvas#doughnut")[0].getContext("2d")).Doughnut(d_data);
 
         var l_data = {
 	      labels : ${h_chart[0]},
 	      datasets : [
 		    {
               // black
-			  fillColor: "rgba(50,50,50,0.5)",
+			  fillColor: "rgba(50,50,50,0.3)",
 			  strokeColor: "rgba(50,50,50,1.0)",
 			  pointColor: "#333333",
 			  pointStrokeColor: "#fff",
@@ -191,10 +192,13 @@
                      scaleOverride: true,
                      scaleSteps: 10,
                      scaleStepWidth: 10,
-                     scaleStartValue: 0
+                     scaleStartValue: 0,
+                     animation:false
         };
-        
-        new Chart(document.getElementById("line").getContext("2d")).Line(l_data, l_opt);
+
+        //$('canvas#line').attr('width', $('canvas#line').parent().width());
+        $('canvas#line').attr('width', l_data['labels'].length * 50);
+        new Chart($('canvas#line')[0].getContext('2d')).Line(l_data, l_opt);
     </script>
   </body>
 </html>
