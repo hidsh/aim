@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="${url('/media/exam.css')}" type="text/css" />    
     <title>ドリルの開始</title>
     <script type="text/javascript">
+    //<![CDATA[
       function do_post(){
         if(document.form.elements['mode'].value == 'drill')
           document.form.action = 'exam_start';
@@ -22,6 +23,7 @@
           return false;
         }
       }
+    // ]]>
     </script>
     <script type="text/javascript" src="${url('/media/jquery.js')}"></script>
     <script type="text/javascript">
@@ -105,6 +107,7 @@
       <span id="chart_doughnut">
         <canvas id="doughnut" height="165" width="165"></canvas>
         <script>
+        //<![CDATA[
           var d_data = [
             {value: ${stat[1][0]},  color: "#1e90ff"},  // blue
             {value: ${stat[2][0]},  color: "#ffd700"},  // yellow
@@ -112,7 +115,8 @@
             {value: ${stat[4][0]},  color: "#e6e6e6"}   // white
           ];
 
-        new Chart($("canvas#doughnut")[0].getContext("2d")).Doughnut(d_data);
+          new Chart($("canvas#doughnut")[0].getContext("2d")).Doughnut(d_data);
+        // ]]>
         </script>
       </span>
       <span>
@@ -131,6 +135,7 @@
       <div id="chart_line">
         <canvas id="line" height="420"></canvas>
         <script>
+        //<![CDATA[
         var l_data = {
 	      labels : ${h_chart[0]},
 	      datasets : [
@@ -183,6 +188,7 @@
 
         $('canvas#line').attr('width', l_data['labels'].length * 70);
         new Chart($('canvas#line')[0].getContext('2d')).Line(l_data, l_opt);
+        // ]]>
         </script>
       </div>
       <!-- <div><a py:if="h_chart" href="#" id="hist_show_all" onclick="hist_show_all()">すべての履歴を表示</a></div> -->
