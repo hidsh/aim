@@ -21,10 +21,6 @@ class Option(object):
         return '%2d:%s:%s' % (self.onum, self.hit, self.your_ans)
 
 class Question(object):
-    GREEN  = 'green'                     # level 3
-    YELLOW = 'yello'                     #       2
-    RED    = 'red'                       #       1
-    WHITE  = 'white'                     #       0
     re_blank = re.compile(r'\[{2}(.)\]{2}')            # e.g. [[ア]] --> ア
     re_opt   = re.compile(r'[ \t　]{2,}')
     re_opt_head = re.compile(r'[ \t　]+')
@@ -68,26 +64,6 @@ class Question(object):
 
         self.desc = None if desc == '' else Markup(_replace_blanks(markdown(desc, ['tables'])))
 
-        """
-        def get_color(self, by):             # by: 'color'|'level'
-        if   self.history == [] or self.history[0] == 'reset':
-            color = self.WHITE
-            level = 0
-        elif self.history[0:2] == ['correct', 'correct']:
-            color = self.GREEN
-            level = 3
-        elif self.history[0] == 'correct':
-            color = self.YELLOW
-            level = 2
-        else:
-            color = self.RED
-            level = 1
-
-        if by == 'color':
-            return color
-        else:
-            return level
-    """
     def correct_answer(self):
         return [x.onum for x in filter(lambda x: x.hit=='*', self.opts)]
 
@@ -147,23 +123,10 @@ class QuestionList(ObjList):
         [delattr(q, 'level') for q in ql]
         return ql
     
-    """        
-    def get_color_distribution(self, hist_list):
-        colors = [x.get_color('color') for x in self._list]
-        n     = len(colors)
-        n_gr  = len([c for c in colors if c == Question.GREEN])
-        n_ye  = len([c for c in colors if c == Question.YELLOW])
-        n_re  = len([c for c in colors if c == Question.RED])
-        n_wh  = len([c for c in colors if c == Question.WHITE])
-        # TODO: adjust max value ratio
-        
-        return ((n, 100), (n_gr, util.percent(n_gr, n)), (n_ye, util.percent(n_ye, n)), (n_re, util.percent(n_re, n)), (n_wh, util.percent(n_wh, n)))
-    """
-
 class QuestionPages(ObjList):
     def __init__(self, ql, conf, color_dists):
         qlx = ql[:]
-        if conf.order == 'poor':         # poor | cont | random
+        if conf.order == 'poor':         # poor | cont | rand
             random.shuffle(qlx)
             qlx = ql.sort_by_poor_questions(color_dists)
             

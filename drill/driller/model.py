@@ -81,7 +81,7 @@ class Result(object):
         def _subst_mark(x):
             return self.MARU if x == 'correct' else self.BATSU
         
-        def _get_color_class(now, prev):                    # TODO refactoring: Question get_color()
+        def _get_color_class(now, prev):
             if [now, prev] == ['correct', 'correct']:
                 return 'lv_gr'
             elif now == 'correct':

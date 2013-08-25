@@ -82,7 +82,7 @@ class HistoryList(ObjList):
         if self._list[-1].start_time == None: return                       # ignore resetting twice in a row
 
         rs = [PseudoResult(q) for q in qlist]
-        self._list.append(History(rs, None, self.color_dists))                                        # reset: start_time = None
+        self._list.append(History(rs, None, self.color_dists))             # reset: start_time = None
         self.count += 1
             
     def get_last_time(self):
