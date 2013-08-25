@@ -223,10 +223,11 @@ class Root(object):
 
         user.history.append(results, start_time)
         user.save()
-        time = user.history.get_last_time()
+        time = user.history[-1].get_time()
+        score = user.history[-1].get_score()
 
         navi = [None, Navi('最初に戻る', '/')]
-        return template.render(navi=navi, score=results.get_score(), results=results, time=time, u=user)
+        return template.render(navi=navi, score=score, results=results, time=time, u=user)
 
     @cherrypy.expose
     @template.output('error.html')

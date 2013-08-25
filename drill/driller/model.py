@@ -5,7 +5,6 @@ from genshi.core import Markup
 from driller.lib import util
 import pickle
 
-
 class ObjList(object):
     def __init__(self):
         self._list = []
@@ -127,15 +126,6 @@ class ExamResult(ObjList):
             l.append(Result(i, q, a.ans, hist_list))
         self._list = l
 
-    def get_score(self):        # TODO refactoring: History's same function
-        correct_answers = [x for x in self._list if x.is_correct()]
-        len_all  = len(self._list)
-        len_corr = len(correct_answers)
-        percent = util.percent(len_corr, len_all)
-        
-        return (len_corr, len_all, percent)
-
-    
 ##
 if __name__ == '__main__':
 

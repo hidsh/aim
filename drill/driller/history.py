@@ -27,10 +27,18 @@ class History(object):
         
         for x in result_list:
             self._list.append(HistoryResultElement(x))
-        self.score  = self._get_score()
+        self.score  = self.get_score()
         self.colors = self._get_color_distributions(colors_old)            # colors_old is updated
         
-    def _get_score(self):                  # TODO refactoring: ExamResult's same function
+    def _get_color_distributions(self, colors):
+        for h in self._list:
+            for q in colors:
+                if (q['ad'] == h.ad) and (q['qnum'] == h.qnum):
+                    q['lv_xx'] = h.lv_xx                                   # colors is updated
+                    break
+        return copy.deepcopy(colors)
+            
+    def get_score(self):
         if [x for x in self._list if x.typ == 'reset']:
             return (-1, -1, 0)
         
@@ -41,14 +49,11 @@ class History(object):
 
         return (len_corr, len_all, percent)
 
-    def _get_color_distributions(self, colors):
-        for h in self._list:
-            for q in colors:
-                if (q['ad'] == h.ad) and (q['qnum'] == h.qnum):
-                    q['lv_xx'] = h.lv_xx                                   # colors is updated
-                    break
-        return copy.deepcopy(colors)
-            
+    def get_time(self):
+        total = (self.end_time - self.start_time)
+        avg = total / len(self._list)
+        return (util.timedelta_fmt(total), util.timedelta_fmt(avg))
+    
     def find_answer(self, ad, qnum):
         for x in self._list:
             if (x.ad == ad) and (x.qnum == qnum):
@@ -84,13 +89,13 @@ class HistoryList(ObjList):
         rs = [PseudoResult(q) for q in qlist]
         self._list.append(History(rs, None, self.color_dists))             # reset: start_time = None
         self.count += 1
-            
+    """            
     def get_last_time(self):
         last = self._list[-1]
         total = (last.end_time - last.start_time)
         avg = total / len(last._list)
         return (util.timedelta_fmt(total), util.timedelta_fmt(avg))
-        
+    """        
     def out(self, reverse=True):
         l = [x for x in self._list if x.start_time]
         oldest = 1 if self.count < self._MAX else self.count - (self._MAX - 1)

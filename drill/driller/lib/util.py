@@ -46,7 +46,6 @@ def timedelta_fmt(timedelta):
         if m > 60:
             h += 1
             m -= 60
-            
 
     if h > 1:
         return '%d時間%d分' % (h, m)
@@ -56,14 +55,6 @@ def timedelta_fmt(timedelta):
         return '%d分%d秒' % (m, s)
     else:
         return '%d秒' % s
-
-def get_score(func, answers):   # TODO
-    corrects = [ x for x in answers if x.is_correct()]
-    len_all  = len(answers)
-    len_corr = len(corrects)
-    score = 0 if len_corr == 0 else percent(len_corr / len_all * 100, 1)
-    
-    return (len_corr, len_all, score)
 
 def filename_body(path):
     return os.path.splitext(path)[0]
