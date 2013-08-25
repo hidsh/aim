@@ -2,13 +2,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-    <meta http-equiv="refresh" content="5;URL=/" />
     <title>エラーが発生しました</title>
     <link rel="stylesheet" href="${url('/media/default.css')}" type="text/css" />    
+    <script type="text/javascript">
+    //<![CDATA[
+      function redirect () {
+        var x = 4;
+
+        return function () {
+          if(x > 0) {
+            // console.log(x);
+            document.getElementById('time').innerHTML = x;
+            x--;
+          } else {
+            location.href='/';;
+          }
+        }
+      }
+      var f = redirect();
+      setInterval('f()', 1000);
+    //]]>
+    </script>
   </head>
   <body>
     <div>${msg}</div>
-    <p>5秒後にトップページにジャンプします。</p>
-    <p>自動的にジャンプしない場合は、<a href="/">こちら</a>をクリック</p>
+    <p><span id="time">5</span>秒後にトップページにジャンプします。</p>
+    <p>自動的にジャンプしない場合は、<a href="/">こちら</a> をクリックしてください。</p>
   </body>
 </html>
