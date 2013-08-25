@@ -17,10 +17,11 @@
         return false;
       }
       function level_reset(){
-        //window.dialog('レベルをリセットします。よろしいですか？'); // TODO
-        document.f_reset.action = 'exam_root';
-        document.f_reset.submit();
-        return false;
+        if(window.confirm('レベルをリセットします。よろしいですか？')) {
+          document.f_reset.action = 'exam_root';
+          document.f_reset.submit();
+          return false;
+        }
       }
       
     </script>
