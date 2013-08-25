@@ -181,20 +181,20 @@
                      animation:false
         };
 
-        $('canvas#line').attr('width', l_data['labels'].length * 100);
+        $('canvas#line').attr('width', l_data['labels'].length * 70);
         new Chart($('canvas#line')[0].getContext('2d')).Line(l_data, l_opt);
         </script>
-        <!-- <div><a py:if="h_chart" href="#" id="hist_show_all" onclick="hist_show_all()">すべての履歴を表示</a></div> -->
-        <table>
-          <tr><th></th><th>日付</th><th>出題数</th><th>得点</th></tr>
-          <tr py:for="h in hists">
-            <td class="num">${h.i}</td>
-            <td class="date">${h.date_str}</td>
-            <td>${h.score[1]}問</td>
-            <td>${h.score[2]}点</td>
-          </tr>
-        </table>
       </div>
+      <!-- <div><a py:if="h_chart" href="#" id="hist_show_all" onclick="hist_show_all()">すべての履歴を表示</a></div> -->
+      <table>
+        <tr><th></th><th>日付</th><th>出題数</th><th>得点</th></tr>
+        <tr py:for="h in hists">
+          <td class="num">${h.i}</td>
+          <td class="date">${h.date_str}</td>
+          <td>${h.score[1]}問</td>
+          <td>${h.score[2]}点</td>
+        </tr>
+      </table>
     </div>
 
     </div> <!-- /page -->    
