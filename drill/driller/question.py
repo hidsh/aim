@@ -135,17 +135,19 @@ class QuestionList(ObjList):
             self._list = l
             self.save(path_cache)
 
-    """
-    def sort_by_poor_questions(self, hist_list):
-        l = self._list[:]
-        for x in l:
-            x.level = x.get_color('level')
+    def sort_by_poor_questions(self, color_dists):
+        def _lv_str2num(lv_str):
+            tbl = {'lv_wh':0, 'lv_re':0, 'lv_ye':2, 'lv_gr':3 }
+            return tbl[lv_str]
             
-        l.sort(key=lambda x:x.level)
-        for x in l:
-            delattr(x, 'level')
-        return l
-        
+        ql = self._list[:]
+        [setattr(q,'level', _lv_str2num(c['lv_xx'])) for c,q in zip(color_dists, ql)]
+            
+        ql.sort(key=lambda x:x.level)
+        [delattr(q, 'level') for q in ql]
+        return ql
+    
+    """        
     def get_color_distribution(self, hist_list):
         colors = [x.get_color('color') for x in self._list]
         n     = len(colors)
@@ -159,11 +161,11 @@ class QuestionList(ObjList):
     """
 
 class QuestionPages(ObjList):
-    def __init__(self, ql, conf):
+    def __init__(self, ql, conf, color_dists):
         qlx = ql[:]
         if conf.order == 'poor':         # poor | cont | random
             random.shuffle(qlx)
-            qlx = ql.sort_by_poor_questions()
+            qlx = ql.sort_by_poor_questions(color_dists)
             
         elif conf.order == 'rand':
             random.shuffle(qlx)

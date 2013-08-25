@@ -103,17 +103,7 @@ class HistoryList(ObjList):
             l.reverse()
             
         return [] if l == [] else l
-    """
-    def sort_by_poor_questions(self, hist_list):
-        l = self._list[:]
-        for x in l:
-            x.level = x.get_color('level')
-            
-        l.sort(key=lambda x:x.level)
-        for x in l:
-            delattr(x, 'level')
-        return l
-    """ 
+
     def get_color_distribution(self, colors=None):
         if colors == None:
             colors = self.color_dists

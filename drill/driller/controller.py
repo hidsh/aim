@@ -130,7 +130,7 @@ class Root(object):
         cherrypy.session['conf'] = user.conf
         cherrypy.session['start_time'] = datetime.now()
         
-        cherrypy.session['qpages'] = qpages = QuestionPages(ql, user.conf)
+        cherrypy.session['qpages'] = qpages = QuestionPages(ql, user.conf, user.history.color_dists)
         cherrypy.session['answer_dict'] = {}
         navi = [None, Navi('次ページ')]
         pginfo = PageInfo(0, qpages, user.conf.qn)
