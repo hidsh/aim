@@ -188,6 +188,7 @@
 
         $('canvas#line').attr('width', l_data['labels'].length * 70);
         new Chart($('canvas#line')[0].getContext('2d')).Line(l_data, l_opt);
+        $('div#chart_line').animate({scrollLeft:$('canvas#line').attr('width')}, 'fast');
         // ]]>
         </script>
       </div>
