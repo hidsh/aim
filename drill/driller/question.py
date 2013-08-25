@@ -7,7 +7,6 @@ from markdown import markdown
 from genshi.core import Markup
 
 from driller.model import ObjList
-
 from driller.lib import util
 
 class Option(object):
@@ -36,7 +35,6 @@ class Question(object):
 
         def _opt_md(x):
             m = Markup(markdown(x.replace('\\n', '\n\n'), ['tables']))
-            
             return Markup(self.re_p.sub('', m))
         
         self.ad = ad

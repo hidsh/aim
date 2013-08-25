@@ -89,7 +89,6 @@
       <div py:for="r in results" class="rb">
         <table class="accordion_head">
           <tr>
-            <!-- <th class="accordion_indicator"><span></span></th> -->
             <th class="qnum">問 ${r.i}</th>
             <td class="${r.typ_class}"><span class="accordion_indicator"><img src="${url('/media/accordion_front.png')}" /></span>${r.typ_str}</td>
             <td class="history"><span py:for="h in r.history">${h}</span></td>
