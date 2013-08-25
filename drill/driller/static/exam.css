@@ -34,11 +34,11 @@ span#chart_doughnut {margin:0 30px 0 0; float:left}
 #stat table {width:300px; text-align:center}
 #stat th {width: 180px}
 
+div#chart_line {margin:20px 0 10px 0; width:100%; overflow:auto; cursor:pointer}
 #history table {width:510px; text-align:center}
-#history td.num {width:40px;}
-#history td.date {width:140px;}
+#history td.num {width:40px}
+#history td.date {width:140px}
 
-div#chart_line {margin:5px 0 10px 0; width:100%; overflow:auto; cursor:pointer}
 
 /* ナビゲーション */
 div.navi {
@@ -145,7 +145,7 @@ table.accordion_head {margin:0; width:100%; cursor:pointer}
 .accordion_head td.wrong   {background-color:#FF6699; width:2.5em; text-align:center}
 .accordion_head td.qinfo   {width:14em; font-weight:normal; text-align:center; padding:3px 8px 0 8px}
 .accordion_head td.history {padding:3px 8px 0 8px}
-.accordion_head td.history span {font-family:monospace; margin:0 0.2em;}
+.accordion_head td.history span {font-family:monospace; margin:0 0.2em}
 .accordion_head span.accordion_indicator img {position:absolute; left:8px; margin-top:3px; background:url(accordion_indicator.png) no-repeat left top}
 .accordion_head span.accordion_indicator img.active {background:url(accordion_indicator.png) no-repeat left bottom}
  

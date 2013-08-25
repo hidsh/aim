@@ -31,6 +31,9 @@ class History(object):
         self.colors = self._get_color_distributions(colors_old)            # colors_old is updated
         
     def _get_score(self):                  # TODO refactoring: ExamResult's same function
+        if [x for x in self._list if x.typ == 'reset']:
+            return (-1, -1, 0)
+        
         correct_answers = [x for x in self._list if x.typ == 'correct']
         len_all  = len(self._list)
         len_corr = len(correct_answers)
@@ -62,19 +65,25 @@ class HistoryList(ObjList):
         self.count = 0
         self.color_dists = [{'ad':q.ad, 'qnum':q.qnum, 'lv_xx':'lv_wh'} for q in qlist]     # latest value (also used as initial value)
 
-    def append(self, hist, start_time):
+    def append(self, result_list, start_time):
         if [x for x in self._list if x.start_time == start_time]: return   # prevent overlapping
 
-        self._list.append(History(hist, start_time, self.color_dists))     # color_dists is updated
+        self._list.append(History(result_list, start_time, self.color_dists))     # color_dists is updated
         self._list = self._list[-self._MAX:]                               # FIFO
         self.count += 1
 
-    def level_reset(self, ql):
+    def level_reset(self, qlist):
+        class PseudoResult(object):
+            def __init__(self, q):
+                self.typ_class = 'reset'
+                self.q = q
+                self.lv_xx = 'lv_wh'
+                
         if self._list[-1].start_time == None: return                       # ignore resetting twice in a row
 
-        l = [x for x in self._list if x.start_time]                        # delete previous reset record
-        l.append(History(ql, None))                                        # reset: start_time = None
-        self._list = l
+        rs = [PseudoResult(q) for q in qlist]
+        self._list.append(History(rs, None, self.color_dists))                                        # reset: start_time = None
+        self.count += 1
             
     def get_last_time(self):
         last = self._list[-1]
@@ -118,23 +127,32 @@ class HistoryList(ObjList):
         return ((n, 100), (n_gr, util.percent(n_gr, n)), (n_ye, util.percent(n_ye, n)), (n_re, util.percent(n_re, n)), (n_wh, util.percent(n_wh, n)))
 
     def get_history_chart(self):
+        if self._list == []: return []
+
         l_gr = [0]
         l_ye = [0]
         l_re = [0]
         l_wh = [100]
         l_score = [0]
-        
+        l_label = ['']
+
+        n = len(self._list)
+        i = n - self._MAX + 1 if n > self._MAX else 1
         for h in self._list:
             _, gr, ye, re, wh = self.get_color_distribution(h.colors)
-            print('>>gr:%2.1f, ye:%2.1f, re:%2.1f, wh:%2.1f' % (gr[1], ye[1], re[1], wh[1]))
             l_gr.append(gr[1])              # percent
             l_ye.append(ye[1])
             l_re.append(re[1])
             l_wh.append(wh[1])
-            l_score.append(h.score[2])
-
-        l_label = [''] + list(reversed(range(self.count, 0, -1)[:self._MAX]))
-
+            
+            if h.start_time:
+                l_score.append(h.score[2])
+                l_label.append(h.start_time.strftime('%Y/%m/%d %H:%M') + '%5d' % i)
+                i += 1
+            else:                                # reset
+                l_score.append(l_score[-1])      # duplicate last score
+                l_label.append('reset')
+                
         return ('%r' % l_label, '%r' % l_score, '%r' % l_gr, '%r' % l_ye, '%r' % l_re, '%r' % l_wh)
         
     def get_ox_list(self, ad, qnum, reverse=True):
