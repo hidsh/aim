@@ -41,7 +41,7 @@ def timedelta_fmt(timedelta):
     m = int(mm)
     s = round(float(ss))
     
-    if s > 30:
+    if h > 1 and s > 30:
         m += 1
         if m > 60:
             h += 1
