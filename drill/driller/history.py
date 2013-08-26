@@ -146,7 +146,7 @@ class HistoryList(ObjList):
                 i += 1
             else:                                # reset
                 l_score.append(l_score[-1])      # duplicate last score
-                l_label.append('reset')
+                l_label.append('Reset')
                 
         return ('%r' % l_label, '%r' % l_score, '%r' % l_gr, '%r' % l_ye, '%r' % l_re, '%r' % l_wh)
         
