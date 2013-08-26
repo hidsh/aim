@@ -7,19 +7,20 @@
     <title>ドリルの開始</title>
     <script type="text/javascript">
     //<![CDATA[
-      function do_post(){
-        if(document.form.elements['mode'].value == 'drill')
-          document.form.action = 'exam_start';
+      function do_post () {
+        if(document.getElementById('mode_print').checked)
+          document.form_setting.action = 'exam_print';
         else
-          document.form.action = 'exam_print';
+          document.form_setting.action = 'exam_start';
 
-        document.form.submit();
+        document.form_setting.submit();
         return false;
       }
-      function level_reset(){
+
+      function level_reset () {
         if(window.confirm('レベルをリセットします。よろしいですか？')) {
-          document.f_reset.action = 'exam_root';
-          document.f_reset.submit();
+          document.form_reset.action = 'exam_root';
+          document.form_reset.submit();
           return false;
         }
       }
@@ -51,7 +52,7 @@
     </div>
     <div id="setting">
       <h1>設定</h1>
-      <form name="form" method="post">
+      <form name="form_setting" method="post">
         <table>
           <tr py:if="author"><th>出題モード</th>
             <td colspan="2"><input type="radio" name="mode" value="print" id="mode_print"/><label for="mode_print">全問プリント</label></td>
@@ -102,7 +103,7 @@
     
     <div id="stat">
       <h1>現在の状況<a py:if="h_chart" href="#" id="level_reset" onclick="level_reset()">レベルリセット</a></h1>
-      <form name="f_reset" method="post">
+      <form name="form_reset" method="post">
         <input type="hidden" name="level_reset" value="yes" />
       </form>
       <span id="chart_doughnut">
