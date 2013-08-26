@@ -32,6 +32,12 @@
       (function() {
         $('div#chart_line').flickable();
       });
+
+      $(function(){
+          $('#accordion_sw').click(function() {
+              $(this).next().slideToggle('fast');
+          }).next().hide();
+      });
     // ]]>
     </script>
     <script src="${url('/media/Chart.js')}"></script>
@@ -102,7 +108,7 @@
     </div>
     
     <div id="stat">
-      <h1>現在の状況<a py:if="h_chart" href="#" id="level_reset" onclick="level_reset()">レベルリセット</a></h1>
+      <h1>現在の状況</h1>
       <form name="form_reset" method="post">
         <input type="hidden" name="level_reset" value="yes" />
       </form>
@@ -121,15 +127,16 @@
         // ]]>
         </script>
       </span>
-      <span>
+      <div>
         <table>
           <tr><th class="lv_gr">&#10026;</th><td>${stat[1][0]}問</td><td>${stat[1][1]}%</td></tr>
           <tr><th class="lv_ye">&#10026;</th><td>${stat[2][0]}問</td><td>${stat[2][1]}%</td></tr>
           <tr><th class="lv_re">&#10026;</th><td>${stat[3][0]}問</td><td>${stat[3][1]}%</td></tr>
           <tr><th class="lv_wh">&#10026;</th><td>${stat[4][0]}問</td><td>${stat[4][1]}%</td></tr>
           <tr><th>全体</th><th>${stat[0][0]}問</th><th>-</th></tr>
-      </table>
-      </span>
+        </table>
+        <button py:if="h_chart" id="level_reset" onclick="level_reset()">レベルリセット</button>
+      </div>
     </div>
     
     <div py:if="h_chart" id="history">
@@ -194,16 +201,18 @@
         // ]]>
         </script>
       </div>
-      <!-- <div><a py:if="h_chart" href="#" id="hist_show_all" onclick="hist_show_all()">すべての履歴を表示</a></div> -->
-      <table>
-        <tr><th></th><th>日付</th><th>出題数</th><th>得点</th></tr>
-        <tr py:for="h in hists">
-          <td class="num">${h.i}</td>
-          <td class="date">${h.date_str}</td>
-          <td>${h.score[1]}問</td>
-          <td>${h.score[2]}点</td>
-        </tr>
-      </table>
+      <div>
+        <button py:if="h_chart" id="accordion_sw">履歴の詳細</button>
+        <table id="hist_detail">
+          <tr><th></th><th>日付</th><th>出題数</th><th>得点</th></tr>
+          <tr py:for="h in hists">
+            <td class="num">${h.i}</td>
+            <td class="date">${h.date_str}</td>
+            <td>${h.score[1]}問</td>
+            <td>${h.score[2]}点</td>
+          </tr>
+        </table>
+      </div>
     </div>
 
     </div> <!-- /page -->    

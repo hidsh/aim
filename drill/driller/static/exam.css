@@ -22,20 +22,23 @@ span#file {color:red}           /* why doesn't work?? */
 #setting tr {border: #000 1px solid}
 #setting th {width:180px}
 #setting td {border:none}
-a#level_reset {margin-left:30px; font-weight:normal; font-size:small}
+
+div#get_start {border: #000 1px dashed; margin:40px 0 40px 0; width:510px; text-align:center}
+
+span#chart_doughnut {margin:0 30px 0 0; float:left}
+
 .lv_gr {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#1e90ff}
 .lv_ye {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#ffd700}
 .lv_re {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#ff3030}
 .lv_wh {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#e6e6e6}
 
-div#get_start {border: #000 1px dashed; margin:40px 0 40px 0; width:510px}
-
-span#chart_doughnut {margin:0 30px 0 0; float:left}
 #stat table {width:300px; text-align:center}
 #stat th {width: 180px}
+button#level_reset {margin:10px 0 10px 195px; font-weight:normal; font-size:small}
 
 div#chart_line {margin:20px 0 10px 0; width:100%; overflow:auto; cursor:pointer}
 canvas#line {margin:0 -55px}
+button#accordion_sw {margin:10px 0 20px 0; font-weight:normal; font-size:small}
 #history table {width:510px; text-align:center}
 #history td.num {width:40px}
 #history td.date {width:140px}
