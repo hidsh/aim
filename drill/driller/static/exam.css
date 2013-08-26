@@ -7,7 +7,7 @@ div.qbx {margin:5px 0 60px}
 
 div.qbi {margin:0 40px}
 
-div#user_id {text-align:right; font-size:small}
+div#user_id {margin: 5px 0;text-align:right; font-size:small}
 div#user_id span{font-family:Courier}
 div#footer {margin:40px 30px 5px 30px; text-align:center; border-top:#000 1px solid; line-height:normal; font-size:small}
 div#footer p {margin-top:5px}

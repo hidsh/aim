@@ -15,7 +15,7 @@
     <!-- mathjax end -->
   </head>
   <body>
-    <div id="user_id"><p><span>${u.id}</span> としてログイン中</p></div>
+    <div id="user_id"><span>${u.id}</span> としてログイン中</div>
     <div class="navi">
       <span py:if="navi[0]" class="navi_l"><a class="navi" href="${navi[0].dispatcher}">${navi[0].label}</a></span>
       <span class="navi_c">問題数: ${pginfo.qn}問</span>
