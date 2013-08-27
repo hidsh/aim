@@ -5,7 +5,6 @@ body {
 
 table {
 	border-collapse:collapse;
-	/* width: 80%; */
 }
 
 th {
@@ -18,5 +17,4 @@ td {
 	border:#000 1px solid;
 	padding:3px;
 }
-
 
