@@ -27,17 +27,16 @@ div#get_start {border: #000 1px dashed; margin:40px 0 40px 0; width:510px; text-
 
 span#chart_doughnut {margin:0 30px 0 0; float:left}
 
-.lv_gr {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#1e90ff}
-.lv_ye {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#ffd700}
-.lv_re {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#ff3030}
-.lv_wh {margin-right: 0.2em; vertical-align: middle; font-size: x-large; color:#e6e6e6}
+.lv_gr {margin: 0 0.2em; font-size: x-large; color:#ffd700; text-shadow: 1px 2px 1px #000}
+.lv_ye {margin: 0 0.2em; font-size: x-large; color:#e6e6e6; text-shadow: 1px 2px 1px #000}
+.lv_re {margin: 0 0.2em; font-size: x-large; color:#1e90ff; text-shadow: 1px 2px 1px #000}
 
 #stat table {width:300px; text-align:center}
 #stat th {width: 180px}
-button#level_reset {margin:10px 0 10px 195px; font-weight:normal; font-size:small}
+button#level_reset {margin:10px 0 10px 0; font-weight:normal; font-size:small}
 
 div#chart_line {margin:20px 0 10px 0; width:100%; overflow:auto; cursor:pointer}
-canvas#line {margin:0 -55px}
+canvas#line {margin:0 -35px}
 button#accordion_sw {margin:10px 0 20px 0; font-weight:normal; font-size:small}
 #history table {width:510px; text-align:center}
 #history td.num {width:40px}
@@ -128,19 +127,19 @@ div.desc_head {margin: 30px 0 0 0; padding-left: 10px; font-weight:bold; backgro
 table#confirm td {border:none}
 
 /* exam_result */
-div.summary {margin:20px 0; text-align:center}
+div.summary {margin:20px 0 5px 0; text-align:center}
 div#score {margin 50px}
 div#score span#total {font-size:xx-large}
 div#score span#frac  {font-size:x-large; margin-left:20px}
 
-div#time {margin:20px}
+div#time {margin:20px 0 5px 0}
 div#time span#total {}
 div#time span#avg   {margin-left:20px}
 
 div#ac_ctrl {text-align:right}
 button#ac_open_all,button#ac_close_all {width:8em}
 
-div.details {margin:20px 0}
+div.details {margin:5px 0 20px 0}
 div.rb {margin:-1px 0 0 23px; padding:0; border:none}
 div.rbx {margin:0; padding:5px 40px 5px 40px; border:#000 1px solid; border-top:none; margin-bottom:20px}
 table.accordion_head {margin:0; width:100%; cursor:pointer}

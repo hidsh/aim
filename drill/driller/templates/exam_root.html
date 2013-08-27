@@ -117,10 +117,9 @@
         <script>
         //<![CDATA[
           var d_data = [
-            {value: ${stat[1][0]},  color: "#1e90ff"},  // blue
-            {value: ${stat[2][0]},  color: "#ffd700"},  // yellow
-            {value: ${stat[3][0]},  color: "#ff3030"},  // red
-            {value: ${stat[4][0]},  color: "#e6e6e6"}   // white
+            {value: ${stat[1][0]},  color: "#ffd700"},  // sunny
+            {value: ${stat[2][0]},  color: "#e6e6e6"},  // cloudy
+            {value: ${stat[3][0]},  color: "#1e90ff"},  // rainy
           ];
 
           new Chart($("canvas#doughnut")[0].getContext("2d")).Doughnut(d_data);
@@ -129,10 +128,9 @@
       </span>
       <div>
         <table>
-          <tr><th class="lv_gr">&#10026;</th><td>${stat[1][0]}問</td><td>${stat[1][1]}%</td></tr>
-          <tr><th class="lv_ye">&#10026;</th><td>${stat[2][0]}問</td><td>${stat[2][1]}%</td></tr>
-          <tr><th class="lv_re">&#10026;</th><td>${stat[3][0]}問</td><td>${stat[3][1]}%</td></tr>
-          <tr><th class="lv_wh">&#10026;</th><td>${stat[4][0]}問</td><td>${stat[4][1]}%</td></tr>
+          <tr><th class="lv_gr">&#9728;</th><td>${stat[1][0]}問</td><td>${stat[1][1]}%</td></tr>
+          <tr><th class="lv_ye">&#9729;</th><td>${stat[2][0]}問</td><td>${stat[2][1]}%</td></tr>
+          <tr><th class="lv_re">&#9730;</th><td>${stat[3][0]}問</td><td>${stat[3][1]}%</td></tr>
           <tr><th>全体</th><th>${stat[0][0]}問</th><th>-</th></tr>
         </table>
         <button py:if="h_chart" id="level_reset" onclick="level_reset()">レベルリセット</button>
@@ -149,40 +147,33 @@
 	      labels : ${h_chart[0]},
 	      datasets : [
 		    {
-              // black
+              // score
 			  fillColor: "rgba(50,50,50,0)",
 			  strokeColor: "rgba(50,50,50,1.0)",
 			  pointColor: "rgba(50,50,50,1.0)",
 			  pointStrokeColor: "#fff",
 			  data: ${h_chart[1]}
 		    }, {
-              // blue
-			  fillColor: "rgba(30,144,255,0.3)",
-			  strokeColor: "rgba(30,144,255,1.0)",
-			  pointColor: "rgba(30,144,255,1.0)",
-			  pointStrokeColor: "#fff",
-			  data: ${h_chart[2]}
-		    }, {
-              // yellow
-			  fillColor: "rgba(255,215,0,0.3)",
+              // sunny
+			  fillColor: "rgba(255,215,0,0.1)",
 			  strokeColor: "rgba(255,215,0,1.0)",
 			  pointColor: "rgba(255,215,0,1.0)",
 			  pointStrokeColor: "#fff",
-			  data: ${h_chart[3]}
+			  data: ${h_chart[2]}
 		    }, {
-              // red
-			  fillColor: "rgba(255,48,48,0.3)",
-			  strokeColor: "rgba(255,48,48,1.0)",
-			  pointColor: "rgba(255,48,48,1.0)",
-			  pointStrokeColor: "#fff",
-			  data: ${h_chart[4]}
-		    }, {
-              // white
-			  fillColor: "rgba(230,230,230,0.3)",
+              // cloudy
+			  fillColor: "rgba(230,230,230,0.1)",
 			  strokeColor: "rgba(230,230,230,1.0)",
 			  pointColor: "rgba(230,230,230,1.0)",
 			  pointStrokeColor: "#fff",
-			  data: ${h_chart[5]}
+			  data: ${h_chart[3]}
+		    }, {
+              // rainy
+			  fillColor: "rgba(30,144,255,0.1)",
+			  strokeColor: "rgba(30,144,255,1.0)",
+			  pointColor: "rgba(30,144,255,1.0)",
+			  pointStrokeColor: "#fff",
+			  data: ${h_chart[4]}
 		    }
 	      ]
         };

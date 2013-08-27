@@ -75,18 +75,21 @@ class ExamConf(object):
 class Result(object):
     MARU  = Markup('&#9711;')
     BATSU = Markup('&#10005;')
+    SUNNY  = Markup('&#9728;')
+    CLOUDY = Markup('&#9729;')
+    RAINY  = Markup('&#9730;')
 
     def __init__(self, i, q, your_ans, hist_list):
         def _subst_mark(x):
             return self.MARU if x == 'correct' else self.BATSU
         
-        def _get_color_class(now, prev):
+        def _get_lv(now, prev):
             if [now, prev] == ['correct', 'correct']:
-                return 'lv_gr'
+                return ('lv_gr', self.SUNNY);
             elif now == 'correct':
-                return 'lv_ye'
+                return ('lv_ye', self.CLOUDY);
             else:
-                return 'lv_re'
+                return ('lv_re', self.RAINY);
 
         self.i = i
 
@@ -109,7 +112,7 @@ class Result(object):
 
         self.history = [_subst_mark(x) for x in hist_list]
         h = hist_list[0] if len(hist_list) > 0 else 'reset'
-        self.lv_xx = _get_color_class(self.typ_class, h)
+        self.lv_xx, self.lv_sign = _get_lv(self.typ_class, h)
         
     def is_correct(self):
         return self.typ_class == 'correct'
