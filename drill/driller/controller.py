@@ -273,5 +273,7 @@ def main(db_name):
 if __name__ == '__main__':
     main('driller.db')
 
-# $ PYTHONPATH=. python driller/controller.py
+# cd ~/test/python/web/aim/drill; ../../../env/33/bin/activate
+# PYTHONPATH=. python driller/controller.py
+
     
