@@ -7,18 +7,6 @@ from itertools import dropwhile
 
 from driller.model import ObjList
 from driller.lib import util
-"""
-class HistoryResultElement(object):
-    def __init__(self, result):
-        self.typ   = result.typ_class
-        self.ad    = result.q.ad
-        self.qnum  = result.q.qnum
-        self.lv_xx = result.lv_xx
-        self.lv_sign = result.lv_sign
-
-    def __repr__(self):
-        return '<HistoryResultElement %d: Q%d: %s, %s(%s)>' % (self.ad, self.qnum, self.typ, self.lv_xx, self.lv_sign)
-"""
     
 class History(object):
     def __init__(self, result_list, start_time, colors_old):
@@ -94,13 +82,7 @@ class HistoryList(ObjList):
         rs = [PseudoResult(q) for q in qlist]
         self._list.append(History(rs, None, self.color_dists))             # reset: start_time = None
         self.count += 1
-    """            
-    def get_last_time(self):
-        last = self._list[-1]
-        total = (last.end_time - last.start_time)
-        avg = total / len(last._list)
-        return (util.timedelta_fmt(total), util.timedelta_fmt(avg))
-    """        
+        
     def out(self, reverse=True):
         l = [x for x in self._list if x.start_time]
         oldest = 1 if self.count < self._MAX else self.count - (self._MAX - 1)
