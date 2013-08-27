@@ -158,8 +158,8 @@ class HistoryList(ObjList):
         clone = copy.copy(self)
             
         l = list(dropwhile(lambda x: x.start_time != None, clone._list))
-        l = l[1:] if l else clone._list
-        l = [x for x in l if x.start_time < start_time]    # except newest
+        l = l[1:] if l and l[0].start_time else clone._list
+        l = [x for x in l if x.start_time == None or x.start_time < start_time]    # except newest
         clone._list = l
 
         return clone
