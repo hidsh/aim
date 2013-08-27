@@ -154,8 +154,32 @@ table.accordion_head {margin:0; width:100%; cursor:pointer}
 .accordion_head span.accordion_indicator img {position:absolute; left:8px; margin-top:3px; background:url(accordion_indicator.png) no-repeat left top}
 .accordion_head span.accordion_indicator img.active {background:url(accordion_indicator.png) no-repeat left bottom}
  
-.opts .correct {color:blue; border:none; padding:4px 5px 1px 5px; width:1.2em}
-.opts .wrong   {color:red;  border:none; padding:4px 5px 1px 5px; width:1.2em}
+.opts td.correct,th.correct {color:#4EB0C2; border:none; padding:6px 5px 0px 5px; width:1.2em}
+.opts td.wrong   {color:#CC527A;  border:none; padding:4px 5px 1px 5px; width:1.2em}
 span.strike {text-decoration:line-through; color:red}
+      span.correct {
+      padding:1px 0px 1px 2px;
+      color:white;
+      font-weight:normal;
+      display:block;
+      width: 35px;
+      height: 25px;
+      background:#4EB0C2;
+      position: relative;
+      -moz-border-radius:    5px;
+      -webkit-border-radius: 5px;
+      border-radius:         5px;
+      }
+      span.correct:after {
+      content:"";
+      position: absolute;
+      left: 93%;
+      top: 0px;
+      width: 0;
+      height: 0;
+      border-top: 13px solid transparent;
+      border-left: 13px solid #4EB0C2;
+      border-bottom: 14px solid transparent;
+      }
 
 

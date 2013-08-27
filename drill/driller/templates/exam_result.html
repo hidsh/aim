@@ -104,8 +104,8 @@
             <th py:for="c in r.q.opt_head">${c}</th>
           </tr>
           <tr py:for="o in r.q.opts">
-            <td class="correct"><span py:if="o.hit">&#9711;</span></td>
-            <td class="${r.typ_class}"><span py:if="o.your_ans">&#10003;</span></td>
+            <td class="correct"><span py:if="o.hit" class="correct">正解</span></td>
+            <td class="${r.typ_class}"><span py:if="o.your_ans">&#9678;</span></td>
             <td py:for="c in o.cols" class="${r.q.opt_style}">${c}</td>
           </tr>
         </table>
