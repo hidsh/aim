@@ -57,7 +57,7 @@ class ExamConf(object):
             self.qn     = 3           # 'ExamConf' object has no attribute 'mode' とかになるのを
             self.order  = 'rand'      # なんとかする
             self.tags   = [None]      # なかったら、デフォルト値でメンバを差しこむ、としたい
-            self.n_per_page = 2
+            self.n_per_page = 3
 
     def __eq__(self, obj):      # TODO メンバすべてをチェック→汎化
         if obj == None:
