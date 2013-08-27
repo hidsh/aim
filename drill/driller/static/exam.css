@@ -88,6 +88,7 @@ span.blank {
 table.opts {
 	border-collapse:collapse;
     margin:10px 10px 10px 30px;
+    -webkit-text-size-adjust: 150%;
 }
 
 .opts th {
