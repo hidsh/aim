@@ -37,6 +37,7 @@ button#level_reset {margin:10px 0 10px 0; font-weight:normal; font-size:small}
 
 div#chart_line {margin:20px 0 10px 0; width:100%; overflow:auto; cursor:pointer}
 canvas#line {margin:0 -35px}
+/* canvas#line {margin:0 0; border:1px solid red} */
 button#accordion_sw {margin:10px 0 20px 0; font-weight:normal; font-size:small}
 #history table {width:510px; text-align:center}
 #history td.num {width:40px}
