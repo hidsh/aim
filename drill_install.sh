@@ -10,3 +10,6 @@ if [ -e "./__g" ]; then
 else
     rm drill/user/__g
 fi
+
+sudo /etc/init.d/apache2 restart
+
