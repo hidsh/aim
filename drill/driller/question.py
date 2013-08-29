@@ -111,7 +111,7 @@ class QuestionList(ObjList):
 
     def sort_by_poor_questions(self, color_dists):
         def _lv_str2num(lv_str):
-            tbl = {'lv_wh':0, 'lv_re':0, 'lv_ye':2, 'lv_gr':3 }
+            tbl = {'lv_re':0, 'lv_ye':2, 'lv_gr':3 }
             return tbl[lv_str]
             
         ql = self._list[:]
