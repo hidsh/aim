@@ -15,6 +15,7 @@ div#footer p {margin-top:5px}
 /* exam_root */
 #exam_root #page {margin:0px 20px 0 40px}
 #exam_root h1 {margin:40px 0 10px 0}
+#exam_root button {margin:10px 0 20px 0; font-weight:normal; font-size:small}
 #about table {width:510px}
 span#file {color:red}           /* why doesn't work?? */
 
@@ -33,12 +34,10 @@ span#chart_doughnut {margin:0 30px 0 0; float:left}
 
 #stat table {width:300px; text-align:center}
 #stat th {width: 180px}
-button#level_reset {margin:10px 0 10px 0; font-weight:normal; font-size:small}
 
 div#chart_line {margin:20px 0 10px 0; width:100%; overflow:auto; cursor:pointer}
 canvas#line {margin:0 -35px}
 /* canvas#line {margin:0 0; border:1px solid red} */
-button#accordion_sw {margin:10px 0 20px 0; font-weight:normal; font-size:small}
 #history table {width:510px; text-align:center}
 #history td.num {width:40px}
 #history td.date {width:140px}

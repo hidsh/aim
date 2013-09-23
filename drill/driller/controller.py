@@ -66,14 +66,16 @@ class Root(object):
             
         ql = QuestionList(q_path)
         user = User(user_id)
+        # import pdb; pdb.set_trace()
+        user.history = HistoryList(ql)
         try:
             user.load()
         except Exception as e:
             print('ユーザ %s のファイルが見つかりませんでした。デフォルトの設定を保存します。:%r' % (user.mail_addr, e))
             user.conf = ExamConf()
-            user.history = HistoryList(ql)
             user.save()
-        
+
+
         if post_dict and post_dict['level_reset'] == 'yes':
             user.history.level_reset(ql)
             user.save()
@@ -117,14 +119,13 @@ class Root(object):
             raise cherrypy.HTTPRedirect('session_error')
 
         user = User(user_id)
-
+        user.history = HistoryList(ql)
         try:
             user.load()
         except Exception as e:
             print('ユーザ %s の設定ファイルが見つかりませんでした。デフォルトの設定でドリルを開始します。: %r' % (user.mail_addr, e))
             
-        conf = ExamConf(post_dict)
-        user.update_conf(conf)
+        user.conf = ExamConf(post_dict)
         user.save()
 
         cherrypy.session['conf'] = user.conf
@@ -209,20 +210,22 @@ class Root(object):
             start_time = cherrypy.session['start_time']
             qpages   = cherrypy.session['qpages']
             ans_dict = cherrypy.session['answer_dict']
-            user     = User(cherrypy.session['user_id'])
+            user_id  = cherrypy.session['user_id']
+            ql       = cherrypy.session['ql']
         except KeyError:
             raise cherrypy.HTTPRedirect('session_error')
 
+        user = User(user_id)
+        user.history = HistoryList(ql)
         try:
             user.load()
         except Exception as e:
-            user.history = HistoryList()
             print('ユーザ %s のファイルが見つかりませんでした。ヒストリを新規に作ります。: %r' % (user.mail_addr, e))
 
         results = ExamResult(qpages, AnswerList(ans_dict), user.history, start_time)
-
         user.history.append(results, start_time)
         user.save()
+
         time = user.history[-1].get_time()
         score = user.history[-1].get_score()
 
