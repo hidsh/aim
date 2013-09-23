@@ -11,6 +11,7 @@ div#user_id {margin: 5px 0;text-align:right; font-size:small}
 div#user_id span{font-family:Courier}
 div#footer {margin:40px 30px 5px 30px; text-align:center; border-top:#000 1px solid; line-height:normal; font-size:small}
 div#footer p {margin-top:5px}
+button {cursor:pointer}
 
 /* exam_root */
 #exam_root #page {margin:0px 20px 0 40px}
@@ -123,7 +124,8 @@ table.opts {
 div.desc_head {margin: 30px 0 0 0; padding-left: 10px; font-weight:bold; background-color:#DDD; color:black}
 
 /* exam_finish_confirm */
-table#confirm td {border:none}
+div#confirm {text-align:center}
+#confirm button {margin:10px 0 20px 0; font-weight:normal; font-size:small; width:5em; margin:10px 5px}
 
 /* exam_result */
 div.summary {margin:20px 0 5px 0; text-align:center}

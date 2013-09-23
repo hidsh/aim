@@ -18,18 +18,14 @@
     <div class="navi">
       <span py:if="navi[0]" class="navi_l"><button class="navi" onclick="do_post(document.form_confirm, 'exam')">${navi[0].label}</button></span>
     </div>
-    <div>
+    <div id="confirm">
       <p>テストを終了します。よろしいですか？</p>
       <form name="form_confirm" method="post">
-        <table id="confirm">
           <input type="hidden" name="_pg" value="${pg}"/>
           <input type="hidden" name="_cmd" value="prev"/>
-          <tr>
-            <td><input type="button" name="confirm" value="はい" onclick="do_post(document.form_confirm, 'exam_result')" /></td>
-            <td><input type="button" name="confirm" value="いいえ"  onclick="do_post(document.form_confirm, 'exam')" /></td>
-          </tr>
-        </table>
       </form>
+      <button onclick="do_post(document.form_confirm, 'exam_result')">はい</button>
+      <button onclick="do_post(document.form_confirm, 'exam')">いいえ</button>
     </div>
     <div class="navi">
       <span py:if="navi[0]" class="navi_l"><button class="navi" onclick="do_post(document.form_confirm, 'exam')">${navi[0].label}</button></span>
