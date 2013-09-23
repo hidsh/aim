@@ -126,6 +126,7 @@ class QuestionPages(ObjList):
         qlx = ql[:]
         # import pdb; pdb.set_trace()
 
+        random.seed()
         if conf.order == 'poor':         # poor | cont | rand
             random.shuffle(qlx)
             qlx = ql.sort_by_poor_questions(color_dists)
