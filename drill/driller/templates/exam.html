@@ -26,9 +26,9 @@
   <body>
     <div id="user_id"><span>${u.id}</span> としてログイン中</div>
     <div class="navi">
-      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'prev')">${navi[0].label}</a></span>
+      <span py:if="navi[0]" class="navi_l"><button class="navi" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'prev')">${navi[0].label}</button></span>
       <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qn}問）</span>
-      <span py:if="navi[1]" class="navi_r"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'next')">${navi[1].label}</a></span>
+      <span py:if="navi[1]" class="navi_r"><button class="navi" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'next')">${navi[1].label}</button></span>
     </div>
     <div class="qb" py:if="questions">
       <form name="form_opt" method="post">
@@ -54,9 +54,9 @@
       </form>
     </div>
     <div class="navi">
-      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'prev')">${navi[0].label}</a></span>
-      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qn}）</span>
-      <span py:if="navi[1]" class="navi_r"><a class="navi" href="#" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'next')">${navi[1].label}</a></span>
+      <span py:if="navi[0]" class="navi_l"><button class="navi" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'prev')">${navi[0].label}</button></span>
+      <span class="navi_c">${pginfo.page_num}/${pginfo.page_max}ページ （問題数: ${pginfo.qn}問）</span>
+      <span py:if="navi[1]" class="navi_r"><button class="navi" onclick="do_post(document.form_opt, 'exam', ${pginfo.idx}, 'next')">${navi[1].label}</button></span>
     </div>
   </body>
 </html>

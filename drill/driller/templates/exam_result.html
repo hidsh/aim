@@ -75,7 +75,7 @@
   <body>
     <div id="user_id"><span>${u.id}</span> としてログイン中</div>
     <div class="navi">
-      <span py:if="navi[1]" class="navi_r"><a class="navi" href="${navi[1].dispatcher}">${navi[1].label}</a></span>
+      <span py:if="navi[1]" class="navi_r"><button class="navi" onclick="location.href='${navi[1].dispatcher}'">${navi[1].label}</button></span>
     </div>
     <div class="summary">
       <div id="score"><span id="total">${score[2]}点</span><span id="frac">$(=\frac{${score[0]}}{${score[1]}})$</span></div>
@@ -114,7 +114,7 @@
       </div>
     </div>
     <div class="navi">
-      <span py:if="navi[1]" class="navi_r"><a class="navi" href="${navi[1].dispatcher}">${navi[1].label}</a></span>
+      <span py:if="navi[1]" class="navi_r"><button class="navi" onclick="location.href='${navi[1].dispatcher}'">${navi[1].label}</button></span>
     </div>
   </body>
 </html>

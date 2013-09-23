@@ -55,8 +55,7 @@ span.navi_l {float:left}
 span.navi_c {float:center}
 span.navi_r {float:right}
 
-a.navi {text-decoration:none; color:#314974}
-a.navi:hover {text-decoration:underline; color:CornflowerBlue}
+button.navi {font-size:small; border:none; background-color:white; cursor:pointer}
 
 
 /* 問題番号 */

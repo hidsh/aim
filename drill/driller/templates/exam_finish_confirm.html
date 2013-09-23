@@ -16,7 +16,7 @@
   <body>
     <div id="user_id"><span>${u.id}</span> としてログイン中</div>
     <div class="navi">
-      <span py:if="navi[0]" class="navi_l"><a class="navi" href="#" onclick="do_post(document.form_confirm, 'exam')">${navi[0].label}</a></span>
+      <span py:if="navi[0]" class="navi_l"><button class="navi" onclick="do_post(document.form_confirm, 'exam')">${navi[0].label}</button></span>
     </div>
     <div>
       <p>テストを終了します。よろしいですか？</p>
@@ -32,7 +32,7 @@
       </form>
     </div>
     <div class="navi">
-      <span py:if="navi[0]" class="navi_l"><a class="navi" href="${url('/%s/%d/%s/' % (navi[0].dispatcher, pg, 'next'))}">${navi[0].label}</a></span>
+      <span py:if="navi[0]" class="navi_l"><button class="navi" onclick="do_post(document.form_confirm, 'exam')">${navi[0].label}</button></span>
     </div>
   </body>
 </html>
