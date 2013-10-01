@@ -1,0 +1,3 @@
+Username (leave blank to use 'g'): g
+Email address: ggg@ggg.com
+pass:ggg
