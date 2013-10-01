@@ -1,7 +1,7 @@
-{% if latest_poll_list %}
+{% if object_list %}
     <ul>
-    {% for poll in latest_poll_list %}
-        <li>{{ poll.question }}</li>
+    {% for object in object_list %}
+        <li>{{ object.question }}</li>
     {% endfor %}
     </ul>
 {% else %}
