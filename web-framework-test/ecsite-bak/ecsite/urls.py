@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
@@ -13,7 +13,8 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
-    (r'^item/', include('itempage.urls')),
-                       
+    url(r'^admin/', include(admin.site.urls)),
+    (r'(?P<item_id>\d+)/$', 'itempage.views.item_page_display'),
+    (r'^itemsearch', 'itempage.views.item_search'),
+    (r'^cart', 'itempage.views.do_cart'),
 )
