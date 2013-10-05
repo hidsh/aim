@@ -3,10 +3,12 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, loader
 from django.views.generic.simple import direct_to_template
+from django.views.decorators.cache import cache_page
 from models import Item
 from ecsite.itempage.forms import ItemSearchForm
 from ecsite.itempage.cart import CartItem
 
+@cache_page(60 * 15)            # 単位は秒。15分キャッシュする。
 def item_page_display(request,item_id):
     item = get_object_or_404(Item, id=item_id)
 

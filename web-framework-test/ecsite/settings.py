@@ -83,3 +83,5 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'ecsite.itempage',    
 )
+
+CACHE_BACKEND = 'file:///Users/g/test/python/web/aim/web-framework-test/ecsite/cache'
