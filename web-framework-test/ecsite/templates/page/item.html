@@ -9,7 +9,12 @@
         商品名：{{ item.item_name }}<br>
         価格：{{ item.price }}円<br>
         <br>
-        <input type="submit" value="買い物かごに入れる">
+        <form action="/cart" method="POST">
+          購入個数：<input type="text" name="buy_num" value="1"><br>
+          <br>
+          <input type="submit" value="買い物かごに入れる">
+          <input type="hidden" name="item_id" value="{{ item.id }}">
+        </form>        
       </center>
     </body>
 </html>

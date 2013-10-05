@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>買い物かご</title>
+  <head>
+    <body>
+      <center>買い物かごの中身は次のとおりです。<br>
+        <table border="1">
+          <tr><th>商品コード</th><th>商品名</th><th>価格</th><th>購入個数</th></tr>
+          {% for cart_item in cart_item_list %}
+          <tr>
+            <td>{{ cart_item.item_code }}</td>
+            <td>{{ cart_item.item_name }}</td>
+            <td>{{ cart_item.price }}円</td>
+            <td>{{ cart_item.buy_num }}個</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </center>
+    </body>
+</html>
