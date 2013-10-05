@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
     (r'^item/(?P<item_id>\d+)/$', 'ecsite.itempage.views.item_page_display'),
+    (r'^itemsearch', 'ecsite.itempage.views.item_search'),
 )

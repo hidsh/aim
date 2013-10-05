@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>商品検索</title>
+  <head>
+    <body>
+      <center>
+        {{ error_message_no_item }}
+        <form action="/itemsearch" method="POST">
+          商品名を入力してください：{{ form.item_name }}<br><br>
+          <input type="submit" value="検索">
+        </form>
+        <br>
+        <table border="1">
+          <th>商品コード</th><th>商品名</th><th>価格</th>
+          {% for item in items %}
+          <tr><td>{{ item.item_code }}</td>
+            <td>{{ item.item_name }}</td>
+            <td>{{ item.price }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+
+    </body>
+</html>
