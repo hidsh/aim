@@ -10,7 +10,7 @@ def item_page_display(request,item_id):
     item = get_object_or_404(Item, id=item_id)
 
     return direct_to_template(request, 'page/item.html',
-                              extera_content={'item':item}
+                              extra_context={'item':item}
     )
 
 def item_search(request):
