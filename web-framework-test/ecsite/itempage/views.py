@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, loader
+from django.views.generic.simple import direct_to_template
 from models import Item
 
 def item_page_display(request,item_id):
