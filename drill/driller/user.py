@@ -22,16 +22,20 @@ class User(object):
                 pickle.dump(self.__dict__, f)
         except IOError as e:
             print('オブジェクトを保存できませんでした: %s: %r' % (self._path, e))
-            
+
     def load(self):
         bak = self.history.color_dists          # backup
 
         path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../user/' + self.id)
-        with open(path, 'rb') as f:
-            self.__dict__ = pickle.load(f)
+        try:
+            with open(path, 'rb') as f:
+                self.__dict__ = pickle.load(f)
+        except IOError as e:
+            # print('ユーザ設定をロードできませんでした: %s: %r' % (self._path, e))
+            self.__init__()
 
         self.history.color_dists = self.merge_color_dists(bak)
-        
+
     def merge_color_dists(self, bak):
         def _in_new(ad, qnum):
             for i,c in enumerate(self.history.color_dists):
@@ -46,9 +50,9 @@ class User(object):
 
         return bak
 
-            
+
 
 ##
 if __name__ == '__main__':
     pass
- 
+
