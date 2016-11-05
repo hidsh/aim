@@ -1,0 +1,11 @@
+# packages in environment at /home/g/.pyenv/versions/miniconda3-4.1.11:
+#
+python                    3.5.2                         0  
+conda                     4.2.12                   py35_0  
+pip                       8.1.2                    py35_0  
+
+CherryPy                  8.1.2                     <pip>
+Genshi                    0.7                       <pip>
+Markdown                  2.6.7                     <pip>
+
+

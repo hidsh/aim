@@ -252,9 +252,15 @@ class Root(object):
 
     
 def main(db_name):
+    ipaddr = os.environ.get('IPADDR')
+    assert (ipaddr != None), 'ERROR: Cannot get env "IPADDR"'
+
     # Some global configuration; note that this could be moved into a
     # configuration file
     cherrypy.config.update({
+        'server.socket_host': ipaddr,
+#        'server.socket_host': '192.168.111.103',
+#        'server.socket_port': 80,
         'tools.encode.on': True, 'tools.encode.encoding': 'utf-8',
         'tools.decode.on': True,
         'tools.trailing_slash.on': True,
